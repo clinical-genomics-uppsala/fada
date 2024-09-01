@@ -26,7 +26,9 @@ from hydra_genetics.utils.software_versions import touch_pipeline_verion_file_na
 from hydra_genetics.utils.software_versions import touch_software_version_files
 from hydra_genetics.utils.software_versions import use_container
 
-min_version("6.8.0")
+hydra_min_version("3.0.0")
+
+min_version("7.32.4")
 
 ### Set and validate config file
 
@@ -50,15 +52,15 @@ except WorkflowError as we:
         schema_section = ".".join(re.findall(r"\['([^']+)'\]", schema_hiearachy)[1::2])
         sys.exit(f"{error_msg} in {schema_section}")
 
-date_string = datetime.now().strftime('%Y%m%d--%H-%M-%S')
-pipeline_version = get_pipeline_version(workflow, pipeline_name="fada")
-version_files = touch_pipeline_verion_file_name(pipeline_version, date_string=date_string, directory="results/versions/software")
+pipeline_name = "Fada"
+pipeline_version = get_pipeline_version(workflow, pipeline_name=pipeline_name)
+version_files = touch_pipeline_verion_file_name(pipeline_version, date_string=pipeline_name, directory="results/versions/software")
 if use_container(workflow):
-    version_files += touch_software_version_files(config, date_string=date_string, directory="results/versions/software")
+    version_files += touch_software_version_files(config, date_string=pipeline_name, directory="results/versions/software")
 add_version_files_to_multiqc(config, version_files)
 
 onstart:
-    export_pipeline_version_as_file(pipeline_version, date_string=date_string, directory="results/versions/software")
+    export_pipeline_version_as_file(pipeline_version, date_string=pipeline_name, directory="results/versions/software")
     # Make sure that the user have the requested containers to be used
     if use_container(workflow):
         # From the config retrieve all dockers used and parse labels for software versions. Add
@@ -68,11 +70,12 @@ onstart:
         # - directory, default value: software_versions
         # - file_name_ending, default value: mqc_versions.yaml
         # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
-        export_software_version_as_files(software_info, date_string=date_string, directory="results/versions/software")
+        export_software_version_as_files(software_info, date_string=pipeline_name, directory="results/versions/software")
     # print config dict as a file. Additional parameters that can be set
     # output_file, default config
     # output_directory, default = None, i.e no folder
     # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
+    date_string = datetime.now().strftime("%Y%m%d")
     export_config_as_file(update_config, date_string=date_string, directory="results/versions")
 
 ### Read and validate resources file
