@@ -1,0 +1,8 @@
+---
+output: "output_ont_wgs.yaml"
+resources: "config/resources.yaml"
+samples: "samples_ont_wgs.tsv"
+units: "units_ont_wgs.tsv"
+
+aligner: "pbmm2"
+

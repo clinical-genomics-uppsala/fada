@@ -1,0 +1,8 @@
+---
+output: "config/output_pacbio_wgs.yaml"
+resources: "config/resources.yaml"
+samples: "samples_pacbio_wgs.tsv"
+units: "units_pacbio_wgs.tsv"
+
+aligner: "pbmm2"
+

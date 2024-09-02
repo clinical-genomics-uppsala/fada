@@ -1,7 +1,42 @@
 ---
-output: "config/output_files.yaml"
-resources: "config/resources.yaml"
-samples: "samples.tsv"
-units: "units.tsv"
 
-default_container: "docker://hydragenetics/common:0.1.9"
+PIPELINE_REF_DATA: "reference_data/"
+
+default_container: "docker://hydragenetics/common:1.11.1"
+
+longread_alignment: true
+
+modules:
+  alignment: "5a051c5"
+  # annotation: "v1.0.1"
+  compression: "v2.0.0"
+  # cnv_sv: "v0.5.0"
+  # filtering: "v0.3.0"
+  #qc: "v0.5.0"
+  misc: "v0.2.0"
+  snv_indels: "v1.0.0"
+
+reference:
+  design_bed: ""
+  fasta: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
+  fai: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
+
+
+multiqc:
+  container: "docker://hydragenetics/multiqc:1.21"
+  reports:
+    DNA:
+      config: "config/multiqc_config_DNA.yaml"
+      included_unit_types: ["N"]
+      qc_files:
+        - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_fastq1_fastqc.zip"
+        - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_fastq2_fastqc.zip"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
+        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
+        - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.summary_metrics"
+        - "qc/picard_collect_wgs_metrics/{sample}_{type}.txt"
+        - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
+        - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
+        - "qc/verifybamid2/{sample}_{type}.selfSM"
