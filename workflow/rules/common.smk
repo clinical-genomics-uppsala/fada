@@ -11,24 +11,28 @@ import yaml
 from datetime import datetime
 from snakemake.utils import validate
 from snakemake.utils import min_version
+from hydra_genetics import min_version as hydra_min_version
+from hydra_genetics.utils.misc import get_module_snakefile
 
 from hydra_genetics.utils.resources import load_resources
 from hydra_genetics.utils.samples import *
 from hydra_genetics.utils.units import *
 
+from hydra_genetics.utils.misc import replace_dict_variables
+
 from hydra_genetics.utils.misc import export_config_as_file
 from hydra_genetics.utils.software_versions import add_version_files_to_multiqc
 from hydra_genetics.utils.software_versions import add_software_version_to_config
 from hydra_genetics.utils.software_versions import export_pipeline_version_as_file
-from hydra_genetics.utils.software_versions import export_software_version_as_files
+from hydra_genetics.utils.software_versions import export_software_version_as_file
 from hydra_genetics.utils.software_versions import get_pipeline_version
-from hydra_genetics.utils.software_versions import touch_pipeline_verion_file_name
-from hydra_genetics.utils.software_versions import touch_software_version_files
+from hydra_genetics.utils.software_versions import touch_pipeline_version_file_name
+from hydra_genetics.utils.software_versions import touch_software_version_file
 from hydra_genetics.utils.software_versions import use_container
 
 hydra_min_version("3.0.0")
 
-min_version("7.32.4")
+min_version("7.8.0")
 
 ### Set and validate config file
 
@@ -54,9 +58,9 @@ except WorkflowError as we:
 
 pipeline_name = "Fada"
 pipeline_version = get_pipeline_version(workflow, pipeline_name=pipeline_name)
-version_files = touch_pipeline_verion_file_name(pipeline_version, date_string=pipeline_name, directory="results/versions/software")
+version_files = touch_pipeline_version_file_name(pipeline_version, date_string=pipeline_name, directory="results/versions/software")
 if use_container(workflow):
-    version_files += touch_software_version_files(config, date_string=pipeline_name, directory="results/versions/software")
+    version_files += touch_software_version_file(config, date_string=pipeline_name, directory="results/versions/software")
 add_version_files_to_multiqc(config, version_files)
 
 onstart:
@@ -70,7 +74,7 @@ onstart:
         # - directory, default value: software_versions
         # - file_name_ending, default value: mqc_versions.yaml
         # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
-        export_software_version_as_files(software_info, date_string=pipeline_name, directory="results/versions/software")
+        export_software_version_as_file(software_info, date_string=pipeline_name, directory="results/versions/software")
     # print config dict as a file. Additional parameters that can be set
     # output_file, default config
     # output_directory, default = None, i.e no folder
@@ -81,6 +85,7 @@ onstart:
 ### Read and validate resources file
 
 config = load_resources(config, config["resources"])
+config = replace_dict_variables(config)
 validate(config, schema="../schemas/resources.schema.yaml")
 
 
@@ -93,7 +98,7 @@ validate(samples, schema="../schemas/samples.schema.yaml")
 
 units = (
     pandas.read_table(config["units"], dtype=str)
-    .set_index(["sample", "type", "flowcell", "lane", "barcode"], drop=False)
+    .set_index(["sample", "type", "processing_unit", "barcode"], drop=False)
     .sort_index()
 )
 
@@ -114,6 +119,25 @@ validate(output_spec, schema="../schemas/output_files.schema.yaml")
 wildcard_constraints:
     sample="|".join(samples.index),
     type="N|T|R",
+
+
+def get_bam_input(wildcards):
+ 
+    sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
+    aligner = config.get("aligner", None)
+    
+    if aligner is None:
+        sys.exit("aligner missing from config, valid options: minimap2 or pbmm2")
+    elif aligner == "minimap2":
+        bam_input = f"alignment/minimap2/{sample_str}.bam"
+    elif aligner == "pbmm2":
+        bam_input = f"alignment/pbmm2/{sample_str}.bam"
+    else:
+        sys.exit("valid options for aligner are: minimap2 or pbmm2")
+
+    bai_input = "{}.bai".format(bam_input)
+
+    return (bam_input, bai_input)
 
 
 def compile_output_file_list(wildcards):
