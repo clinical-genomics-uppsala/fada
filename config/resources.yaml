@@ -3,6 +3,19 @@
 default_resources:
   threads: 1
   time: "12:00:00"
-  mem_mb: 1024
-  mem_per_cpu: 3072
+  mem_mb: 6144
+  mem_per_cpu: 6144
   partition: core
+
+pbmm2_align:
+  mem_mb: 122880
+  mem_per_cpu: 6144
+  threads: 20
+
+deepvariant:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
+
+trgt_genotype:
+  threads: 4

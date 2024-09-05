@@ -129,9 +129,9 @@ def get_bam_input(wildcards):
     if aligner is None:
         sys.exit("aligner missing from config, valid options: minimap2 or pbmm2")
     elif aligner == "minimap2":
-        bam_input = f"alignment/minimap2/{sample_str}.bam"
+        bam_input = f"alignment/minimap2_align/{sample_str}.bam"
     elif aligner == "pbmm2":
-        bam_input = f"alignment/pbmm2/{sample_str}.bam"
+        bam_input = f"alignment/pbmm2_align/{sample_str}.bam"
     else:
         sys.exit("valid options for aligner are: minimap2 or pbmm2")
 

@@ -9,12 +9,28 @@ rule all:
     input:
         compile_output_file_list,
 
+ruleorder: _copy_samtools_crai > compression_samtools_index
+
+module annotation:
+    snakefile:
+        get_module_snakefile(config, "hydra-genetics/annotation", path="workflow/Snakefile", tag=config["modules"]["annotation"])
+    config:
+        config
+
+use rule * from annotation as annotation_*
+
+use rule stranger from annotation as annotation with:
+    input:
+        vcf="cnv_sv/trgt/{sample}_{type}.vcf.gz",
+        cat=config.get("stranger", {}).get("catalog", ""),
+    output:
+        vcf=temp("cnv_sv/stranger/{sample}_{type}.stranger.trgt.vcf")
+
 module alignment:
     snakefile:
         get_module_snakefile(config, "hydra-genetics/alignment", path="workflow/Snakefile", tag=config["modules"]["alignment"])
     config:
         config
-
 
 use rule * from alignment as alignment_*
 
@@ -35,4 +51,63 @@ use rule samtools_view from compression as compression_samtools_view with:
         bai=lambda wildcards: get_bam_input(wildcards)[1],
         ref=config.get("reference", {}).get("fasta", ""),
     output:
+        cram=temp("compression/samtools_view/{sample}_{type}.cram"),
+    log:
+        "compression/samtools_view/{sample}_{type}.cram.log",
+    benchmark:
+        repeat(
+            "compression/samtools_view/{sample}_{type}.cram.benchmark.tsv",
+            config.get("compression_samtools_view", {}).get("benchmark_repeats", 1),
+        )
 
+module cnv_sv:
+    snakefile:
+        get_module_snakefile(
+            config, "hydra-genetics/cnv_sv", path="workflow/Snakefile", tag=config["modules"]["cnv_sv"]
+        )
+    config:
+        config
+
+use rule * from cnv_sv as cnv_sv_*
+
+use rule trgt_genotype from cnv_sv as cnv_sv_trgt with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        ref=config.get("reference", {}).get("fasta", ""),
+    output:
+        vcf="cnv_sv/trgt_genotype/{sample}_{type}.vcf.gz",
+        bam="cnv_sv/trgt_genotype/{sample}_{type}.spanning.bam",
+
+module misc:
+    snakefile:
+        get_module_snakefile(
+            config, "hydra-genetics/misc", path="workflow/Snakefile", tag=config["modules"]["misc"]
+        )
+    config:
+        config
+
+use rule * from misc as misc_* 
+
+module snv_indels:
+    snakefile:
+        get_module_snakefile(config, "hydra-genetics/snv_indels", path="workflow/Snakefile", tag=config["modules"]["snv_indels"])
+    config:
+        config
+
+
+use rule * from snv_indels as snv_indels_*
+
+use rule deepvariant from snv_indels as snv_indels_deepvariant with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        ref=config.get("reference", {}).get("fasta", ""),
+
+
+use rule bcftools_concat from snv_indels as snv_indels_bcftools_concat with:
+    input:
+        calls=expand(
+            "{{file}}_{chr}.{{vcf}}.gz", chr=[f"chr{i}" for i in list(range(1,23)) + ["X", "Y"]]),
+        index=expand(
+            "{{file}}_{chr}.{{vcf}}.gz", chr=[f"chr{i}" for i in list(range(1,23)) + ["X", "Y"]]),

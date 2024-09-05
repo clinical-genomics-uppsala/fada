@@ -1,8 +1,8 @@
 ---
- files: 
-   - name: "_copy_cram"
-     output: "result/{sample}.cram"
-     input: "compression/samtools_view/{sample}_N.cram"
+files: 
+  - name: "_copy_cram"
+    output: "result/{sample}.cram"
+    input: "compression/samtools_view/{sample}_N.cram"
   - name: "_copy_crai"
-     output: "result/{sample}.cram.crai"
-     input: "compression/samtools_view/{sample}_N.cram"
+    output: "result/{sample}.cram.crai"
+    input: "compression/samtools_view/{sample}_N.cram.crai"

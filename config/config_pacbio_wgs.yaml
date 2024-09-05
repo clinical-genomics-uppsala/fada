@@ -1,8 +1,43 @@
 ---
 output: "config/output_pacbio_wgs.yaml"
-resources: "config/resources.yaml"
 samples: "samples_pacbio_wgs.tsv"
 units: "units_pacbio_wgs.tsv"
 
 aligner: "pbmm2"
 
+deepvariant:
+  container: "docker://google/deepvariant:1.6.1"
+  model_type: "PACBIO"
+  output_gvcf: false
+
+pbmm2_index:
+  preset: "HIFI"
+  container: "docker://hydragenetics/pbmm2:1.10"
+
+pbmm2_align:
+  preset: "HIFI"
+  container: "docker://hydragenetics/pbmm2:1.10"
+  extra: "--unmapped "
+
+minimap2_align:
+  preset: "map-hifi"
+
+trgt_genotype:
+  bed: "reference/human_GRCh38_trgt.bed"
+  container: "docker://hydragenetics/trgt:1.0.0"
+
+trgt_plot_motifs:
+  image_type: "svg"
+  plot_type: "allele"
+  show: "motifs"
+  container: "docker://hydragenetics/trgt:1.0.0"
+
+trgt_plot_motifs:
+  image_type: "svg"
+  plot_type: "allele"
+  show: "meth"
+  container: "docker://hydragenetics/trgt:1.0.0"
+
+stranger:
+  extra: "--trgt"
+  

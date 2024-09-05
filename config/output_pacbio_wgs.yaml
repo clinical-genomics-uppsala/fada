@@ -1,5 +1,25 @@
 ---
- files: 
-   - name: "_copy_samples_tsv"
-     output: "result/samples.tsv"
-     input: "samples.tsv"
+files: 
+    # Cram files
+  - name: "samtools_cram"
+    output: "result/{sample}.cram"
+    input: "compression/samtools_view/{sample}_N.cram"
+  - name: "samtools_crai"
+    output: "result/{sample}.cram.crai"
+    input: "compression/samtools_view/{sample}_N.cram.crai"
+    
+    #SNV & INDEL files
+  - name: "deepvariant_vcf"
+    output: "result/{sample}.deepvariant.vcf.gz."
+    input: "snv_indels/deepvariant/{sample}_N.merged.vcf.gz"
+  - name: "deepvariant_tbi"
+    output: "result/{sample}.deepvariant.vcf.gz.tbi"
+    input: "snv_indels/deepvariant/{sample}_N.merged.vcf.gz.tbi"
+
+  # Repeat expansion files
+  - name: "stranger_trgt_vcf"
+    output: "result/{sample}.trgt.stranger.vcf.gz"
+    input: "annotation/stranger/{sample}_N.trgt.stranger.vcf.gz"
+  - name: "stranger_trgt_tbi"
+    output: "result/{sample}.trgt.stranger.vcf.gz.tbi"
+    input: "annotation/stranger/{sample}_N.trgt.stranger.vcf.gz.tbi"
