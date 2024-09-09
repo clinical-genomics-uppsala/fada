@@ -1,6 +1,6 @@
 ---
 
-PIPELINE_REF_DATA: "/data/ref_data/wp3/fada/GRCH38"
+PIPELINE_REF_DATA: "reference"
 
 default_container: "docker://hydragenetics/common:1.11.1"
 
@@ -8,12 +8,12 @@ resources: "config/resources.yaml"
 
 modules:
   alignment: "1f4bc73"
-  annotation: "5fb7bed"
+  annotation: "7b57039"
   compression: "b3ef8cc"
-  cnv_sv: "v0.5.0"
+  cnv_sv: "34dbbb4"
   # filtering: "v0.3.0"
   #qc: "v0.5.0"
-  misc: "v0.2.0"
+  misc: "cd1e891"
   snv_indels: "0ed8526"
 
 reference:
@@ -21,12 +21,6 @@ reference:
   fasta: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
   fai: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
   pathogenic_repeats_bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
-
-minimap2_index:
-  container: "docker://hydragenetics/minimap2:2.26"
-
-minimap2_align:
-  container: "docker://hydragenetics/minimap2:2.26"
 
 multiqc:
   container: "docker://hydragenetics/multiqc:1.21"
