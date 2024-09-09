@@ -10,6 +10,9 @@ rule all:
         compile_output_file_list,
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
+ruleorder: _copy_stranger_trgt_tbi > annotation_tabix_vcf
+ruleorder: snv_indels_bgzip > annotation_bgzip_vcf 
+ruleorder: snv_indels_tabix > annotation_tabix_vcf 
 
 module annotation:
     snakefile:
@@ -19,12 +22,12 @@ module annotation:
 
 use rule * from annotation as annotation_*
 
-use rule stranger from annotation as annotation with:
+use rule stranger from annotation as annotation_stranger with:
     input:
-        vcf="cnv_sv/trgt/{sample}_{type}.vcf.gz",
+        vcf="cnv_sv/trgt_genotype/{sample}_{type}.vcf.gz",
         cat=config.get("stranger", {}).get("catalog", ""),
     output:
-        vcf=temp("cnv_sv/stranger/{sample}_{type}.stranger.trgt.vcf")
+        vcf=temp("annotation/stranger/{sample}_{type}.trgt.vcf")
 
 module alignment:
     snakefile:
@@ -74,20 +77,21 @@ use rule trgt_genotype from cnv_sv as cnv_sv_trgt with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
         bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bed=config.get("reference", {}).get("pathogenic_repeats_bed", ""),
         ref=config.get("reference", {}).get("fasta", ""),
     output:
         vcf="cnv_sv/trgt_genotype/{sample}_{type}.vcf.gz",
         bam="cnv_sv/trgt_genotype/{sample}_{type}.spanning.bam",
 
-module misc:
-    snakefile:
-        get_module_snakefile(
-            config, "hydra-genetics/misc", path="workflow/Snakefile", tag=config["modules"]["misc"]
-        )
-    config:
-        config
+# module misc:
+#     snakefile:
+#         get_module_snakefile(
+#             config, "hydra-genetics/misc", path="workflow/Snakefile", tag=config["modules"]["misc"]
+#         )
+#     config:
+#         config
 
-use rule * from misc as misc_* 
+# use rule * from misc exclude bedtools_intersect as misc_* 
 
 module snv_indels:
     snakefile:

@@ -91,7 +91,7 @@ validate(config, schema="../schemas/resources.schema.yaml")
 
 ### Read and validate samples file
 
-samples = pd.read_table(config["samples"], dtype=str).set_index("sample", drop=False)
+samples = pd.read_table(config["samples"], dtype=str, sep='\t').set_index("sample", drop=False)
 validate(samples, schema="../schemas/samples.schema.yaml")
 
 ### Read and validate units file
@@ -157,6 +157,7 @@ def compile_output_file_list(wildcards):
 
         for op in outputpaths:
             output_files.append(outdir / Path(op))
+    
 
     return output_files
 
