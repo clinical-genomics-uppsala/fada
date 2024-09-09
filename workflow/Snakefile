@@ -3,16 +3,20 @@ __copyright__ = "Copyright 2024, Pádraic Corcoran"
 __email__ = "padraic.corcoran@sciliflab.uu.se"
 __license__ = "GPL-3"
 
+
 include: "rules/common.smk"
+
 
 rule all:
     input:
         compile_output_file_list,
 
+
 ruleorder: _copy_samtools_crai > compression_samtools_index
 ruleorder: _copy_stranger_trgt_tbi > annotation_tabix_vcf
-ruleorder: snv_indels_bgzip > annotation_bgzip_vcf 
-ruleorder: snv_indels_tabix > annotation_tabix_vcf 
+ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
+ruleorder: snv_indels_tabix > annotation_tabix_vcf
+
 
 module annotation:
     snakefile:
@@ -20,14 +24,17 @@ module annotation:
     config:
         config
 
+
 use rule * from annotation as annotation_*
+
 
 use rule stranger from annotation as annotation_stranger with:
     input:
         vcf="cnv_sv/trgt_genotype/{sample}_{type}.vcf.gz",
         cat=config.get("stranger", {}).get("catalog", ""),
     output:
-        vcf=temp("annotation/stranger/{sample}_{type}.trgt.vcf")
+        vcf=temp("annotation/stranger/{sample}_{type}.trgt.vcf"),
+
 
 module alignment:
     snakefile:
@@ -35,7 +42,9 @@ module alignment:
     config:
         config
 
+
 use rule * from alignment as alignment_*
+
 
 module compression:
     snakefile:
@@ -47,6 +56,7 @@ module compression:
 
 
 use rule * from compression as compression_*
+
 
 use rule samtools_view from compression as compression_samtools_view with:
     input:
@@ -63,15 +73,16 @@ use rule samtools_view from compression as compression_samtools_view with:
             config.get("compression_samtools_view", {}).get("benchmark_repeats", 1),
         )
 
+
 module cnv_sv:
     snakefile:
-        get_module_snakefile(
-            config, "hydra-genetics/cnv_sv", path="workflow/Snakefile", tag=config["modules"]["cnv_sv"]
-        )
+        get_module_snakefile(config, "hydra-genetics/cnv_sv", path="workflow/Snakefile", tag=config["modules"]["cnv_sv"])
     config:
         config
 
+
 use rule * from cnv_sv as cnv_sv_*
+
 
 use rule trgt_genotype from cnv_sv as cnv_sv_trgt with:
     input:
@@ -83,6 +94,7 @@ use rule trgt_genotype from cnv_sv as cnv_sv_trgt with:
         vcf="cnv_sv/trgt_genotype/{sample}_{type}.vcf.gz",
         bam="cnv_sv/trgt_genotype/{sample}_{type}.spanning.bam",
 
+
 # module misc:
 #     snakefile:
 #         get_module_snakefile(
@@ -91,7 +103,8 @@ use rule trgt_genotype from cnv_sv as cnv_sv_trgt with:
 #     config:
 #         config
 
-# use rule * from misc exclude bedtools_intersect as misc_* 
+# use rule * from misc exclude bedtools_intersect as misc_*
+
 
 module snv_indels:
     snakefile:
@@ -102,6 +115,7 @@ module snv_indels:
 
 use rule * from snv_indels as snv_indels_*
 
+
 use rule deepvariant from snv_indels as snv_indels_deepvariant with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
@@ -111,7 +125,5 @@ use rule deepvariant from snv_indels as snv_indels_deepvariant with:
 
 use rule bcftools_concat from snv_indels as snv_indels_bcftools_concat with:
     input:
-        calls=expand(
-            "{{file}}_{chr}.{{vcf}}.gz", chr=[f"chr{i}" for i in list(range(1,23)) + ["X", "Y"]]),
-        index=expand(
-            "{{file}}_{chr}.{{vcf}}.gz", chr=[f"chr{i}" for i in list(range(1,23)) + ["X", "Y"]]),
+        calls=expand("{{file}}_{chr}.{{vcf}}.gz", chr=[f"chr{i}" for i in list(range(1, 23)) + ["X", "Y"]]),
+        index=expand("{{file}}_{chr}.{{vcf}}.gz", chr=[f"chr{i}" for i in list(range(1, 23)) + ["X", "Y"]]),

@@ -58,10 +58,13 @@ except WorkflowError as we:
 
 pipeline_name = "Fada"
 pipeline_version = get_pipeline_version(workflow, pipeline_name=pipeline_name)
-version_files = touch_pipeline_version_file_name(pipeline_version, date_string=pipeline_name, directory="results/versions/software")
+version_files = touch_pipeline_version_file_name(
+    pipeline_version, date_string=pipeline_name, directory="results/versions/software"
+)
 if use_container(workflow):
     version_files += touch_software_version_file(config, date_string=pipeline_name, directory="results/versions/software")
 add_version_files_to_multiqc(config, version_files)
+
 
 onstart:
     export_pipeline_version_as_file(pipeline_version, date_string=pipeline_name, directory="results/versions/software")
@@ -82,6 +85,7 @@ onstart:
     date_string = datetime.now().strftime("%Y%m%d")
     export_config_as_file(update_config, date_string=date_string, directory="results/versions")
 
+
 ### Read and validate resources file
 
 config = load_resources(config, config["resources"])
@@ -91,7 +95,7 @@ validate(config, schema="../schemas/resources.schema.yaml")
 
 ### Read and validate samples file
 
-samples = pd.read_table(config["samples"], dtype=str, sep='\t').set_index("sample", drop=False)
+samples = pd.read_table(config["samples"], dtype=str, sep="\t").set_index("sample", drop=False)
 validate(samples, schema="../schemas/samples.schema.yaml")
 
 ### Read and validate units file
@@ -122,10 +126,10 @@ wildcard_constraints:
 
 
 def get_bam_input(wildcards):
- 
+
     sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
     aligner = config.get("aligner", None)
-    
+
     if aligner is None:
         sys.exit("aligner missing from config, valid options: minimap2 or pbmm2")
     elif aligner == "minimap2":
@@ -157,7 +161,6 @@ def compile_output_file_list(wildcards):
 
         for op in outputpaths:
             output_files.append(outdir / Path(op))
-    
 
     return output_files
 
