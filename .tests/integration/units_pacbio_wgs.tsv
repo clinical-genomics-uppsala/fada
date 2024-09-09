@@ -1,0 +1,2 @@
+sample	type	platform	machine	processing_unit	barcode	methylation	bam
+HG002	N	PACBIO	REVIO	m84045_240503_181249_s4	CTGAGCACTCGAGTAT	Yes	/beegfs-storage/projects/wp3/nobackup/CGU_2023_24_MariaW_wgs_pacbio_wifi/DataDelivery_2024-05-06_17-15-19_ugc00288/files/pr_075/rawdata/pr_075_004/m84045_240503_181249_s4.hifi_reads.bc2084.bam
