@@ -1,4 +1,5 @@
-# <img src="images/hydragenetics.png" width=40 /> hydra-genetics/fada
+# <img src="images/hydragenetics.png" width=40 /> Fada
+
 
 #### Pipeline for germline variant detection in longread sequence data
 
