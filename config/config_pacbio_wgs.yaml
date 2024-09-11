@@ -22,8 +22,13 @@ pbmm2_align:
 minimap2_align:
   preset: "map-hifi"
 
+mosdepth:
+  container: "docker://hydragenetics/mosdepth:0.3.2"
+  by: "500"
+  extra: "--fast-mode --use-median --no-per-base "
+
 trgt_genotype:
-  bed: "reference/human_GRCh38_trgt.bed"
+  bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
   container: "docker://hydragenetics/trgt:1.0.0"
 
 trgt_plot_motifs:
@@ -32,7 +37,7 @@ trgt_plot_motifs:
   show: "motifs"
   container: "docker://hydragenetics/trgt:1.0.0"
 
-trgt_plot_motifs:
+trgt_plot_meth:
   image_type: "svg"
   plot_type: "allele"
   show: "meth"
@@ -40,4 +45,3 @@ trgt_plot_motifs:
 
 stranger:
   extra: "--trgt"
-  

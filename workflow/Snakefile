@@ -83,8 +83,14 @@ module cnv_sv:
 
 use rule * from cnv_sv as cnv_sv_*
 
+use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        ref=config.get("reference", {}).get("fasta", ""),
 
-use rule trgt_genotype from cnv_sv as cnv_sv_trgt with:
+
+use rule trgt_genotype from cnv_sv as cnv_sv_trgt_genotype with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
         bai=lambda wildcards: get_bam_input(wildcards)[1],
@@ -95,16 +101,13 @@ use rule trgt_genotype from cnv_sv as cnv_sv_trgt with:
         bam="cnv_sv/trgt_genotype/{sample}_{type}.spanning.bam",
 
 
-# module misc:
-#     snakefile:
-#         get_module_snakefile(
-#             config, "hydra-genetics/misc", path="workflow/Snakefile", tag=config["modules"]["misc"]
-#         )
-#     config:
-#         config
+use rule trgt_plot from cnv_sv as cnv_sv_trgt_plot with:
+    output:
+        image=expand("cnv_sv/trgt_plot/motif/{{sample}}_{{type}}_{{locus}}.{ext}", ext=config.get("trgt_plot_motif", {}).get("image", "svg")),
 
-# use rule * from misc exclude bedtools_intersect as misc_*
-
+use rule trgt_plot from cnv_sv as cnv_sv_trgt_plot_meth with:
+    output:
+        image=expand("cnv_sv/trgt_plot/meth/{{sample}}_{{type}}_{{locus}}.{ext}", ext=config.get("trgt_plot_meth", {}).get("image", "svg")),
 
 module snv_indels:
     snakefile:
@@ -127,3 +130,40 @@ use rule bcftools_concat from snv_indels as snv_indels_bcftools_concat with:
     input:
         calls=expand("{{file}}_{chr}.{{vcf}}.gz", chr=[f"chr{i}" for i in list(range(1, 23)) + ["X", "Y"]]),
         index=expand("{{file}}_{chr}.{{vcf}}.gz", chr=[f"chr{i}" for i in list(range(1, 23)) + ["X", "Y"]]),
+
+
+module qc:
+    snakefile:
+        get_module_snakefile(config, "hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["qc"])
+    config:
+        config
+
+use rule multiqc from qc as qc_multiqc with:
+    input:
+        files=lambda wildcards: set(
+            [
+                file.format(sample=sample, type=u.type)
+                for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
+                for sample in get_samples(samples)
+                for u in units.loc[sample].dropna().itertuples()
+                if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+            ]
+        ),
+        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+
+
+use rule mosdepth from qc as qc_mosdepth with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+
+use rule samtools_stats from qc as qc_samtools_stats with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+
+use rule samtools_idxstats from qc as qc_samtools_idxstats with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+    output:
+        temp("qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"),

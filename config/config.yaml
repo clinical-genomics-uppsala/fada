@@ -1,6 +1,6 @@
 ---
 
-PIPELINE_REF_DATA: "reference"
+PIPELINE_REF_DATA: "/data/ref_data/wp3/fada/GRCH38"
 
 default_container: "docker://hydragenetics/common:1.11.1"
 
@@ -8,11 +8,11 @@ resources: "config/resources.yaml"
 
 modules:
   alignment: "1f4bc73"
-  annotation: "7b57039"
+  annotation: "3ce9da5"
   compression: "b3ef8cc"
-  cnv_sv: "34dbbb4"
+  cnv_sv: "f29e4a2"
   # filtering: "v0.3.0"
-  #qc: "v0.5.0"
+  qc: "6bb90bb"
   misc: "cd1e891"
   snv_indels: "0ed8526"
 
@@ -32,8 +32,6 @@ multiqc:
         - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
         - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
         - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
-        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
-        - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.summary_metrics"
         - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
         - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
 

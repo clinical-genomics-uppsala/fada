@@ -58,12 +58,13 @@ except WorkflowError as we:
 
 pipeline_name = "Fada"
 pipeline_version = get_pipeline_version(workflow, pipeline_name=pipeline_name)
-version_files = touch_pipeline_version_file_name(
+version_file = touch_pipeline_version_file_name(
     pipeline_version, date_string=pipeline_name, directory="results/versions/software"
 )
+
 if use_container(workflow):
-    version_files += touch_software_version_file(config, date_string=pipeline_name, directory="results/versions/software")
-add_version_files_to_multiqc(config, version_files)
+    version_file.append(touch_software_version_file(config, date_string=pipeline_name, directory="results/versions/software"))
+add_version_files_to_multiqc(config, version_file)
 
 
 onstart:
@@ -144,6 +145,17 @@ def get_bam_input(wildcards):
     return (bam_input, bai_input)
 
 
+def get_trgt_loci(wildcards):
+    trgt_bed = config.get("trgt_genotype", {}).get("bed", "")
+    rep_ids = []
+    with open(trgt_bed, "r") as infile:
+        for line in infile:
+            cols = line.split("\t")
+            rep_id = cols[3].split(";")[0]
+            rep_ids.append(rep_id.split("=")[1])
+    return rep_ids
+
+
 def compile_output_file_list(wildcards):
     outdir = pathlib.Path(output_spec.get("directory", "./"))
     output_files = []
@@ -153,9 +165,11 @@ def compile_output_file_list(wildcards):
         # that the output strings should be formatted with.
         outputpaths = set(
             [
-                f["output"].format(sample=sample, type=unit_type)
+                f["output"].format(sample=sample, type=unit_type, locus=locus, suffix=suffix)
                 for sample in get_samples(samples)
                 for unit_type in get_unit_types(units, sample)
+                for locus in get_trgt_loci(wildcards)
+                for suffix in [config.get("trgt_plot_motif", {}).get("image", "svg")]
             ]
         )
 

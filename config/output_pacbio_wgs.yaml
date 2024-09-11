@@ -2,24 +2,44 @@
 files: 
     # Cram files
   - name: "samtools_cram"
-    output: "results/{sample}.cram"
+    output: "results/{sample}/{sample}.cram"
     input: "compression/samtools_view/{sample}_N.cram"
   - name: "samtools_crai"
-    output: "results/{sample}.cram.crai"
+    output: "results/{sample}/cram/{sample}.cram.crai"
     input: "compression/samtools_view/{sample}_N.cram.crai"
 
     #SNV & INDEL files
   - name: "deepvariant_vcf"
-    output: "results/{sample}.deepvariant.vcf.gz."
+    output: "results/{sample}/snv_indels/{sample}.deepvariant.vcf.gz."
     input: "snv_indels/deepvariant/{sample}_N.merged.vcf.gz"
   - name: "deepvariant_tbi"
-    output: "results/{sample}.deepvariant.vcf.gz.tbi"
+    output: "results/{sample}/snv_indels/{sample}.deepvariant.vcf.gz.tbi"
     input: "snv_indels/deepvariant/{sample}_N.merged.vcf.gz.tbi"
+  
+    # CNV & SV files
+  - name: "sniffles2_vcf"
+    output: "results/{sample}/cnv_sv/{sample}.sniffles2.vcf.gz"
+    input: "cnv_sv/sniffles2_call/{sample}_N.vcf.gz"
+  - name: "sniffles2_vcf_tbi"
+    output: "results/{sample}/cnv_sv/{sample}.sniffles2.vcf.gz.tbi"
+    input: "cnv_sv/sniffles2_call/{sample}_N.vcf.gz.tbi"
 
-  # Repeat expansion files
+    # Repeat expansion files
   - name: "stranger_trgt_vcf"
-    output: "results/{sample}.trgt.vcf.gz"
+    output: "results/{sample}/repeat_expansions/{sample}.trgt.vcf.gz"
     input: "annotation/stranger/{sample}_N.trgt.vcf.gz"
   - name: "stranger_trgt_tbi"
-    output: "results/{sample}.trgt.vcf.gz.tbi"
+    output: "results/{sample}/repeat_expansions/{sample}.trgt.vcf.gz.tbi"
     input: "annotation/stranger/{sample}_N.trgt.vcf.gz.tbi"
+
+  - name: "trgt_plot_motif"
+    output: "results/{sample}/repeat_expansions/trgt_plot/motif/{sample}_{locus}.{suffix}"
+    input: "cnv_sv/trgt_plot/motif/{sample}_N_{locus}.{suffix}"
+  - name: "trgt_plot_meth"
+    output: "results/{sample}/repeat_expansions/trgt_plot/meth/{sample}_{locus}.{suffix}"
+    input: "cnv_sv/trgt_plot/meth/{sample}_N_{locus}.{suffix}"
+  
+  # QC files
+  - name: "multiqc_report"
+    output: "results/multiqc_DNA.html"
+    input: "qc/multiqc/multiqc_DNA.html"

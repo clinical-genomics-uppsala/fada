@@ -3,13 +3,13 @@
 
 #### Pipeline for germline variant detection in longread sequence data
 
-![Lint](https://github.com/hydra-genetics/fada/actions/workflows/lint.yaml/badge.svg?branch=develop)
-![Snakefmt](https://github.com/hydra-genetics/fada/actions/workflows/snakefmt.yaml/badge.svg?branch=develop)
-![snakemake dry run](https://github.com/hydra-genetics/fada/actions/workflows/snakemake-dry-run.yaml/badge.svg?branch=develop)
-![integration test](https://github.com/hydra-genetics/fada/actions/workflows/integration.yaml/badge.svg?branch=develop)
+![Lint](https://github.com/clinical-genomics-uppsala/fada/actions/workflows/lint.yaml/badge.svg?branch=develop)
+![Snakefmt](https://github.com/clinical-genomics-uppsala/fada/actions/workflows/snakefmt.yaml/badge.svg?branch=develop)
+![snakemake dry run](https://github.com/clinical-genomics-uppsala/fada/actions/workflows/snakemake-dry-run.yaml/badge.svg?branch=develop)
+![integration test](https://github.com/clinical-genomics-uppsala/fada/actions/workflows/integration.yaml/badge.svg?branch=develop)
 
-![pycodestyle](https://github.com/hydra-genetics/fada/actions/workflows/pycodestyle.yaml/badge.svg?branch=develop)
-![pytest](https://github.com/hydra-genetics/fada/actions/workflows/pytest.yaml/badge.svg?branch=develop)
+![pycodestyle](https://github.com/clinical-genomics-uppsala/fada/actions/workflows/pycodestyle.yaml/badge.svg?branch=develop)
+![pytest](https://github.com/clinical-genomics-uppsala/fada/actions/workflows/pytest.yaml/badge.svg?branch=develop)
 
 [![License: GPL-3](https://img.shields.io/badge/License-GPL3-yellow.svg)](https://opensource.org/licenses/gpl-3.0.html)
 
@@ -18,7 +18,7 @@
 
 In order to use this module, the following dependencies are required:
 
-[![hydra-genetics](https://img.shields.io/badge/hydragenetics-v3.0.0-blue)](https://github.com/hydra-genetics/)
+[![clinical-genomics-uppsala](https://img.shields.io/badge/hydragenetics-v3.0.0-blue)](https://github.com/hydra-genetics/)
 [![pandas](https://img.shields.io/badge/pandas-1.3.1-blue)](https://pandas.pydata.org/)
 [![python](https://img.shields.io/badge/python-3.9-blue)
 [![snakemake](https://img.shields.io/badge/snakemake-7.26.0-blue)](https://snakemake.readthedocs.io/en/stable/)
