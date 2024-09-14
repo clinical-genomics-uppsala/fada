@@ -13,7 +13,7 @@ rule all:
 
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
-ruleorder: _copy_stranger_trgt_tbi > annotation_tabix_vcf
+#ruleorder: _copy_stranger_trgt_tbi > annotation_tabix_vcf
 ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
 ruleorder: snv_indels_tabix > annotation_tabix_vcf
 

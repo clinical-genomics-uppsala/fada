@@ -17,5 +17,10 @@ deepvariant:
   mem_per_cpu: 6144
   threads: 10
 
+sniffles2_call:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
+
 trgt_genotype:
   threads: 4

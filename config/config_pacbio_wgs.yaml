@@ -20,22 +20,22 @@ pbmm2_align:
   extra: "--unmapped "
 
 minimap2_align:
+  container: "docker://hydragenetics/minimap2:2.26"
   preset: "map-hifi"
 
 mosdepth:
-  container: "docker://hydragenetics/mosdepth:0.3.2"
   by: "500"
   extra: "--fast-mode --use-median --no-per-base "
 
 trgt_genotype:
-  bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
   container: "docker://hydragenetics/trgt:1.0.0"
+  bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
 
 trgt_plot_motifs:
+  container: "docker://hydragenetics/trgt:1.0.0"
   image_type: "svg"
   plot_type: "allele"
   show: "motifs"
-  container: "docker://hydragenetics/trgt:1.0.0"
 
 trgt_plot_meth:
   image_type: "svg"
@@ -43,5 +43,12 @@ trgt_plot_meth:
   show: "meth"
   container: "docker://hydragenetics/trgt:1.0.0"
 
+sniffles2_call:
+  container: "docker://hydragenetics/sniffles2:2.4"
+  bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
+
 stranger:
+  catalog: "{{PIPELINE_REF_DATA}}/variant_catalog_hg38.json"
+  container: "docker://hydragenetics/stranger:0.9.1"
   extra: "--trgt"
+
