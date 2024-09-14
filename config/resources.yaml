@@ -12,6 +12,16 @@ pbmm2_align:
   mem_per_cpu: 6144
   threads: 20
 
+minimap2_index:
+  mem_mb: 6144
+  mem_per_cpu: 6144
+  threads: 1
+
+minimap2_align:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
+
 deepvariant:
   mem_mb: 61440
   mem_per_cpu: 6144

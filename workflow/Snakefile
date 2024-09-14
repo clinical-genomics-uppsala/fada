@@ -13,16 +13,20 @@ if config.get("pipeline") == "pacbio_twist_cancer":
     include: "rules/export_qc_twist_cancer.smk"
     include: "rules/picard.smk"
 
+if config.get("pipeline") == "ont_target_str":
+    include: "rules/local/samtools.smk"
+
 
 rule all:
     input:
         compile_output_file_list,
 
 
-ruleorder: _copy_samtools_crai > compression_samtools_index
-ruleorder: cnv_sv_sawfish_joint_call > cnv_sv_tabix
-ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
-ruleorder: snv_indels_tabix > annotation_tabix_vcf
+if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs" ]:
+    ruleorder: _copy_samtools_crai > compression_samtools_index
+    ruleorder: cnv_sv_sawfish_joint_call > cnv_sv_tabix
+    ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
+    ruleorder: snv_indels_tabix > annotation_tabix_vcf
 
 
 module annotation:
@@ -33,7 +37,6 @@ module annotation:
 
 
 use rule * from annotation as annotation_*
-
 
 use rule stranger from annotation as annotation_stranger with:
     input:
@@ -204,6 +207,14 @@ use rule bcftools_concat from snv_indels as snv_indels_bcftools_concat with:
         calls=expand("{{file}}_{chr}.{{vcf}}.gz", chr=chr_list),
         index=expand("{{file}}_{chr}.{{vcf}}.gz.tbi", chr=chr_list),
 
+# module misc:
+#     snakefile:
+#         get_module_snakefile(config, "hydra-genetics/misc", path="workflow/Snakefile", tag=config["modules"]["misc"])
+#     config:
+#         config
+
+
+# use rule samtools_index from misc as misc_samtools_index
 
 module qc:
     snakefile:
@@ -268,6 +279,57 @@ use rule multiqc from qc as qc_multiqc with:
         config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
 
 
+<<<<<<< HEAD
+=======
+use rule mosdepth from qc as qc_mosdepth_wgs with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+
+use rule mosdepth_bed from qc as mosdepth_bed_target with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bed=config.get("reference", {}).get("target_bed", ""),
+    output:
+        bed=temp("qc/mosdepth_bed_target/{sample}_{type}.regions.bed.gz"),
+        bed_csi=temp("qc/mosdepth_bed_target/{sample}_{type}.regions.bed.gz.csi"),
+        coverage=temp("qc/mosdepth_bed_target/{sample}_{type}.per-base.bed.gz"),
+        coverage_csi=temp("qc/mosdepth_bed_target/{sample}_{type}.per-base.bed.gz.csi"),
+        glob=temp("qc/mosdepth_bed_target/{sample}_{type}.mosdepth.global.dist.txt"),
+        region=temp("qc/mosdepth_bed_target/{sample}_{type}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth_bed_target/{sample}_{type}.mosdepth.summary.txt"),
+    log:
+        "qc/mosdepth_bed_target/{sample}_{type}.mosdepth.summary.txt.log",
+    benchmark:
+        repeat(
+            "qc/mosdepth_bed_target/{sample}_{type}.mosdepth.summary.txt.benchmark.tsv",
+            config.get("mosdepth_bed", {}).get("benchmark_repeats", 1),
+        )
+
+use rule mosdepth_bed from qc as mosdepth_bed_design with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bed=config.get("reference", {}).get("design_bed", ""),
+    output:
+        bed=temp("qc/mosdepth_bed_design/{sample}_{type}.regions.bed.gz"),
+        bed_csi=temp("qc/mosdepth_bed_design/{sample}_{type}.regions.bed.gz.csi"),
+        coverage=temp("qc/mosdepth_bed_design/{sample}_{type}.per-base.bed.gz"),
+        coverage_csi=temp("qc/mosdepth_bed_design/{sample}_{type}.per-base.bed.gz.csi"),
+        glob=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.global.dist.txt"),
+        region=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt"),
+    log:
+        "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt.log",
+    benchmark:
+        repeat(
+            "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt.benchmark.tsv",
+            config.get("mosdepth_bed", {}).get("benchmark_repeats", 1),
+        )
+
+
+>>>>>>> d22caf5 (feat: add mapping, target qc for ont targeted)
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],

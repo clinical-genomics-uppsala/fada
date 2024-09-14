@@ -1,0 +1,43 @@
+---
+pipeline: "ont_target_str"
+output: "config/output_ont_target_str.yaml"
+samples: "samples_ont_str.tsv"
+units: "units_ont_str.tsv"
+
+aligner: "minimap2"
+
+reference:
+  design_bed: "{{PIPELINE_REF_DATA}}/designs/gRNA_design_repeat_expansions_220308.bed"
+  target_bed: "{{PIPELINE_REF_DATA}}/targets/gms_cas9_str_targets.bed"
+
+minimap2_index:
+  container: "docker://hydragenetics/minimap2:2.26"
+  preset: "map-ont"
+
+minimap2_align:
+  container: "docker://hydragenetics/minimap2:2.26"
+  preset: "map-ont"
+  extra: "-Y "
+
+mosdepth_bed:
+  container: "docker://hydragenetics/mosdepth:0.3.2"
+
+multiqc:
+  container: "docker://hydragenetics/multiqc:1.21"
+  reports:
+    DNA:
+      config: "config/multiqc_config_DNA.yaml"
+      included_unit_types: ["N"]
+      qc_files:
+        - "qc/mosdepth_bed_target/{sample}_{type}.mosdepth.global.dist.txt"
+        - "qc/mosdepth_bed_target/{sample}_{type}.mosdepth.region.dist.txt"
+        - "qc/mosdepth_bed_target/{sample}_{type}.mosdepth.summary.txt"
+        - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
+        - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
+
+sniffles2_call:
+  container: "docker://hydragenetics/sniffles2:2.4"
+  bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
+
+
+
