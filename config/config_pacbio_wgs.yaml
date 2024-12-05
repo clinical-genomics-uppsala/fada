@@ -1,9 +1,19 @@
 ---
+pipeline: "pacbio_wgs"
 output: "config/output_pacbio_wgs.yaml"
 samples: "samples_pacbio_wgs.tsv"
 units: "units_pacbio_wgs.tsv"
 
 aligner: "pbmm2"
+phaser: "hiphase"
+trimmer_software: None
+
+
+reference:
+  skip_contigs: #scaffolds in hg38 to skip in deepvariant calling
+    - ".*_random"
+    - "chrUn_.*"
+    - "chrEBV"
 
 deepvariant:
   container: "docker://google/deepvariant:1.6.1"
@@ -18,21 +28,33 @@ pbmm2_align:
   preset: "HIFI"
   container: "docker://hydragenetics/pbmm2:1.10"
   extra: "--unmapped "
-
-minimap2_align:
-  container: "docker://hydragenetics/minimap2:2.26"
-  preset: "map-hifi"
-
+  
 mosdepth:
+  container: "docker://hydragenetics/mosdepth:0.3.2"
   by: "500"
   extra: "--fast-mode --use-median --no-per-base "
+
+multiqc:
+  container: "docker://hydragenetics/multiqc:1.21"
+  reports:
+    DNA:
+      config: "config/multiqc_config_DNA.yaml"
+      included_unit_types: ["N"]
+      qc_files:
+        - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
+        - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
+        - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
 
 trgt_genotype:
   container: "docker://hydragenetics/trgt:1.0.0"
   bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
 
-trgt_plot_motifs:
+trgt_plot:
   container: "docker://hydragenetics/trgt:1.0.0"
+
+trgt_plot_motifs:
   image_type: "svg"
   plot_type: "allele"
   show: "motifs"
@@ -41,7 +63,6 @@ trgt_plot_meth:
   image_type: "svg"
   plot_type: "allele"
   show: "meth"
-  container: "docker://hydragenetics/trgt:1.0.0"
 
 sniffles2_call:
   container: "docker://hydragenetics/sniffles2:2.4"

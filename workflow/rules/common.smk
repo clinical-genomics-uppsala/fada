@@ -19,6 +19,7 @@ from hydra_genetics.utils.samples import *
 from hydra_genetics.utils.units import *
 
 from hydra_genetics.utils.misc import replace_dict_variables
+from hydra_genetics.utils.misc import extract_chr
 
 from hydra_genetics.utils.misc import export_config_as_file
 from hydra_genetics.utils.software_versions import add_version_files_to_multiqc
@@ -109,6 +110,42 @@ units = (
 
 validate(units, schema="../schemas/units.schema.yaml")
 
+## genarate chromosome list 
+
+def get_chr_from_re(contig_patterns):
+    contigs = []
+    ref_fasta = config.get("reference", {}).get("fasta", "")
+    all_contigs = extract_chr(f"{ref_fasta}.fai", filter_out=[])
+    for pattern in contig_patterns:
+        for contig in all_contigs:
+            # print(pattern, contig)
+            contig_match = re.match(pattern, contig)
+            if contig_match is not None:
+                # print(contig_match, contig_match.group())
+                contigs.append(contig_match.group())
+    # print(contigs)
+    if len(set(contigs)) < len(contigs):  # check for duplicate conting entries
+        chr_set = set()
+        duplicate_contigs = [c for c in contigs if c in chr_set or chr_set.add(c)]
+        dup_contigs_str = ", ".join(duplicate_contigs)
+        sys.exit(
+            f"Duplicate contigs detected:\n {dup_contigs_str}\n\
+        Please revise the regular expressions listed under reference in the config"
+        )
+
+    return contigs
+
+skip_contig_patterns = config.get("reference", {}).get("skip_contigs", [])
+
+if len(skip_contig_patterns) == 0:
+    skip_contigs = []
+else:
+    skip_contigs = get_chr_from_re(skip_contig_patterns)
+
+ref_fai = config.get("reference", {}).get("fai", "")
+chr_list = extract_chr(ref_fai, filter_out=skip_contigs)
+
+ 
 ### Read and validate output file
 
 with open(config["output"]) as output:
@@ -122,23 +159,61 @@ validate(output_spec, schema="../schemas/output_files.schema.yaml")
 
 ### Set wildcard constraints
 wildcard_constraints:
+    barcode="[A-Z+-]+",
     sample="|".join(samples.index),
     type="N|T|R",
 
 
-def get_bam_input(wildcards):
+def get_pbmm2_query(wildcards):
+    markdups = config.get("markdups", "")
+    unit = units.loc[(wildcards.sample, wildcards.type, wildcards.processing_unit, wildcards.barcode)]
+    if markdups == "pbmarkdup":
+        print(f"prealignment/pbmarkdup")
+        bam_file = f"prealignment/pbmarkdup/{{sample}}_{{type}}_{{processing_unit}}_{{barcode}}.bam"
+        #bam_file = "prealignment/pbmarkdup/{}_{}_{}_{}.bam".format(unit["sample"], unit["type"], unit["processing_unit"], unit["barcode"]),
+    else:
+        unit = units.loc[(wildcards.sample, wildcards.type, wildcards.processing_unit, wildcards.barcode)]
+        bam_file = unit["bam"]
+        print(bam_file)
+
+
+    return bam_file
+
+
+def get_bam_input(wildcards, phaser=None):
 
     sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
     aligner = config.get("aligner", None)
-
+    
     if aligner is None:
         sys.exit("aligner missing from config, valid options: minimap2 or pbmm2")
-    elif aligner == "minimap2":
+    elif aligner == "minimap2" and phaser is None:
         bam_input = f"alignment/minimap2_align/{sample_str}.bam"
-    elif aligner == "pbmm2":
+    elif aligner == "pbmm2" and phaser is None:
         bam_input = f"alignment/pbmm2_align/{sample_str}.bam"
+    elif aligner == "pbmm2" and phaser == "hiphase":
+        bam_input = f"snv_indels/hiphase/{sample_str}.haplotagged.bam"
+    elif aligner == "minimap2" and phaser == "longphase":
+        bam_input = f"snv_indels/longhase/{sample_str}.haplotagged.bam"
     else:
-        sys.exit("valid options for aligner are: minimap2 or pbmm2")
+        sys.exit("Valid options for aligner are: minimap2 or pbmm2. Valid phasers are hiphase for pbmm2 and longphase for minimap2")
+
+    bai_input = "{}.bai".format(bam_input)
+
+    return (bam_input, bai_input)
+
+
+def get_haplotagged_bam(wildcards):
+
+    sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
+    phaser = config.get("phaser", None)
+    
+    if phaser == "hiphase":
+        bam_input = f"snv_indels/hiphase/{sample_str}.haplotagged.bam"
+    elif aligner == "longphase":
+        bam_input = f"snv_indels/longphase/{sample_str}.haplotagged.bam"
+    else:
+        sys.exit("valid options for phaser are: hiphase or longphase")
 
     bai_input = "{}.bai".format(bam_input)
 
@@ -156,6 +231,23 @@ def get_trgt_loci(wildcards):
     return rep_ids
 
 
+def get_gvcf_output(wildcards, name):
+    if config.get(name, {}).get("output_gvcf", False):
+        return f" --output_gvcf snv_indels/deepvariant/{wildcards.sample}_{wildcards.type}_{wildcards.chr}.g.vcf.gz "
+    else:
+        return ""
+
+
+def get_deepvariant_region(wildcards, input):
+    try:
+        bed_file = input.bed
+        region_param = f"--region {bed_file}"
+    except KeyError:
+        chrom = wildcards.chr
+        region_param = f"--region {chrom}"
+    return region_param
+
+
 def compile_output_file_list(wildcards):
     outdir = pathlib.Path(output_spec.get("directory", "./"))
     output_files = []
@@ -163,15 +255,25 @@ def compile_output_file_list(wildcards):
     for f in output_spec["files"]:
         # Please remember to add any additional values down below
         # that the output strings should be formatted with.
-        outputpaths = set(
-            [
-                f["output"].format(sample=sample, type=unit_type, locus=locus, suffix=suffix)
-                for sample in get_samples(samples)
-                for unit_type in get_unit_types(units, sample)
-                for locus in get_trgt_loci(wildcards)
-                for suffix in [config.get("trgt_plot_motif", {}).get("image", "svg")]
-            ]
-        )
+        if config["pipeline"] == "pacbio_wgs":
+            outputpaths = set(
+                [
+                    f["output"].format(sample=sample, type=unit_type, locus=locus, suffix=suffix)
+                    for sample in get_samples(samples)
+                    for unit_type in get_unit_types(units, sample)
+                    for locus in get_trgt_loci(wildcards)
+                    for suffix in [config.get("trgt_plot_motif", {}).get("image", "svg")]
+                ]
+            )
+        elif config["pipeline"] == "pacbio_twist_cancer":
+            outputpaths = set(
+                [
+                    f["output"].format(sample=sample, type=unit_type, gene=gene)
+                    for sample in get_samples(samples)
+                    for unit_type in get_unit_types(units, sample)
+                    for gene in config["paraphase"]["genes"]
+                ]
+            )
 
         for op in outputpaths:
             output_files.append(outdir / Path(op))

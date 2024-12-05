@@ -1,0 +1,85 @@
+---
+pipeline: "pacbio_twist_cancer"
+output: "config/output_pacbio_twist_cancer.yaml"
+samples: "samples_pacbio_twist_cancer.tsv"
+units: "units_pacbio_twist_cancer.tsv"
+
+aligner: "pbmm2"
+phaser: "hiphase"
+markdups: "pbmarkdup"
+trimmer_software: None
+
+reference:
+  design_bed: "{{PIPELINE_REF_DATA}}/designs/Annotated_expected_coverage_hg38_241001.bed"
+  coverage_bed: "{{PIPELINE_REF_DATA}}/designs/"
+  skip_contigs: #chromosomes or scaffold not in the design
+    - "^chrX$"
+    - "^chrY$"
+    - "^chrM$"
+    - ".*_random"
+    - "chrUn_.*"
+    - "chrEBV"
+
+deepvariant:
+  container: "docker://google/deepvariant:1.6.1"
+  model_type: "PACBIO"
+  output_gvcf: false
+
+hiphase:
+  container: "docker://hydragenetics/hiphase:1.4.5"
+  sv_caller: false
+  str_caller: false
+
+pbmarkdup:
+  container: "docker://hydragenetics/pbmarkdup:1.1.0"
+
+pbmm2_index:
+  preset: "HIFI"
+  container: "docker://hydragenetics/pbmm2:1.10"
+
+pbmm2_align:
+  preset: "HIFI"
+  container: "docker://hydragenetics/pbmm2:1.10"
+  extra: "--unmapped "
+
+picard_bed_to_interval_list:
+  extra: "--SORT true "
+
+mosdepth_bed:
+  container: "docker://hydragenetics/mosdepth:0.3.2"
+  thresholds: "10,20,50"
+
+multiqc:
+  container: "docker://hydragenetics/multiqc:1.21"
+  reports:
+    DNA:
+      config: "config/multiqc_config_pacbio_twist_cancer.yaml"
+      included_unit_types: ["N"]
+      qc_files:
+        - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
+        - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
+        - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
+        - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
+        - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt"
+        - "prealignment/pbmarkdup/{sample}_{type}_{processing_unit}_{barcode}.bam.log"
+
+paraphase:
+  container: "docker://quay.io/pacbio/paraphase:3.1.1_build1"
+  genome: "38"
+  genes:
+    - pms2
+
+sawfish_discover:
+  extra: "--clobber "
+  container: "docker://hydragenetics/sawfish:0.12.7"
+  # expected_cn: ## not specified due to lack of chrX or chrY in the data
+  #     male: "reference/expected_cn.hg38.XY.bed" 
+  #     female: "reference/expected_cn.hg38.XX.bed"
+
+sawfish_joint_call:
+  extra: "--clobber "
+  container: "docker://hydragenetics/sawfish:0.12.7"
+  supporting_reads: true
+  
+

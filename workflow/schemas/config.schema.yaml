@@ -16,6 +16,40 @@ properties:
     type: string
     description: name or path to a default docker/singularity container
 
+
+
+# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  picard_bed_to_interval_list:
+    type: object
+    description: parameters for picard_bed_to_interval_list
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters that should be forwarded
+
+
+
+# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  picard_create_sequence_dictionary:
+    type: object
+    description: parameters for picard_create_sequence_dictionary
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters that should be forwarded
+
 required:
   - samples
   - units
