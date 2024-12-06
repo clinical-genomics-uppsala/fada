@@ -50,13 +50,13 @@ use rule * from alignment as alignment_*
 use rule pbmm2_align from alignment as alignment_pbmm2_align with:
     input:
         query=lambda wildcards: get_pbmm2_query(wildcards),
-       #query="prealignment/pbmarkdup/{sample}_{type}_{processing_unit}_{barcode}.bam",
         reference=expand(
             "{ref}.{preset}.mmi",
             ref=config.get("reference", {}).get("fasta", ""),
             preset=config.get("pbmm2_align", {}).get("preset", ""),
-        ),
-
+        ), 
+    # wildcard_constraints:
+    #     barcode="[A-Z-]+"
 
 module compression:
     snakefile:
@@ -132,7 +132,6 @@ module prealignment:
 use rule pbmarkdup from prealignment as prealignment_pbmarkdup
 
 
-
 module snv_indels:
     snakefile:
         get_module_snakefile(config, "hydra-genetics/snv_indels", path="workflow/Snakefile", tag=config["modules"]["snv_indels"])
@@ -178,15 +177,46 @@ use rule multiqc from qc as qc_multiqc with:
                 for sample in get_samples(samples)
                 for u in units.loc[sample].dropna().itertuples()
                 if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
-            ]
+            ] #+ [config.get("lima_reports", "")]
         ),
-        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+        #config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
 
 
-use rule mosdepth from qc as qc_mosdepth with:
+use rule mosdepth_bed from qc as qc_mosdepth_bed_design with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
         bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bed=config["reference"]["design_bed"],
+    output:
+        bed=temp("qc/mosdepth_bed_design/{sample}_{type}.regions.bed.gz"),
+        bed_csi=temp("qc/mosdepth_bed_design/{sample}_{type}.regions.bed.gz.csi"),
+        coverage=temp("qc/mosdepth_bed_design/{sample}_{type}.per-base.bed.gz"),
+        coverage_csi=temp("qc/mosdepth_bed_design/{sample}_{type}.per-base.bed.gz.csi"),
+        thresholds=temp("qc/mosdepth_bed_design/{sample}_{type}.thresholds.bed.gz"),
+        glob=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.global.dist.txt"),
+        region=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt"),
+    params:
+        thresholds=config["mosdepth_bed"]["thresholds"],
+
+
+use rule mosdepth_bed from qc as qc_mosdepth_bed_exon with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bed=config["reference"]["exon_bed"],
+    output:
+        bed=temp("qc/mosdepth_bed_exon/{sample}_{type}.regions.bed.gz"),
+        bed_csi=temp("qc/mosdepth_bed_exon/{sample}_{type}.regions.bed.gz.csi"),
+        coverage=temp("qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz"),
+        coverage_csi=temp("qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz.csi"),
+        thresholds=temp("qc/mosdepth_bed_exon/{sample}_{type}.thresholds.bed.gz"),
+        glob=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.global.dist.txt"),
+        region=temp("qc/mosdepth_bed/_exon{sample}_{type}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.summary.txt"),
+    params:
+        thresholds=config["mosdepth_bed"]["thresholds"],
+
 
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:

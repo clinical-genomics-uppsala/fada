@@ -42,10 +42,10 @@ files:
     output: "results/{sample}/paraphase/{sample}.paraphase.json"
     input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam"
   - name: "paraphase_vcf"
-    output: "results/{sample}/cnv_sv/{sample}.paraphase.{gene}.vcf.gz"
+    output: "results/{sample}/paraphase/{sample}.paraphase.{gene}.vcf.gz"
     input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N_paraphase_vcfs/{sample}_N_{gene}.vcf.gz"
   - name: "paraphase_vcf_tbi"
-    output: "results/{sample}/cnv_sv/{sample}.paraphase.{gene}.vcf.gz.tbi"
+    output: "results/{sample}/paraphase/{sample}.paraphase.{gene}.vcf.gz.tbi"
     input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N_paraphase_vcfs/{sample}_N_{gene}.vcf.gz.tbi"
 
   

@@ -11,7 +11,7 @@ trimmer_software: None
 
 reference:
   design_bed: "{{PIPELINE_REF_DATA}}/designs/Annotated_expected_coverage_hg38_241001.bed"
-  coverage_bed: "{{PIPELINE_REF_DATA}}/designs/"
+  exon_bed: "{{PIPELINE_REF_DATA}}/designs/Twist_Cancer_230602_hg38_coding_exons.bed"
   skip_contigs: #chromosomes or scaffold not in the design
     - "^chrX$"
     - "^chrY$"
@@ -43,7 +43,14 @@ pbmm2_align:
   extra: "--unmapped "
 
 picard_bed_to_interval_list:
-  extra: "--SORT true "
+  container: "docker://hydragenetics/picard:2.25.0"
+  extra: "SORT=true"
+
+picard_create_sequence_dictionary:
+  container: "docker://hydragenetics/picard:2.25.0"
+
+picard_collect_hs_metrics:
+  container: "docker://hydragenetics/picard:2.25.0"
 
 mosdepth_bed:
   container: "docker://hydragenetics/mosdepth:0.3.2"
@@ -56,9 +63,9 @@ multiqc:
       config: "config/multiqc_config_pacbio_twist_cancer.yaml"
       included_unit_types: ["N"]
       qc_files:
-        - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
-        - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
-        - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
+        - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt"
+        - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.region.dist.txt"
+        - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.global.dist.txt"
         - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
         - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
         - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt"
@@ -73,13 +80,12 @@ paraphase:
 sawfish_discover:
   extra: "--clobber "
   container: "docker://hydragenetics/sawfish:0.12.7"
-  # expected_cn: ## not specified due to lack of chrX or chrY in the data
-  #     male: "reference/expected_cn.hg38.XY.bed" 
-  #     female: "reference/expected_cn.hg38.XX.bed"
+  expected_cn: ## not specified due to lack of chrX or chrY in the data
+      male: "reference/expected_cn.hg38.XY.bed" 
+      female: "reference/expected_cn.hg38.XX.bed"
 
 sawfish_joint_call:
   extra: "--clobber "
   container: "docker://hydragenetics/sawfish:0.12.7"
   supporting_reads: true
   
-

@@ -159,7 +159,7 @@ validate(output_spec, schema="../schemas/output_files.schema.yaml")
 
 ### Set wildcard constraints
 wildcard_constraints:
-    barcode="[A-Z+-]+",
+    barcode="[A-Z-]+",
     sample="|".join(samples.index),
     type="N|T|R",
 
@@ -168,14 +168,11 @@ def get_pbmm2_query(wildcards):
     markdups = config.get("markdups", "")
     unit = units.loc[(wildcards.sample, wildcards.type, wildcards.processing_unit, wildcards.barcode)]
     if markdups == "pbmarkdup":
-        print(f"prealignment/pbmarkdup")
         bam_file = f"prealignment/pbmarkdup/{{sample}}_{{type}}_{{processing_unit}}_{{barcode}}.bam"
         #bam_file = "prealignment/pbmarkdup/{}_{}_{}_{}.bam".format(unit["sample"], unit["type"], unit["processing_unit"], unit["barcode"]),
     else:
         unit = units.loc[(wildcards.sample, wildcards.type, wildcards.processing_unit, wildcards.barcode)]
         bam_file = unit["bam"]
-        print(bam_file)
-
 
     return bam_file
 
@@ -241,10 +238,10 @@ def get_gvcf_output(wildcards, name):
 def get_deepvariant_region(wildcards, input):
     try:
         bed_file = input.bed
-        region_param = f"--region {bed_file}"
+        region_param = f"--regions {bed_file}"
     except KeyError:
         chrom = wildcards.chr
-        region_param = f"--region {chrom}"
+        region_param = f"--regions {chrom}"
     return region_param
 
 
