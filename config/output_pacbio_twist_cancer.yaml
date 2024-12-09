@@ -51,5 +51,5 @@ files:
   
   # QC files
   - name: "multiqc_report"
-    output: "results/multiqc_DNA.html"
-    input: "qc/multiqc/multiqc_DNA.html"
+    output: "results/multiqc_pacbio_twist_cancer.html"
+    input: "qc/multiqc/multiqc_pacbio_twist_cancer.html"
