@@ -179,7 +179,6 @@ def get_pbmm2_query(wildcards):
 
 
 def get_bam_input(wildcards, phaser=None):
-
     sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
     aligner = config.get("aligner", None)
 
@@ -204,7 +203,6 @@ def get_bam_input(wildcards, phaser=None):
 
 
 def get_haplotagged_bam(wildcards):
-
     sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
     phaser = config.get("phaser", None)
 
