@@ -5,7 +5,7 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
-#include: "rules/export_qc.smk"
+# include: "rules/export_qc.smk"
 include: "rules/picard.smk"
 
 
@@ -47,6 +47,7 @@ module alignment:
 
 use rule * from alignment as alignment_*
 
+
 use rule pbmm2_align from alignment as alignment_pbmm2_align with:
     input:
         query=lambda wildcards: get_pbmm2_query(wildcards),
@@ -54,9 +55,12 @@ use rule pbmm2_align from alignment as alignment_pbmm2_align with:
             "{ref}.{preset}.mmi",
             ref=config.get("reference", {}).get("fasta", ""),
             preset=config.get("pbmm2_align", {}).get("preset", ""),
-        ), 
-    # wildcard_constraints:
-    #     barcode="[A-Z-]+"
+        ),
+
+
+# wildcard_constraints:
+#     barcode="[A-Z-]+"
+
 
 module compression:
     snakefile:
@@ -95,6 +99,7 @@ module cnv_sv:
 
 use rule * from cnv_sv as cnv_sv_*
 
+
 use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
@@ -115,16 +120,24 @@ use rule trgt_genotype from cnv_sv as cnv_sv_trgt_genotype with:
 
 use rule trgt_plot from cnv_sv as cnv_sv_trgt_plot with:
     output:
-        image=expand("cnv_sv/trgt_plot/motif/{{sample}}_{{type}}_{{locus}}.{ext}", ext=config.get("trgt_plot_motif", {}).get("image", "svg")),	
+        image=expand(
+            "cnv_sv/trgt_plot/motif/{{sample}}_{{type}}_{{locus}}.{ext}",
+            ext=config.get("trgt_plot_motif", {}).get("image", "svg"),
+        ),
+
 
 use rule trgt_plot from cnv_sv as cnv_sv_trgt_plot_meth with:
     output:
-        image=expand("cnv_sv/trgt_plot/meth/{{sample}}_{{type}}_{{locus}}.{ext}", ext=config.get("trgt_plot_meth", {}).get("image", "svg")),
+        image=expand(
+            "cnv_sv/trgt_plot/meth/{{sample}}_{{type}}_{{locus}}.{ext}", ext=config.get("trgt_plot_meth", {}).get("image", "svg")
+        ),
 
 
 module prealignment:
     snakefile:
-        get_module_snakefile(config, "hydra-genetics/prealignment", path="workflow/Snakefile", tag=config["modules"]["prealignment"])
+        get_module_snakefile(
+            config, "hydra-genetics/prealignment", path="workflow/Snakefile", tag=config["modules"]["prealignment"]
+        )
     config:
         config
 
@@ -147,7 +160,7 @@ use rule deepvariant_pacbio from snv_indels as snv_indels_deepvariant_pacbio wit
         bam=lambda wildcards: get_bam_input(wildcards)[0],
         bai=lambda wildcards: get_bam_input(wildcards)[1],
         ref=config.get("reference", {}).get("fasta", ""),
-        bed="snv_indels/bed_split/design_bedfile_{chr}.bed" if config.get("reference", {}).get("design_bed", False)  else [],
+        bed="snv_indels/bed_split/design_bedfile_{chr}.bed" if config.get("reference", {}).get("design_bed", False) else [],
     params:
         model_type=config.get("deepvariant", {}).get("model_type", "PACBIO"),
         output_gvcf=lambda wildcards: get_gvcf_output(wildcards, "deepvariant"),
@@ -204,6 +217,7 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_exon with:
     params:
         thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
 
+
 use rule multiqc from qc as qc_multiqc with:
     input:
         files=lambda wildcards: set(
@@ -213,13 +227,15 @@ use rule multiqc from qc as qc_multiqc with:
                 for sample in get_samples(samples)
                 for u in units.loc[sample].dropna().itertuples()
                 if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
-            ] #+ [config.get("lima_reports", "")]
+            ] 
         ),
         config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+
 
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
+
 
 use rule samtools_idxstats from qc as qc_samtools_idxstats with:
     input:
@@ -236,4 +252,3 @@ use rule picard_collect_hs_metrics from qc as qc_picard_hs_metrics with:
         bait_intervals="qc/picard_bed_to_interval_list/targets.interval_list",
         reference=config.get("reference", {}).get("fasta", ""),
         target_intervals="qc/picard_bed_to_interval_list/targets.interval_list",
-
