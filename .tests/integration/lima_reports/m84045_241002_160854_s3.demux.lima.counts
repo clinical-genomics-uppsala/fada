@@ -1,0 +1,18 @@
+IdxFirst	IdxCombined	IdxFirstNamed	IdxCombinedNamed	Counts	MeanScore
+-1	-1	Not Barcoded	Not Barcoded	20755	96
+0	1	Plate_A_1_A01_F	Plate_A_1_A01_R	358646	98
+2	3	Plate_A_2_B01_F	Plate_A_2_B01_R	575563	98
+4	5	Plate_A_3_C01_F	Plate_A_3_C01_R	289646	98
+6	7	Plate_A_4_D01_F	Plate_A_4_D01_R	425713	98
+8	9	Plate_A_5_E01_F	Plate_A_5_E01_R	211873	98
+10	11	Plate_A_6_F01_F	Plate_A_6_F01_R	636769	98
+12	13	Plate_A_7_G01_F	Plate_A_7_G01_R	512369	98
+14	15	Plate_A_8_H01_F	Plate_A_8_H01_R	280943	98
+16	17	Plate_A_9_A02_F	Plate_A_9_A02_R	685453	98
+18	19	Plate_A_10_B02_F	Plate_A_10_B02_R	468840	98
+20	21	Plate_A_11_C02_F	Plate_A_11_C02_R	817637	98
+22	23	Plate_A_12_D02_F	Plate_A_12_D02_R	422067	98
+24	25	Plate_A_13_E02_F	Plate_A_13_E02_R	443032	98
+26	27	Plate_A_14_F02_F	Plate_A_14_F02_R	660859	98
+28	29	Plate_A_15_G02_F	Plate_A_15_G02_R	488347	98
+30	31	Plate_A_16_H02_F	Plate_A_16_H02_R	544748	98

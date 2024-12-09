@@ -1,0 +1,55 @@
+---
+files: 
+    # Cram files
+  - name: "samtools_cram"
+    output: "results/{sample}/cram/{sample}.cram"
+    input: "compression/samtools_view/{sample}_N.cram"
+  - name: "samtools_crai"
+    output: "results/{sample}/cram/{sample}.cram.crai"
+    input: "compression/samtools_view/{sample}_N.cram.crai"
+
+    #SNV & INDEL files
+  # - name: "deepvariant_vcf"
+  #   output: "results/{sample}/snv_indels/{sample}.deepvariant.vcf.gz"
+  #   input: "snv_indels/deepvariant/{sample}_N.merged.vcf.gz"
+  # - name: "deepvariant_tbi"
+  #   output: "results/{sample}/snv_indels/{sample}.deepvariant.vcf.gz.tbi"
+  #   input: "snv_indels/deepvariant/{sample}_N.merged.vcf.gz.tbi"
+  - name: "deepvariant_phased_vcf"
+    output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz"
+    input: "snv_indels/hiphase/{sample}_N.deepvariant.phased.vcf.gz"
+  - name: "deepvariant_phased_tbi"
+    output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz.tbi"
+    input: "snv_indels/hiphase/{sample}_N.deepvariant.phased.vcf.gz.tbi"
+  # - name: "haplotagged_bam"
+  #   output: "results/{sample}/{sample}.haplotagged.bam"
+  #   input: "snv_indels/hiphase/{sample}_N.haplotagged.bam"
+  
+    # CNV & SV files
+  - name: "sawfish_vcf"
+    output: "results/{sample}/cnv_sv/{sample}.sniffles2.vcf.gz"
+    input: "cnv_sv/sawfish_joint_call/{sample}_N.vcf.gz"
+  - name: "sawfish_vcf_tbi"
+    output: "results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz.tbi"
+    input: "cnv_sv/sawfish_joint_call/{sample}_N.vcf.gz.tbi"
+  - name: "paraphase_bam"
+    output: "results/{sample}/paraphase/{sample}_{type}.paraphase.bam"
+    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam"
+  - name: "paraphase_bai"
+    output: "results/{sample}/paraphase/{sample}.paraphase.bam.bai"
+    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam.bai"
+  - name: "paraphase_json"
+    output: "results/{sample}/paraphase/{sample}.paraphase.json"
+    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam"
+  - name: "paraphase_vcf"
+    output: "results/{sample}/paraphase/{sample}.paraphase.{gene}.vcf.gz"
+    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N_paraphase_vcfs/{sample}_N_{gene}.vcf.gz"
+  - name: "paraphase_vcf_tbi"
+    output: "results/{sample}/paraphase/{sample}.paraphase.{gene}.vcf.gz.tbi"
+    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N_paraphase_vcfs/{sample}_N_{gene}.vcf.gz.tbi"
+
+  
+  # QC files
+  - name: "multiqc_report"
+    output: "results/multiqc_pacbio_twist_cancer.html"
+    input: "qc/multiqc/multiqc_pacbio_twist_cancer.html"
