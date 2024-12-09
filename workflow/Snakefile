@@ -182,6 +182,12 @@ module qc:
         config
 
 
+use rule mosdepth from qc as qc_mosdepth with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+
+
 use rule mosdepth_bed from qc as qc_mosdepth_bed_design with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
