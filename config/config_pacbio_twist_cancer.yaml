@@ -70,7 +70,6 @@ multiqc:
         - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
         - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt"
         - "prealignment/pbmarkdup/{sample}_{type}_{processing_unit}_{barcode}.bam.log"
-        - "qc/picard_collect_duplication_metrics/{sample}_{type}.duplication_metrics.txt"
 
 paraphase:
   container: "docker://quay.io/pacbio/paraphase:3.1.1_build1"
