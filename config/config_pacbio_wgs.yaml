@@ -38,7 +38,7 @@ multiqc:
   container: "docker://hydragenetics/multiqc:1.21"
   reports:
     pacbio_wgs:
-      config: "config/multiqc_config_DNA.yaml"
+      config: "config/multiqc_config_pacbio_wgs.yaml"
       included_unit_types: ["N"]
       qc_files:
         - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
