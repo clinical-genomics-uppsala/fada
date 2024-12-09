@@ -110,7 +110,8 @@ units = (
 
 validate(units, schema="../schemas/units.schema.yaml")
 
-## genarate chromosome list 
+## genarate chromosome list
+
 
 def get_chr_from_re(contig_patterns):
     contigs = []
@@ -135,6 +136,7 @@ def get_chr_from_re(contig_patterns):
 
     return contigs
 
+
 skip_contig_patterns = config.get("reference", {}).get("skip_contigs", [])
 
 if len(skip_contig_patterns) == 0:
@@ -145,7 +147,7 @@ else:
 ref_fai = config.get("reference", {}).get("fai", "")
 chr_list = extract_chr(ref_fai, filter_out=skip_contigs)
 
- 
+
 ### Read and validate output file
 
 with open(config["output"]) as output:
@@ -169,7 +171,6 @@ def get_pbmm2_query(wildcards):
     unit = units.loc[(wildcards.sample, wildcards.type, wildcards.processing_unit, wildcards.barcode)]
     if markdups == "pbmarkdup":
         bam_file = f"prealignment/pbmarkdup/{{sample}}_{{type}}_{{processing_unit}}_{{barcode}}.bam"
-        #bam_file = "prealignment/pbmarkdup/{}_{}_{}_{}.bam".format(unit["sample"], unit["type"], unit["processing_unit"], unit["barcode"]),
     else:
         unit = units.loc[(wildcards.sample, wildcards.type, wildcards.processing_unit, wildcards.barcode)]
         bam_file = unit["bam"]
@@ -181,7 +182,7 @@ def get_bam_input(wildcards, phaser=None):
 
     sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
     aligner = config.get("aligner", None)
-    
+
     if aligner is None:
         sys.exit("aligner missing from config, valid options: minimap2 or pbmm2")
     elif aligner == "minimap2" and phaser is None:
@@ -193,7 +194,9 @@ def get_bam_input(wildcards, phaser=None):
     elif aligner == "minimap2" and phaser == "longphase":
         bam_input = f"snv_indels/longhase/{sample_str}.haplotagged.bam"
     else:
-        sys.exit("Valid options for aligner are: minimap2 or pbmm2. Valid phasers are hiphase for pbmm2 and longphase for minimap2")
+        sys.exit(
+            "Valid options for aligner are: minimap2 or pbmm2. Valid phasers are hiphase for pbmm2 and longphase for minimap2"
+        )
 
     bai_input = "{}.bai".format(bam_input)
 
@@ -204,7 +207,7 @@ def get_haplotagged_bam(wildcards):
 
     sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
     phaser = config.get("phaser", None)
-    
+
     if phaser == "hiphase":
         bam_input = f"snv_indels/hiphase/{sample_str}.haplotagged.bam"
     elif aligner == "longphase":

@@ -8,7 +8,7 @@ rule picard_bed_to_interval_list:
     input:
         bed=config.get("reference", {}).get("design_bed", ""),
         reference=config["reference"]["fasta"],
-        dict="qc/picard_create_sequence_dictionary/reference.dict"
+        dict="qc/picard_create_sequence_dictionary/reference.dict",
     output:
         "qc/picard_bed_to_interval_list/targets.interval_list",
     params:
@@ -18,7 +18,7 @@ rule picard_bed_to_interval_list:
     benchmark:
         repeat(
             "qc/picard_bed_to_interval_list/targets.interval_list.benchmark.tsv",
-            config.get("picard_bed_to_interval_list", {}).get("benchmark_repeats", 1)
+            config.get("picard_bed_to_interval_list", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("picard_bed_to_interval_list", {}).get("threads", config["default_resources"]["threads"])
     resources:
@@ -47,12 +47,14 @@ rule picard_create_sequence_dictionary:
     benchmark:
         repeat(
             "qc/picard_create_sequence_dictionary/reference.dict.benchmark.tsv",
-            config.get("picard_create_sequence_dictionary", {}).get("benchmark_repeats", 1)
+            config.get("picard_create_sequence_dictionary", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("picard_create_sequence_dictionary", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("picard_create_sequence_dictionary", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
-        mem_per_cpu=config.get("picard_create_sequence_dictionary", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        mem_per_cpu=config.get("picard_create_sequence_dictionary", {}).get(
+            "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
+        ),
         partition=config.get("picard_create_sequence_dictionary", {}).get("partition", config["default_resources"]["partition"]),
         threads=config.get("picard_create_sequence_dictionary", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("picard_create_sequence_dictionary", {}).get("time", config["default_resources"]["time"]),

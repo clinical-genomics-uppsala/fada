@@ -5,6 +5,7 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+#include: "rules/export_qc.smk"
 include: "rules/picard.smk"
 
 
@@ -15,7 +16,6 @@ rule all:
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
 ruleorder: cnv_sv_sawfish_joint_call > cnv_sv_tabix
-#ruleorder: _copy_stranger_trgt_tbi > annotation_tabix_vcf
 ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
 ruleorder: snv_indels_tabix > annotation_tabix_vcf
 
@@ -168,19 +168,6 @@ module qc:
     config:
         config
 
-use rule multiqc from qc as qc_multiqc with:
-    input:
-        files=lambda wildcards: set(
-            [
-                file.format(sample=sample, type=u.type, processing_unit=u.processing_unit, barcode=u.barcode)
-                for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
-                for sample in get_samples(samples)
-                for u in units.loc[sample].dropna().itertuples()
-                if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
-            ] #+ [config.get("lima_reports", "")]
-        ),
-        #config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
-
 
 use rule mosdepth_bed from qc as qc_mosdepth_bed_design with:
     input:
@@ -217,6 +204,18 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_exon with:
     params:
         thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
 
+use rule multiqc from qc as qc_multiqc with:
+    input:
+        files=lambda wildcards: set(
+            [
+                file.format(sample=sample, type=u.type, processing_unit=u.processing_unit, barcode=u.barcode)
+                for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
+                for sample in get_samples(samples)
+                for u in units.loc[sample].dropna().itertuples()
+                if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+            ] #+ [config.get("lima_reports", "")]
+        ),
+        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
 
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
@@ -237,3 +236,4 @@ use rule picard_collect_hs_metrics from qc as qc_picard_hs_metrics with:
         bait_intervals="qc/picard_bed_to_interval_list/targets.interval_list",
         reference=config.get("reference", {}).get("fasta", ""),
         target_intervals="qc/picard_bed_to_interval_list/targets.interval_list",
+
