@@ -233,7 +233,7 @@ use rule multiqc from qc as qc_multiqc with:
                 for sample in get_samples(samples)
                 for u in units.loc[sample].dropna().itertuples()
                 if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
-            ] 
+            ]
         ),
         config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
 
