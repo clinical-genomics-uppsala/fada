@@ -30,8 +30,8 @@ jobs:
       - name: snakemake dry run pacbio wgs
         working-directory: .tests/integration
         run: |
-          cp -r ../../config && snakemake -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_pacbio_wgs.yaml
+          cp -r ../../config . && snakemake -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_pacbio_wgs.yaml
       - name: snakemake dry run pacbio twist cancer
         working-directory: .tests/integration
         run: |
-          cp -r ../../config && snakemake -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml
+          cp -r ../../config . && snakemake -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml
