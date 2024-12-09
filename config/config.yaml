@@ -7,7 +7,7 @@ default_container: "docker://hydragenetics/common:1.11.1"
 resources: "config/resources.yaml"
 
 modules:
-  alignment: "45c5346"
+  alignment: "2c5867b"
   annotation: "3ce9da5"
   compression: "b3ef8cc"
   cnv_sv: "75bc154"

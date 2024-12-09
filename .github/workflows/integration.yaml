@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.8
+      - name: Set up Python 3.9
         uses: actions/setup-python@v3
         with:
           python-version: 3.8
@@ -43,8 +43,8 @@ jobs:
       - name: Add conda to system path
         run: |
           echo $CONDA/bin >> $GITHUB_PATH
-      - name: Integration test - small dataset
+      - name: Integration test - small dataset twist cancer
         working-directory: .tests/integration
         run: |
-          snakemake -s ../../workflow/Snakefile -j 2 -p --show-failed-logs --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config resources=resources_test.yaml PIPELINE_REF_DATA=reference/  lima_reports=lima_reports/ --use-singularity  --singularity-args  " --no-home --cleanenv --bind /home/runner "
-          snakemake -s ../../workflow/Snakefile -j 2 -p --show-failed-logs --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config resources=resources_test.yaml PIPELINE_REF_DATA=reference  lima_reports=lima_reports --use-singularity  --singularity-args " --no-home --cleanenv --bind /home/runner "  --singularity-prefix singularity_files
+          cp -r ../../config . && snakemake -s ../../workflow/Snakefile -j 2 -p --show-failed-logs --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config resources=resources_test.yaml PIPELINE_REF_DATA=reference/  lima_reports=lima_reports/ --use-singularity  --singularity-args  " --no-home --cleanenv --bind /home/runner "
+      
