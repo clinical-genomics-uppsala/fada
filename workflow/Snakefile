@@ -186,7 +186,7 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_design with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
         bai=lambda wildcards: get_bam_input(wildcards)[1],
-        bed=config["reference"]["design_bed"],
+        bed=config.get("reference", {}).get("design_bed", ""),
     output:
         bed=temp("qc/mosdepth_bed_design/{sample}_{type}.regions.bed.gz"),
         bed_csi=temp("qc/mosdepth_bed_design/{sample}_{type}.regions.bed.gz.csi"),
@@ -197,14 +197,14 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_design with:
         region=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.region.dist.txt"),
         summary=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt"),
     params:
-        thresholds=config["mosdepth_bed"]["thresholds"],
+        thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
 
 
 use rule mosdepth_bed from qc as qc_mosdepth_bed_exon with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
         bai=lambda wildcards: get_bam_input(wildcards)[1],
-        bed=config["reference"]["exon_bed"],
+        bed=config.get("reference", {}).get("exon_bed", ""),
     output:
         bed=temp("qc/mosdepth_bed_exon/{sample}_{type}.regions.bed.gz"),
         bed_csi=temp("qc/mosdepth_bed_exon/{sample}_{type}.regions.bed.gz.csi"),
@@ -215,7 +215,7 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_exon with:
         region=temp("qc/mosdepth_bed/_exon{sample}_{type}.mosdepth.region.dist.txt"),
         summary=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.summary.txt"),
     params:
-        thresholds=config["mosdepth_bed"]["thresholds"],
+        thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
 
 
 use rule samtools_stats from qc as qc_samtools_stats with:
