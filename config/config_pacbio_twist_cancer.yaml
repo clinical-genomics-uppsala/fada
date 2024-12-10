@@ -35,11 +35,11 @@ pbmarkdup:
 
 pbmm2_index:
   preset: "HIFI"
-  container: "docker://hydragenetics/pbmm2:1.10"
+  container: "docker://hydragenetics/pbmm2:1.16"
 
 pbmm2_align:
   preset: "HIFI"
-  container: "docker://hydragenetics/pbmm2:1.10"
+  container: "docker://hydragenetics/pbmm2:1.16"
   extra: "--unmapped "
 
 picard_bed_to_interval_list:
