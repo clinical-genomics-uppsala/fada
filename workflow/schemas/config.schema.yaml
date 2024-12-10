@@ -50,6 +50,74 @@ properties:
         type: string
         description: parameters that should be forwarded
 
+
+
+# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  export_qc_bedtools_intersect:
+    type: object
+    description: parameters for export_qc_bedtools_intersect
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters that should be forwarded
+
+
+
+# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  export_qc_bedtools_intersect:
+    type: object
+    description: parameters for export_qc_bedtools_intersect
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters that should be forwarded
+
+
+
+# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  export_qc_bedtools_intersect_pgrs:
+    type: object
+    description: parameters for export_qc_bedtools_intersect_pgrs
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters that should be forwarded
+
+
+
+# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  export_qc_xlsx_report:
+    type: object
+    description: parameters for export_qc_xlsx_report
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters that should be forwarded
+
 required:
   - samples
   - units
