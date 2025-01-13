@@ -251,8 +251,6 @@ def compile_output_file_list(wildcards):
     output_files = []
 
     for f in output_spec["files"]:
-        # Please remember to add any additional values down below
-        # that the output strings should be formatted with.
         if config["pipeline"] == "pacbio_wgs":
             outputpaths = set(
                 [

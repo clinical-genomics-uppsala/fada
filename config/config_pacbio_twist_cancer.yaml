@@ -57,7 +57,7 @@ mosdepth_bed:
   thresholds: "10,20,50"
 
 multiqc:
-  container: "docker://hydragenetics/multiqc:1.21"
+  container: "docker://hydragenetics/multiqc:1.25.1"
   reports:
     pacbio_twist_cancer:
       config: "config/multiqc_config_pacbio_twist_cancer.yaml"
@@ -80,9 +80,9 @@ paraphase:
 sawfish_discover:
   extra: "--clobber "
   container: "docker://hydragenetics/sawfish:0.12.7"
-  expected_cn: ## not specified due to lack of chrX or chrY in the data
-      male: "reference/expected_cn.hg38.XY.bed" 
-      female: "reference/expected_cn.hg38.XX.bed"
+  # expected_cn: ## not specified due to lack of chrX or chrY in the data
+  #     male: "reference/expected_cn.hg38.XY.bed" 
+  #     female: "reference/expected_cn.hg38.XX.bed"
 
 sawfish_joint_call:
   extra: "--clobber "

@@ -58,10 +58,6 @@ use rule pbmm2_align from alignment as alignment_pbmm2_align with:
         ),
 
 
-# wildcard_constraints:
-#     barcode="[A-Z-]+"
-
-
 module compression:
     snakefile:
         get_module_snakefile(
@@ -132,6 +128,14 @@ use rule trgt_plot from cnv_sv as cnv_sv_trgt_plot_meth with:
             "cnv_sv/trgt_plot/meth/{{sample}}_{{type}}_{{locus}}.{ext}", ext=config.get("trgt_plot_meth", {}).get("image", "svg")
         ),
 
+
+module filtering:
+    snakefile:
+        get_module_snakefile(config, "hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["filtering"])
+    config:
+        config
+
+use rule bcftools_view from filtering as filtering_bcftools_view 
 
 module prealignment:
     snakefile:
