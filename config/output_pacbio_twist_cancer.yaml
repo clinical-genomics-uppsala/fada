@@ -27,13 +27,13 @@ files:
   
     # CNV & SV files
   - name: "sawfish_vcf"
-    output: "results/{sample}/cnv_sv/{sample}.sniffles2.vcf.gz"
+    output: "results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz"
     input: "cnv_sv/sawfish_joint_call/{sample}_N.vcf.gz"
   - name: "sawfish_vcf_tbi"
     output: "results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz.tbi"
     input: "cnv_sv/sawfish_joint_call/{sample}_N.vcf.gz.tbi"
   - name: "paraphase_bam"
-    output: "results/{sample}/paraphase/{sample}_{type}.paraphase.bam"
+    output: "results/{sample}/paraphase/{sample}.paraphase.bam"
     input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam"
   - name: "paraphase_bai"
     output: "results/{sample}/paraphase/{sample}.paraphase.bam.bai"
