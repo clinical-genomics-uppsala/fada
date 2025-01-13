@@ -11,6 +11,8 @@
 ![pycodestyle](https://github.com/clinical-genomics-uppsala/fada/actions/workflows/pycodestyle.yaml/badge.svg?branch=develop)
 ![pytest](https://github.com/clinical-genomics-uppsala/fada/actions/workflows/pytest.yaml/badge.svg?branch=develop)
 
+[![Documentation Status](https://readthedocs.org/projects/fada/badge/?version=latest)](https://fada.readthedocs.io/en/latest/?badge=latest)
+
 [![License: GPL-3](https://img.shields.io/badge/License-GPL3-yellow.svg)](https://opensource.org/licenses/gpl-3.0.html)
 
 
