@@ -105,3 +105,24 @@ Introduction to export_qc_xlsx_report
 #### Resources settings (`resources.yaml`)
 
 #RESOURCESSCHEMA__export_qc_xlsx_report#
+
+## [extract_read_metrics](url_to_tool)
+Introduction to extract_read_metrics
+
+### :snake: Rule
+
+#SNAKEMAKE_RULE_SOURCE__extract_read_metrics__extract_read_metrics#
+
+#### :left_right_arrow: input / output files
+
+#SNAKEMAKE_RULE_TABLE__extract_read_metrics__extract_read_metrics#
+
+### :wrench: Configuration
+
+#### Software settings (`config.yaml`)
+
+#CONFIGSCHEMA__extract_read_metrics#
+
+#### Resources settings (`resources.yaml`)
+
+#RESOURCESSCHEMA__extract_read_metrics#

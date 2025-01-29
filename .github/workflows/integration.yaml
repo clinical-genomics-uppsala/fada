@@ -47,5 +47,5 @@ jobs:
       - name: Integration test - small dataset twist cancer
         working-directory: .tests/integration
         run: |
-          mkdir singularity_files && cp -r ../../config . && snakemake -s ../../workflow/Snakefile -j 2 -p --show-failed-logs --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config resources=resources_test.yaml PIPELINE_REF_DATA=reference  lima_reports=lima_reports/ --use-singularity  --singularity-args  " --no-home --cleanenv --bind /home/runner " --singularity-prefix singularity_files 
+          mkdir singularity_files && cp -r ../../config . && snakemake -s ../../workflow/Snakefile -j 2 -p --show-failed-logs --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config resources=resources_test.yaml PIPELINE_REF_DATA=reference --config sequenceid="test"  lima_reports=lima_reports/ --use-singularity  --singularity-args  " --no-home --cleanenv --bind /home/runner " --singularity-prefix singularity_files 
       

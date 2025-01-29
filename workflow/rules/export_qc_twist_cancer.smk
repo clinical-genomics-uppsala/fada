@@ -6,18 +6,18 @@ __license__ = "GPL-3"
 
 rule export_qc_bedtools_intersect:
     input:
-        left="qc/mosdepth_bed/{sample}_{type}.per-base.bed.gz",
-        coverage_csi="qc/mosdepth_bed/{sample}_{type}.per-base.bed.gz.csi",
+        left="qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz",
+        coverage_csi="qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz.csi",
         right=config["reference"]["exon_bed"],
     output:
-        results=temp("qc/mosdepth_bed/{sample}_{type}.mosdepth.per-base.exon_bed.txt"),
+        results=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.per-base.exon_bed.txt"),
     params:
         extra=config.get("export_qc_bedtools_intersect", {}).get("extra", ""),
     log:
-        "fada/export_qc_bedtools_intersect/{sample}_{type}.output.log",
+        "qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.per-base.exon_bed.log",
     benchmark:
         repeat(
-            "fada/export_qc_bedtools_intersect/{sample}_{type}.output.benchmark.tsv",
+            "qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.per-base.exon_bed.benchmark.tsv",
             config.get("export_qc_bedtools_intersect", {}).get("benchmark_repeats", 1)
         )
     threads: config.get("export_qc_bedtools_intersect", {}).get("threads", config["default_resources"]["threads"])
@@ -37,18 +37,18 @@ rule export_qc_bedtools_intersect:
 
 rule export_qc_bedtools_intersect_pgrs:
     input:
-        left="qc/mosdepth_bed/{sample}_{type}.per-base.bed.gz",
-        coverage_csi="qc/mosdepth_bed/{sample}_{type}.per-base.bed.gz.csi",
+        left="qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz",
+        coverage_csi="qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz.csi",
         right=config["reference"]["pgrs_bed"],
     output:
-        results=temp("qc/mosdepth_bed/{sample}_{type}.mosdepth.pgrs_cov.txt"),
+        results=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.pgrs_cov.txt"),
     params:
         extra=config.get("export_qc_bedtools_intersect_pgrs", {}).get("extra", ""),
     log:
-        "fada/export_qc_bedtools_intersect_pgrs/{sample}_{type}.output.log",
+        "qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.pgrs_cov.log",
     benchmark:
         repeat(
-            "fada/export_qc_bedtools_intersect_pgrs/{sample}_{type}.output.benchmark.tsv",
+            "qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.pgrs_cov.benchmark.tsv",
             config.get("export_qc_bedtools_intersect_pgrs", {}).get("benchmark_repeats", 1)
         )
     threads: config.get("export_qc_bedtools_intersect_pgrs", {}).get("threads", config["default_resources"]["threads"])
@@ -68,14 +68,15 @@ rule export_qc_bedtools_intersect_pgrs:
 
 rule export_qc_xlsx_tc_report:
     input:
-        mosdepth_summary="qc/mosdepth_bed/{sample}_{type}.mosdepth.summary.txt",
-        mosdepth_thresholds="qc/mosdepth_bed/{sample}_{type}.thresholds.bed.gz",
-        mosdepth_regions="qc/mosdepth_bed/{sample}_{type}.regions.bed.gz",
-        mosdepth_perbase="qc/mosdepth_bed/{sample}_{type}.mosdepth.per-base.exon_bed.txt",
-        pgrs_coverage="qc/mosdepth_bed/{sample}_{type}.mosdepth.pgrs_cov.txt",
+        mosdepth_summary="qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.summary.txt",
+        mosdepth_thresholds="qc/mosdepth_bed_exon/{sample}_{type}.thresholds.bed.gz",
+        mosdepth_regions="qc/mosdepth_bed_exon/{sample}_{type}.regions.bed.gz",
+        mosdepth_perbase="qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.per-base.exon_bed.txt",
+        pgrs_coverage="qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.pgrs_cov.txt",
         design_bed=config["reference"]["exon_bed"],
         pgrs_bed=config["reference"]["pgrs_bed"],
-        wanted_transcripts=config["export_qc_xlsx_report"]["wanted_transcripts"],
+        reads_summary="qc/extract_read_metrics/{sample}_{type}.summary.tsv",
+        wanted_transcripts=config["reference"]["wanted_transcripts"],
     output:
         results=temp("qc/xlsx_report/{sample}_{type}.xlsx"),
     params:
@@ -99,6 +100,7 @@ rule export_qc_xlsx_tc_report:
     container:
         config.get("export_qc_xlsx_report", {}).get("container", config["default_container"])
     message:
-        "{rule}: collecting qc values into {output}"
+        "{rule}: collecting qc values into {output} for the twist cancer design"
     script:
-        "../scripts/export_qc_xlsx_report.py"
+        "../scripts/export_qc_xlsx_tc_report.py"
+

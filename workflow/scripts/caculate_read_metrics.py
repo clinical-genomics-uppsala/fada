@@ -26,7 +26,7 @@ def extract_read_metrics(bam_file, read_metrics_file):
         A dictionary containing the following summary statistics:
             - total_count: Total number of reads.
             - duplicate_count: Number of duplicate reads.
-            - median_quality: Median read quality.
+            - median_read_quality: Median read quality.
             - mean_read_quality: Mean read quality.
             - max_read_quality: Maximum read quality.
             - min_read_quality: Minimum read quality.

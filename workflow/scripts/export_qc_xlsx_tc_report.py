@@ -7,60 +7,6 @@ import xlsxwriter
 from operator import itemgetter
 import pandas as pd
 
-def parse_logfile(self, logfile):
-    """
-
-    Modified from https://github.com/MultiQC/MultiQC/blob/main/multiqc/modules/pbmarkdup/pbmarkdup.py
-
-    Parse the standard output from pbmarkdup
-
-    This is currently quite ugly, since pbmarkdup does not have an easily
-    parsable output format. See this github issue:
-    https://github.com/PacificBiosciences/pbbioconda/issues/365
-
-    For now, we just assume that the data fields are always in the same
-    order, without any missing values.
-    """
-
-    file_content = logfile["f"]
-
-    # The number of spaces in the header can vary, based on the length of
-    # the name of the library. We therefore need a regex to match the
-    # header.
-    header_pattern = "LIBRARY +READS +UNIQUE MOLECULES +DUPLICATE READS"
-    pattern = re.compile(header_pattern)
-
-    # The file header
-    file_header = next(file_content).strip()
-
-    # Log an error if the header doesn't match the expected pattern
-    if not re.match(pattern, file_header):
-        fname = logfile["fn"]
-        log.error(f"Can't parse file '{fname}', unknown header: '{file_header}'")
-        return False
-
-    data = dict()
-
-    # Each parsable line is either for a library, or for 'TOTAL', the sum
-    # of all parsed libraries
-    for line in file_content:
-        # Lines which start with --- denote separators in the file, and do
-        # not need to be parsed
-        if line.startswith("-"):
-            continue
-
-        # Not very nice, we assume that all fields are always present
-        lib_name, reads, unique_mol_count, unique_mol_perc, duplicate_count, duplicate_perc = line.split()
-
-        # We are only interested in the counts, not the percentages
-        data[lib_name] = {
-            "READS": int(reads),
-            "UNIQUE MOLECULES": int(unique_mol_count),
-            "DUPLICATE READS": int(duplicate_count),
-        }
-
-    return data
-
 
 sample = snakemake.input.mosdepth_summary.split("/")[-1].split(".mosdepth.summary.txt")[0]
 
@@ -71,10 +17,8 @@ max_cov = int(snakemake.params.coverage_thresholds.strip().split(",")[2])
 cmd_avg_cov = "grep total_region " + snakemake.input.mosdepth_summary + " | awk '{print $4}'"
 avg_coverage = subprocess.run(cmd_avg_cov, stdout=subprocess.PIPE, shell="TRUE").stdout.decode("utf-8").strip()
 
-duplication_file = snakemake.input.pbmarkdups
-#duplication_df = pd.read_csv(duplication_file).set_index('Sample')
-
-
+# extract duplication rate from the reads_summary.tsv file
+duplication = float(pd.read_csv(snakemake.input.reads_summary, sep='\t').percent_duplication.iloc[0])
 
 wanted_transcripts = []
 with open(snakemake.input.wanted_transcripts) as wanted_file:

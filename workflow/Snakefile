@@ -5,7 +5,8 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
-# include: "rules/export_qc.smk"
+include: "rules/extract_read_metrics.smk"
+include: "rules/export_qc_twist_cancer.smk"
 include: "rules/picard.smk"
 
 
@@ -56,6 +57,25 @@ use rule pbmm2_align from alignment as alignment_pbmm2_align with:
             ref=config.get("reference", {}).get("fasta", ""),
             preset=config.get("pbmm2_align", {}).get("preset", ""),
         ),
+
+
+use rule samtools_merge_bam from alignment as alignment_samtools_merge_bam with:
+    input:
+        bams=lambda wildcards: [
+            "prealignment/pbmarkdup/{sample}_{type}_%s_%s.bam" % (u.processing_unit, u.barcode)
+            for u in get_units(units, wildcards)
+        ],
+    output:
+        bam=temp("prealignment/pbmarkdup/{sample}_{type}.bam"),
+    log:
+        "prealignment/pbmarkdup/{sample}_{type}.bam.log",
+    benchmark:
+        repeat(
+            "prealignment/pbmarkdup/{sample}_{type}.bam.benchmark.tsv",
+            config.get("samtools_merge_bam", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: merge {input.bams} files, creating {output.bam}"
 
 
 module compression:
@@ -131,7 +151,7 @@ use rule trgt_plot from cnv_sv as cnv_sv_trgt_plot_meth with:
 
 module filtering:
     snakefile:
-        get_module_snakefile(config, "hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["filtering"])
+        get_module_snakefile(config, "hydra-genetics/filtering", path="workflow/Snakefile", tag=config["modules"]["filtering"])
     config:
         config
 

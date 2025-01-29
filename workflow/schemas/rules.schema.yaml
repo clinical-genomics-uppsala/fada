@@ -121,3 +121,26 @@ properties:
             type: string
             description: description output1
             #value: set to override value in table, else remove
+
+# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  extract_read_metrics:
+    type: object
+    description: input and output parameters for extract_read_metrics
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          input1:
+            type: string
+            description: description input1
+            #value: set to override value in table, else remove
+
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          output1:
+            type: string
+            description: description output1
+            #value: set to override value in table, else remove

@@ -9,21 +9,12 @@ files:
     input: "compression/samtools_view/{sample}_N.cram.crai"
 
     #SNV & INDEL files
-  # - name: "deepvariant_vcf"
-  #   output: "results/{sample}/snv_indels/{sample}.deepvariant.vcf.gz"
-  #   input: "snv_indels/deepvariant/{sample}_N.merged.vcf.gz"
-  # - name: "deepvariant_tbi"
-  #   output: "results/{sample}/snv_indels/{sample}.deepvariant.vcf.gz.tbi"
-  #   input: "snv_indels/deepvariant/{sample}_N.merged.vcf.gz.tbi"
   - name: "deepvariant_phased_vcf"
     output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz"
     input: "snv_indels/hiphase/{sample}_N.deepvariant.phased.vcf.gz"
   - name: "deepvariant_phased_tbi"
     output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz.tbi"
     input: "snv_indels/hiphase/{sample}_N.deepvariant.phased.vcf.gz.tbi"
-  # - name: "haplotagged_bam"
-  #   output: "results/{sample}/{sample}.haplotagged.bam"
-  #   input: "snv_indels/hiphase/{sample}_N.haplotagged.bam"
   
     # CNV & SV files
   - name: "sawfish_vcf"
@@ -53,3 +44,6 @@ files:
   - name: "multiqc_report"
     output: "results/multiqc_pacbio_twist_cancer.html"
     input: "qc/multiqc/multiqc_pacbio_twist_cancer.html"
+  - name: QC xlsx-report
+    input: qc/xlsx_report/{sample}_N.xlsx
+    output: "{sample}/{sample}.xlsx"

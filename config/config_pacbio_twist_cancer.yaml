@@ -11,19 +11,24 @@ trimmer_software: None
 
 reference:
   design_bed: "{{PIPELINE_REF_DATA}}/designs/Annotated_expected_coverage_hg38_241001.bed"
-  exon_bed: "{{PIPELINE_REF_DATA}}/designs/Twist_Cancer_230602_hg38_coding_exons.bed"
-  skip_contigs: #chromosomes or scaffold not in the design
+  exon_bed: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/Twist_Cancer_230602_hg38_coding_exons.bed"
+  pgrs_bed: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/Twist_Cancer_230707_hg38_pgrs_snps.bed"
+  skip_contigs: #chromosomes or scaffolds not in the design
     - "^chrX$"
     - "^chrY$"
     - "^chrM$"
     - ".*_random"
     - "chrUn_.*"
     - "chrEBV"
+  wanted_transcripts: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/wanted_transcripts.bed"
 
 deepvariant:
   container: "docker://google/deepvariant:1.8.0"
   model_type: "PACBIO"
   output_gvcf: false
+
+export_qc_bedtools_intersect:
+  extra: " -wb "
 
 hiphase:
   container: "docker://hydragenetics/hiphase:1.4.5"
