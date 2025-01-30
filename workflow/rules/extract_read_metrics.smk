@@ -13,7 +13,7 @@ rule extract_read_metrics:
     params:
         extra=config.get("extract_read_metrics", {}).get("extra", ""),
     log:
-        "extract_read_metrics/{sample}_{type}.metrics.log",
+        "qc/extract_read_metrics/{sample}_{type}.metrics.log",
     benchmark:
         repeat(
             "extract_read_metrics/{sample}_{type}.metrics.benchmark.tsv",

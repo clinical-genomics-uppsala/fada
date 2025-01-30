@@ -82,8 +82,8 @@ def extract_read_metrics(bam_file, read_metrics_file):
 
 def main():
   bam_file =  snakemake.input.bam
-  read_metrics_out = snakemake.input.reads_metrics
-  summary_metrics_out = snakemake.input.output.reads_summary
+  read_metrics_out = snakemake.output.reads_metrics
+  summary_metrics_out = snakemake.output.reads_summary
   summary_stats = extract_read_metrics(bam_file, read_metrics_out)
   summary_stats_list = [ str(i) for i in [ summary_stats["total_count"], round(summary_stats["mean_read_length"],1),
                       summary_stats["median_read_length"], summary_stats["max_read_length"], summary_stats["min_read_length"], 
@@ -93,7 +93,7 @@ def main():
 
   with open(summary_metrics_out, "w") as summary_out:
     print("\t".join(["total_count", "mean_read_length", "median_read_length", "min_read_length", "max_read_length", 
-                     "mean_read_quality", "min_read_quality", "max_read_quality", "percent_duplication"]))
+                     "mean_read_quality", "min_read_quality", "max_read_quality", "percent_duplication"]), file=summary_out)
     print("\t".join(summary_stats_list), file=summary_out)
 
 if __name__ == "__main__":

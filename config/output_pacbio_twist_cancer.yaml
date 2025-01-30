@@ -46,4 +46,4 @@ files:
     input: "qc/multiqc/multiqc_pacbio_twist_cancer.html"
   - name: QC xlsx-report
     input: qc/xlsx_report/{sample}_N.xlsx
-    output: "{sample}/{sample}.xlsx"
+    output: "results/{sample}/{sample}_coveage_report.xlsx"
