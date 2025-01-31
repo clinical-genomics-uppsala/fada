@@ -16,7 +16,7 @@ reference:
     - "chrEBV"
 
 deepvariant:
-  container: "docker://google/deepvariant:1.6.1"
+  container: "docker://google/deepvariant:1.8.0"
   model_type: "PACBIO"
   output_gvcf: false
 
@@ -35,7 +35,7 @@ mosdepth:
   extra: "--fast-mode --use-median --no-per-base "
 
 multiqc:
-  container: "docker://hydragenetics/multiqc:1.21"
+  container: "docker://hydragenetics/multiqc:1.25.1"
   reports:
     pacbio_wgs:
       config: "config/multiqc_config_pacbio_wgs.yaml"

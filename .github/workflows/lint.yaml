@@ -35,4 +35,4 @@ jobs:
       - name: Linting pacbio twist cancer
         working-directory: .tests/integration
         run: |
-          cp -r ../../config . && snakemake --lint -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config PIPELINE_REF_DATA=reference
+          cp -r ../../config . && snakemake --lint -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config PIPELINE_REF_DATA=reference --config sequenceid="test"

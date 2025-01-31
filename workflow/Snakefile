@@ -5,8 +5,13 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
-# include: "rules/export_qc.smk"
-include: "rules/picard.smk"
+include: "rules/extract_read_metrics.smk"
+
+
+if config.get("pipeline") == "pacbio_twist_cancer":
+
+    include: "rules/export_qc_twist_cancer.smk"
+    include: "rules/picard.smk"
 
 
 rule all:
@@ -58,8 +63,23 @@ use rule pbmm2_align from alignment as alignment_pbmm2_align with:
         ),
 
 
-# wildcard_constraints:
-#     barcode="[A-Z-]+"
+use rule samtools_merge_bam from alignment as alignment_samtools_merge_bam with:
+    input:
+        bams=lambda wildcards: [
+            "prealignment/pbmarkdup/{sample}_{type}_%s_%s.bam" % (u.processing_unit, u.barcode)
+            for u in get_units(units, wildcards)
+        ],
+    output:
+        bam=temp("prealignment/pbmarkdup/{sample}_{type}.bam"),
+    log:
+        "prealignment/pbmarkdup/{sample}_{type}.bam.log",
+    benchmark:
+        repeat(
+            "prealignment/pbmarkdup/{sample}_{type}.bam.benchmark.tsv",
+            config.get("samtools_merge_bam", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: merge {input.bams} files, creating {output.bam}"
 
 
 module compression:
@@ -131,6 +151,16 @@ use rule trgt_plot from cnv_sv as cnv_sv_trgt_plot_meth with:
         image=expand(
             "cnv_sv/trgt_plot/meth/{{sample}}_{{type}}_{{locus}}.{ext}", ext=config.get("trgt_plot_meth", {}).get("image", "svg")
         ),
+
+
+module filtering:
+    snakefile:
+        get_module_snakefile(config, "hydra-genetics/filtering", path="workflow/Snakefile", tag=config["modules"]["filtering"])
+    config:
+        config
+
+
+use rule bcftools_view from filtering as filtering_bcftools_view
 
 
 module prealignment:
@@ -218,7 +248,7 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_exon with:
         coverage_csi=temp("qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz.csi"),
         thresholds=temp("qc/mosdepth_bed_exon/{sample}_{type}.thresholds.bed.gz"),
         glob=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.global.dist.txt"),
-        region=temp("qc/mosdepth_bed/_exon{sample}_{type}.mosdepth.region.dist.txt"),
+        region=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.region.dist.txt"),
         summary=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.summary.txt"),
     params:
         thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
