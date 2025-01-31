@@ -17,7 +17,7 @@ rule extract_read_metrics:
     benchmark:
         repeat(
             "extract_read_metrics/{sample}_{type}.metrics.benchmark.tsv",
-            config.get("extract_read_metrics", {}).get("benchmark_repeats", 1)
+            config.get("extract_read_metrics", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("extract_read_metrics", {}).get("threads", config["default_resources"]["threads"])
     resources:
@@ -32,6 +32,3 @@ rule extract_read_metrics:
         "{rule}: extract read metrics from {input.bam}"
     script:
         "../scripts/calculate_read_metrics.py"
-
-
-

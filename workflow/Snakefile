@@ -6,7 +6,10 @@ __license__ = "GPL-3"
 
 include: "rules/common.smk"
 include: "rules/extract_read_metrics.smk"
-if config.get("pipeline") == "pacbio_twist_cancer": 
+
+
+if config.get("pipeline") == "pacbio_twist_cancer":
+
     include: "rules/export_qc_twist_cancer.smk"
     include: "rules/picard.smk"
 
@@ -156,7 +159,9 @@ module filtering:
     config:
         config
 
-use rule bcftools_view from filtering as filtering_bcftools_view 
+
+use rule bcftools_view from filtering as filtering_bcftools_view
+
 
 module prealignment:
     snakefile:

@@ -18,7 +18,7 @@ rule export_qc_bedtools_intersect:
     benchmark:
         repeat(
             "qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.per-base.exon_bed.benchmark.tsv",
-            config.get("export_qc_bedtools_intersect", {}).get("benchmark_repeats", 1)
+            config.get("export_qc_bedtools_intersect", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("export_qc_bedtools_intersect", {}).get("threads", config["default_resources"]["threads"])
     resources:
@@ -49,12 +49,14 @@ rule export_qc_bedtools_intersect_pgrs:
     benchmark:
         repeat(
             "qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.pgrs_cov.benchmark.tsv",
-            config.get("export_qc_bedtools_intersect_pgrs", {}).get("benchmark_repeats", 1)
+            config.get("export_qc_bedtools_intersect_pgrs", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("export_qc_bedtools_intersect_pgrs", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("export_qc_bedtools_intersect_pgrs", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
-        mem_per_cpu=config.get("export_qc_bedtools_intersect_pgrs", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        mem_per_cpu=config.get("export_qc_bedtools_intersect_pgrs", {}).get(
+            "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
+        ),
         partition=config.get("export_qc_bedtools_intersect_pgrs", {}).get("partition", config["default_resources"]["partition"]),
         threads=config.get("export_qc_bedtools_intersect_pgrs", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("export_qc_bedtools_intersect_pgrs", {}).get("time", config["default_resources"]["time"]),
@@ -88,7 +90,7 @@ rule export_qc_xlsx_tc_report:
     benchmark:
         repeat(
             "qc/xlsx_report/{sample}_{type}.xlsx.benchmark.tsv",
-            config.get("export_qc_xlsx_report", {}).get("benchmark_repeats", 1)
+            config.get("export_qc_xlsx_report", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("export_qc_xlsx_report", {}).get("threads", config["default_resources"]["threads"])
     resources:
@@ -103,4 +105,3 @@ rule export_qc_xlsx_tc_report:
         "{rule}: collecting qc values into {output} for the twist cancer design"
     script:
         "../scripts/export_qc_xlsx_tc_report.py"
-
