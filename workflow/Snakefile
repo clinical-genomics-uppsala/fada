@@ -6,8 +6,9 @@ __license__ = "GPL-3"
 
 include: "rules/common.smk"
 include: "rules/extract_read_metrics.smk"
-include: "rules/export_qc_twist_cancer.smk"
-include: "rules/picard.smk"
+if config.get("pipeline") == "pacbio_twist_cancer": 
+    include: "rules/export_qc_twist_cancer.smk"
+    include: "rules/picard.smk"
 
 
 rule all:

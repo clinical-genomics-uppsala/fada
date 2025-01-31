@@ -100,8 +100,7 @@ with open(snakemake.input.pgrs_coverage) as pgrs_file:
     for lline in pgrs_file:
         line = lline.strip().split("\t")
         line[3] = int(line[3])
-        pgrs_cov_table.append(line[0:4] + [line[7]]) # no column beyoind 4?
-        
+        pgrs_cov_table.append(line[0:4] + [line[7]])
 
 
 # Create xlsx file and sheets
@@ -164,7 +163,7 @@ worksheet_overview.write_row(
 worksheet_overview.write(18, 0, "Number of regions not coverage by at least " + str(min_cov) + "x: ")
 worksheet_overview.write(19, 0, str(num_low_regions))
 
-worksheet_overview.write(22, 0, "Bedfile used: " + snakemake.input.design_bed) 
+worksheet_overview.write(22, 0, "Bedfile used: " + snakemake.input.design_bed)
 worksheet_overview.write(23, 0, "PGRS-bedfile used: " + snakemake.input.pgrs_bed)
 
 # low cov

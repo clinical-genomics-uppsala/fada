@@ -4,12 +4,14 @@ import xlsxwriter
 from operator import itemgetter
 import pandas as pd
 
+
 def parse_mosdepth_summary(summary_file):
     with open(summary_file, 'r') as file:
         for line in file:
             if "total_region" in line:
                 return line.split()[3]
     return "0"
+
 
 def parse_reads_summary(reads_summary_file):
     try:
@@ -18,6 +20,7 @@ def parse_reads_summary(reads_summary_file):
         print(f"Error parsing reads summary: {e}")
         raise
 
+
 def get_wanted_transcripts(wanted_file):
     try:
         with open(wanted_file, 'r') as file:
@@ -25,6 +28,7 @@ def get_wanted_transcripts(wanted_file):
     except Exception as e:
         print(f"Error reading wanted transcripts: {e}")
         raise
+
 
 def parse_regions_file(regions_file):
     region_cov_table = []
@@ -41,6 +45,7 @@ def parse_regions_file(regions_file):
             if line[0:5] not in bed_table:
                 bed_table.append(line[0:5])
     return region_cov_table, bed_table
+
 
 def parse_thresholds_file(threshold_file, total_length):
     threshold_table = []
@@ -69,6 +74,7 @@ def parse_thresholds_file(threshold_file, total_length):
                 threshold_table.append(outline)
     return threshold_table, total_breadth, total_length
 
+
 def parse_low_coverage(per_base_file, min_cov, bed_table, wanted_transcripts):
     low_cov_lines = []
     with open(per_base_file, "r") as file:
@@ -94,11 +100,13 @@ def parse_low_coverage(per_base_file, min_cov, bed_table, wanted_transcripts):
                 low_cov_table.append(line + [""] + [";".join(exons)])
     return low_cov_table, num_low_regions
 
+
 def generate_excel_report(output_file, data):
     workbook = xlsxwriter.Workbook(output_file)
 
     # Unpack data
-    sequenceid, sample, avg_coverage, duplication, min_cov, med_cov, max_cov, total_breadth, total_length, low_cov_table, num_low_regions, region_cov_table, threshold_table = data
+    sequenceid, sample, avg_coverage, duplication, min_cov, med_cov, max_cov, total_breadth, \
+        total_length, low_cov_table, num_low_regions, region_cov_table, threshold_table = data
 
     # Create xlsx file and sheets
     empty_list = ["", "", "", "", "", ""]
@@ -112,9 +120,9 @@ def generate_excel_report(output_file, data):
     format_heading = workbook.add_format({"bold": True, "font_size": 18})
     format_line = workbook.add_format({"top": 1})
     format_table_heading = workbook.add_format({"bold": True, "text_wrap": True})
-    format_wrap_text = workbook.add_format({"text_wrap": True})
-    format_italic = workbook.add_format({"italic": True})
-    format_red_font = workbook.add_format({"font_color": "red"})
+    # format_wrap_text = workbook.add_format({"text_wrap": True})
+    # format_italic = workbook.add_format({"italic": True})
+    # format_red_font = workbook.add_format({"font_color": "red"})
 
     # Overview
     worksheet_overview.write(0, 0, sample, format_heading)
@@ -140,7 +148,8 @@ def generate_excel_report(output_file, data):
     worksheet_overview.write_row(
         15,
         0,
-        ["RunID", "DNAnr", "Avg. coverage [x]", "Duplicationlevel [%]", str(min_cov) + "x", str(med_cov) + "x", str(max_cov) + "x"],
+        ["RunID", "DNAnr", "Avg. coverage [x]", "Duplicationlevel [%]",
+         str(min_cov) + "x", str(med_cov) + "x", str(max_cov) + "x"],
         format_table_heading,
     )
     worksheet_overview.write_row(
@@ -160,7 +169,7 @@ def generate_excel_report(output_file, data):
     worksheet_overview.write(18, 0, "Number of regions not coverage by at least " + str(min_cov) + "x: ")
     worksheet_overview.write(19, 0, str(num_low_regions))
 
-    worksheet_overview.write(22, 0, "Bedfile used: " + snakemake.input.design_bed) 
+    worksheet_overview.write(22, 0, "Bedfile used: " + snakemake.input.design_bed)
     worksheet_overview.write(23, 0, "PGRS-bedfile used: " + snakemake.input.pgrs_bed)
 
     # low cov
@@ -264,11 +273,12 @@ def main():
     )
 
     data = (
-        sequenceid,sample, avg_coverage, duplication, min_cov, med_cov, max_cov,
+        sequenceid, sample, avg_coverage, duplication, min_cov, med_cov, max_cov,
         total_breadth, total_length, low_cov_table, num_low_regions,
         region_cov_table, threshold_table
     )
     generate_excel_report(snakemake.output[0], data)
+
 
 if __name__ == "__main__":
     main()
