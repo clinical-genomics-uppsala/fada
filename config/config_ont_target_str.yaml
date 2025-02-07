@@ -35,6 +35,12 @@ multiqc:
         - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
         - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
 
+pepper_deepvariant:
+  container: "docker://kishwars/pepper_deepvariant:r0.8"
+
+samtools_view_on_target:
+  container: "docker://hydragenetics/samtools:1.21"
+
 sniffles2_call:
   container: "docker://hydragenetics/sniffles2:2.4"
   bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"

@@ -12,15 +12,12 @@ files:
   - name: "multiqc_report"
     output: "results/multiqc_DNA.html"
     input: "qc/multiqc/multiqc_DNA.html"
-  - name: "on_target_bam"
-    output: "results/{sample}/{sample}.on_target.bam"
-    input: "qc/samtools_view_on_target/{sample}_N.on_target.bam"
   # - name: "on_target_bai"
   #   output: "results/{sample}/{sample}.on_target.bam.bai"
   #   input: "qc/samtools_view_on_target/{sample}_N.on_target.bam.bai"
-  - name: "off_target_bam"
-    output: "results/{sample}/{sample}.off_target.bam"
-    input: "qc/samtools_view_off_target/{sample}_N.off_target.bam"
+  - name: "on_target_tsv"
+    output: "results/{sample}/{sample}.reads.on_target.tsv"
+    input: "qc/samtools_view_on_target/{sample}_N.reads.on_target.tsv"
   # - name: "off_target_bai"
   #   output: "results/{sample}/{sample}.off_target.bam.bai"
   #   input: "qc/samtools_view_off_target/{sample}_N.off_target.bam.bai"
@@ -46,3 +43,9 @@ files:
     output: "results/{sample}/{sample}.mosdepth.summary.txt"
     input: "qc/mosdepth_bed_design/{sample}_N.mosdepth.summary.txt"
 
+
+  # snv indels
+  - name: "pepper_deepvariant"
+    output: "results/{sample}/{sample}.vcf.gz"
+    input: "snv_indels/pepper_deepvariant/{sample}_N/{sample}_N.vcf.gz"
+  
