@@ -270,7 +270,7 @@ def compile_output_file_list(wildcards):
                     for gene in config["paraphase"]["genes"]
                 ]
             )
-        elif config["pipeline"] ==  "ont_stront_target_str":
+        elif config["pipeline"] ==  "ont_target_str":
             outputpaths = set(
                 [
                     f["output"].format(sample=sample, type=unit_type)

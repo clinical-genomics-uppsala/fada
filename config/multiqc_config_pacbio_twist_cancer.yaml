@@ -1,6 +1,6 @@
 
 title: "Clinical Genomics MultiQC Report"
-subtitle: "Reference used: GRCh38"
+subtitle: "Reference used: GRCh38 workflow: Pacbio twist cancer"
 intro_text: "The MultiQC report summarise analysis results from long read DNA sequencing that been analysed by the pipeline Fada (https://github.com/clinical-genomics-uppsala/fada)."
 
 report_header_info:

@@ -35,3 +35,7 @@ jobs:
         working-directory: .tests/integration
         run: |
           cp -r ../../config . && snakemake -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config PIPELINE_REF_DATA=reference sequenceid="test"
+      - name: snakemake dry run ont targeted str
+        working-directory: .tests/integration
+        run: |
+          cp -r ../../config . && snakemake -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_ont_target_str.yaml --config PIPELINE_REF_DATA=reference

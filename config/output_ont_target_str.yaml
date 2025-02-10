@@ -45,7 +45,4 @@ files:
 
 
   # snv indels
-  - name: "pepper_deepvariant"
-    output: "results/{sample}/{sample}.vcf.gz"
-    input: "snv_indels/pepper_deepvariant/{sample}_N/{sample}_N.vcf.gz"
-  
+
