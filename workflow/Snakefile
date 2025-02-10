@@ -5,6 +5,8 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/strkit.smk"
+include: "rules/strdust.smk"
 include: "rules/extract_read_metrics.smk"
 
 

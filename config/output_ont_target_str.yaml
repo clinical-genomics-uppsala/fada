@@ -44,5 +44,13 @@ files:
     input: "qc/mosdepth_bed_design/{sample}_N.mosdepth.summary.txt"
 
 
-  # snv indels
+  #STRs
+  - name: "strdust_vcf"
+    output: "results/{sample}/STRs/{sample}.strdust.vcf"
+    input: "cnv_sv/strdust/{sample}_N.vcf"
+  - name: "strkit_vcf"
+    output: "results/{sample}/STRs/{sample}.strkit.vcf"
+    input: "cnv_sv/strkit_call/{sample}_N.vcf"
+
+  
 
