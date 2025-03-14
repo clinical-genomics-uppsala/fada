@@ -126,3 +126,45 @@ Introduction to extract_read_metrics
 #### Resources settings (`resources.yaml`)
 
 #RESOURCESSCHEMA__extract_read_metrics#
+
+## [strdust](url_to_tool)
+Introduction to strdust
+
+### :snake: Rule
+
+#SNAKEMAKE_RULE_SOURCE__strdust__strdust#
+
+#### :left_right_arrow: input / output files
+
+#SNAKEMAKE_RULE_TABLE__strdust__strdust#
+
+### :wrench: Configuration
+
+#### Software settings (`config.yaml`)
+
+#CONFIGSCHEMA__strdust#
+
+#### Resources settings (`resources.yaml`)
+
+#RESOURCESSCHEMA__strdust#
+
+## [strkit_call](url_to_tool)
+Introduction to strkit_call
+
+### :snake: Rule
+
+#SNAKEMAKE_RULE_SOURCE__strkit__strkit_call#
+
+#### :left_right_arrow: input / output files
+
+#SNAKEMAKE_RULE_TABLE__strkit__strkit_call#
+
+### :wrench: Configuration
+
+#### Software settings (`config.yaml`)
+
+#CONFIGSCHEMA__strkit_call#
+
+#### Resources settings (`resources.yaml`)
+
+#RESOURCESSCHEMA__strkit_call#

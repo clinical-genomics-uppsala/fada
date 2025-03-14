@@ -1,6 +1,6 @@
 
 title: "Clinical Genomics MultiQC Report"
-subtitle: "Reference used: GRCh38 workflow: Pacbio WGS""
+subtitle: "Reference used: GRCh38 workflow: ONT targeted STR"
 intro_text: "The MultiQC report summarise analysis results from long read DNA sequencing that been analysed by the pipeline Fada (https://github.com/clinical-genomics-uppsala/fada)."
 
 report_header_info:
@@ -11,18 +11,23 @@ show_analysis_paths: True
 
 decimalPoint_format: ','
 
+log_filesize_limit: 500000000 # increased for larger samtools stats log files
+
 extra_fn_clean_exts: ##from this until end
-    - '.dup'
-    - type: regex
-      pattern: '_fastq[12]'
-#    - '_S'
-extra_fn_clean_trim:
-  - 'Sample_VE-3297_'
+    - '_N'
+# # #    - '_S'
+# extra_fn_clean_trim:
+#   - type: regex
+#     pattern: '_N_*'
 
 module_order:
+  - seuquali
   - mosdepth
   - samtools
 
+sp:
+  nanostat:
+    fn: "NanoStats.txt"
 
 table_columns_visible:
   mosdepth:
@@ -45,14 +50,14 @@ table_columns_visible:
     raw_total_sequences: True
 
 # Patriks plug in, addera egna columner till general stats
-multiqc_cgs:
-  "Samtools: stats":
-    average_quality:
-      title: "Average Quality"
-      description: "Ratio between the sum of base qualities and total length from Samtools stats"
-      min: 0
-      max: 60
-      scale: "RdYlGn"
+# multiqc_cgs:
+#   "Samtools: stats":
+#     average_quality:
+#       title: "Average Quality"
+#       description: "Ratio between the sum of base qualities and total length from Samtools stats"
+#       min: 0
+#       max: 60
+#       scale: "RdYlGn"
 
 # Galler alla kolumner oberoende pa module!
 table_columns_placement:
@@ -76,6 +81,11 @@ table_columns_placement:
  
 
 mosdepth_config:
+  general_stats_coverage:
+    - 10
+    - 20
+    - 30
+    - 50
   include_contigs:
     - "chr*"
   exclude_contigs:

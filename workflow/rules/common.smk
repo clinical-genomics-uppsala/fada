@@ -270,6 +270,16 @@ def compile_output_file_list(wildcards):
                     for gene in config["paraphase"]["genes"]
                 ]
             )
+        elif config["pipeline"] == "ont_target_str":
+            outputpaths = set(
+                [
+                    f["output"].format(sample=sample, type=unit_type)
+                    for sample in get_samples(samples)
+                    for unit_type in get_unit_types(units, sample)
+                ]
+            )
+        else:
+            sys.exit("pipeline has not be specified in the config file")
 
         for op in outputpaths:
             output_files.append(outdir / Path(op))

@@ -7,21 +7,32 @@ default_container: "docker://hydragenetics/common:1.11.1"
 resources: "config/resources.yaml"
 
 modules:
-  alignment: "497e3e8"
+  alignment: "5444def"
   annotation: "3ce9da5"
   compression: "b3ef8cc"
   cnv_sv: "75bc154"
   filtering: "be5cc98"
   misc: "cd1e891"
   prealignment: "a9ff268"
-  qc: "a5e356d"
+  qc: "c323ccf"
   snv_indels: "2fa0c4e"
-
 
 reference:
   fasta: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
   fai: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
   pathogenic_repeats_bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
 
+minimap2_align:
+  preset: ""
 
+cramino:
+  container: "docker://hydragenetics/cramino:0.14.5"
 
+multiqc:
+  container: "docker://hydragenetics/multiqc:1.27.1"
+
+nanoplot:
+  container: "docker://hydragenetics/nanoplot:1.44.1"
+
+sequali:
+  container: "docker://hydragenetics/sequali:0.12.0"

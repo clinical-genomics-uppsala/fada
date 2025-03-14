@@ -1,0 +1,64 @@
+---
+pipeline: "ont_target_str"
+output: "config/output_ont_target_str.yaml"
+samples: "samples_ont_str.tsv"
+units: "units_ont_str.tsv"
+
+aligner: "minimap2"
+trimmer_software: None
+
+reference:
+  #design_bed: "{{PIPELINE_REF_DATA}}/designs/gRNA_design_repeat_expansions_220308.bed"
+  design_bed: "{{PIPELINE_REF_DATA}}/ont_target_str/ReadUntil_Final_Extra_50kb_hg38_v5.bed"
+  str_bed: "{{PIPELINE_REF_DATA}}/ont_target_str/STRchive-disease-loci-v2.2.1.hg38.in_design.bed" # disease strs in the design
+
+minimap2_index:
+  container: "docker://hydragenetics/minimap2:2.26"
+  preset: "map-ont"
+
+minimap2_align:
+  container: "docker://hydragenetics/minimap2:2.26"
+  preset: "map-ont"
+  extra: "-Y "
+
+mosdepth_bed:
+  container: "docker://hydragenetics/mosdepth:0.3.2"
+  thresholds: "10,20,50"
+
+multiqc:
+  reports:
+    DNA:
+      config: "config/multiqc_config_ont_target_str.yaml"
+      included_unit_types: ["N"]
+      qc_files:
+        - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.global.dist.txt"
+        - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.region.dist.txt"
+        - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt"
+        - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
+        - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
+        - "qc/sequali/{sample}_{type}_{processing_unit}_{barcode}.json"
+        - "qc/nanoplot/{sample}_{type}.txt"
+      extra: "-v "
+
+nanoplot:
+  extra: "--info_in_report "
+
+samtools_view_on_target:
+  container: "docker://hydragenetics/samtools:1.21"
+
+straglr:
+  container: "docker://quay.io/biocontainers/straglr:1.5.3"
+  bed: "{{PIPELINE_REF_DATA}}/ont_target_str/strkit_loci.bed"
+
+strdust:
+  container: "docker://hydragenetics/strdust:0.8.2"
+  extra: "--somatic  --unphased "
+
+strkit_call:
+  container: "docker://ghcr.io/davidlougheed/strkit:0.21.0-alpha.1"
+  bed: "{{PIPELINE_REF_DATA}}/ont_target_str/strkit_loci.bed"
+  extra: "--targeted  --seed 183 "
+
+
+
+

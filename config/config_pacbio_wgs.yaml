@@ -15,6 +15,9 @@ reference:
     - "chrUn_.*"
     - "chrEBV"
 
+reference:
+  design_bed: ""
+
 deepvariant:
   container: "docker://google/deepvariant:1.8.0"
   model_type: "PACBIO"

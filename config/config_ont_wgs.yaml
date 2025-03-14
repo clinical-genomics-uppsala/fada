@@ -4,5 +4,5 @@ resources: "config/resources.yaml"
 samples: "samples_ont_wgs.tsv"
 units: "units_ont_wgs.tsv"
 
-aligner: "pbmm2"
+aligner: "minimap2"
 

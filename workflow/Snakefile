@@ -5,6 +5,8 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/strkit.smk"
+include: "rules/strdust.smk"
 include: "rules/extract_read_metrics.smk"
 
 
@@ -14,15 +16,24 @@ if config.get("pipeline") == "pacbio_twist_cancer":
     include: "rules/picard.smk"
 
 
+if config.get("pipeline") == "ont_target_str":
+
+    include: "rules/samtools.smk"
+
+
 rule all:
     input:
         compile_output_file_list,
 
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
-ruleorder: cnv_sv_sawfish_joint_call > cnv_sv_tabix
-ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
-ruleorder: snv_indels_tabix > annotation_tabix_vcf
+
+
+if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
+
+    ruleorder: cnv_sv_sawfish_joint_call > cnv_sv_tabix
+    ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
+    ruleorder: snv_indels_tabix > annotation_tabix_vcf
 
 
 module annotation:
@@ -212,6 +223,15 @@ module qc:
         config
 
 
+use rule * from qc as qc_*
+
+
+use rule cramino from qc as qc_cramino with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+
+
 use rule mosdepth from qc as qc_mosdepth with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
@@ -250,6 +270,24 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_exon with:
         glob=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.global.dist.txt"),
         region=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.region.dist.txt"),
         summary=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.summary.txt"),
+    params:
+        thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
+
+
+use rule mosdepth_bed from qc as qc_mosdepth_bed_str with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bed=config.get("reference", {}).get("str_bed", ""),
+    output:
+        bed=temp("qc/mosdepth_bed_str/{sample}_{type}.regions.bed.gz"),
+        bed_csi=temp("qc/mosdepth_bed_str/{sample}_{type}.regions.bed.gz.csi"),
+        coverage=temp("qc/mosdepth_bed_str/{sample}_{type}.per-base.bed.gz"),
+        coverage_csi=temp("qc/mosdepth_bed_str/{sample}_{type}.per-base.bed.gz.csi"),
+        thresholds=temp("qc/mosdepth_bed_str/{sample}_{type}.thresholds.bed.gz"),
+        glob=temp("qc/mosdepth_bed_str/{sample}_{type}.mosdepth.global.dist.txt"),
+        region=temp("qc/mosdepth_bed_str/{sample}_{type}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth_bed_str/{sample}_{type}.mosdepth.summary.txt"),
     params:
         thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
 
