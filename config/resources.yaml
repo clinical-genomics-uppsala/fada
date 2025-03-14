@@ -22,6 +22,11 @@ minimap2_align:
   mem_per_cpu: 6144
   threads: 10
 
+nanoplot:
+  mem_mb: 49152
+  mem_per_cpu: 6144
+  threads: 8
+
 deepvariant:
   mem_mb: 61440
   mem_per_cpu: 6144

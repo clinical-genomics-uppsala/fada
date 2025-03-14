@@ -215,6 +215,12 @@ module qc:
     config:
         config
 
+use rule * from qc as qc_*
+
+use rule cramino from qc as qc_cramino with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
 
 use rule mosdepth from qc as qc_mosdepth with:
     input:
@@ -254,6 +260,24 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_exon with:
         glob=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.global.dist.txt"),
         region=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.region.dist.txt"),
         summary=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.summary.txt"),
+    params:
+        thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
+
+
+use rule mosdepth_bed from qc as qc_mosdepth_bed_str with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bed=config.get("reference", {}).get("str_bed", ""),
+    output:
+        bed=temp("qc/mosdepth_bed_str/{sample}_{type}.regions.bed.gz"),
+        bed_csi=temp("qc/mosdepth_bed_str/{sample}_{type}.regions.bed.gz.csi"),
+        coverage=temp("qc/mosdepth_bed_str/{sample}_{type}.per-base.bed.gz"),
+        coverage_csi=temp("qc/mosdepth_bed_str/{sample}_{type}.per-base.bed.gz.csi"),
+        thresholds=temp("qc/mosdepth_bed_str/{sample}_{type}.thresholds.bed.gz"),
+        glob=temp("qc/mosdepth_bed_str/{sample}_{type}.mosdepth.global.dist.txt"),
+        region=temp("qc/mosdepth_bed_str/{sample}_{type}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth_bed_str/{sample}_{type}.mosdepth.summary.txt"),
     params:
         thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
 

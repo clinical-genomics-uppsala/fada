@@ -40,4 +40,4 @@ rule strdust:
         "-R {input.repeats} "
         "--sample {params.sample} "
         "{input.fasta} "
-        "{input.bam} > {output.vcf} &> {log}"
+        "{input.bam} > {output.vcf} 2> {log}"
