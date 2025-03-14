@@ -30,6 +30,3 @@ rule samtools_view_on_target:
         """
         samtools view  {input.bam} -L {input.bed} | cut -f1 | sort | uniq > {output.on_tsv} 
         """
-
-
-    

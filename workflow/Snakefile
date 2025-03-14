@@ -15,17 +15,22 @@ if config.get("pipeline") == "pacbio_twist_cancer":
     include: "rules/export_qc_twist_cancer.smk"
     include: "rules/picard.smk"
 
+
 if config.get("pipeline") == "ont_target_str":
-    include: "rules/local/samtools.smk"
+
+    include: "rules/samtools.smk"
 
 
 rule all:
     input:
         compile_output_file_list,
 
+
 ruleorder: _copy_samtools_crai > compression_samtools_index
 
-if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs" ]:
+
+if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
+
     ruleorder: cnv_sv_sawfish_joint_call > cnv_sv_tabix
     ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
     ruleorder: snv_indels_tabix > annotation_tabix_vcf
@@ -39,6 +44,7 @@ module annotation:
 
 
 use rule * from annotation as annotation_*
+
 
 use rule stranger from annotation as annotation_stranger with:
     input:
@@ -209,18 +215,22 @@ use rule bcftools_concat from snv_indels as snv_indels_bcftools_concat with:
         calls=expand("{{file}}_{chr}.{{vcf}}.gz", chr=chr_list),
         index=expand("{{file}}_{chr}.{{vcf}}.gz.tbi", chr=chr_list),
 
+
 module qc:
     snakefile:
         get_module_snakefile(config, "hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["qc"])
     config:
         config
 
+
 use rule * from qc as qc_*
+
 
 use rule cramino from qc as qc_cramino with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
         bai=lambda wildcards: get_bam_input(wildcards)[1],
+
 
 use rule mosdepth from qc as qc_mosdepth with:
     input:

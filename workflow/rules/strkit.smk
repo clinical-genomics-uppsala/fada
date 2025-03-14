@@ -20,8 +20,7 @@ rule strkit_call:
         "cnv_sv/strkit_call/{sample}_{type}.vcf.log",
     benchmark:
         repeat(
-            "cnv_sv/strkit_call/{sample}_{type}.output.benchmark.tsv",
-            config.get("strkit_call", {}).get("benchmark_repeats", 1)
+            "cnv_sv/strkit_call/{sample}_{type}.output.benchmark.tsv", config.get("strkit_call", {}).get("benchmark_repeats", 1)
         )
     threads: config.get("strkit_call", {}).get("threads", config["default_resources"]["threads"])
     resources:
@@ -36,9 +35,9 @@ rule strkit_call:
         "{rule}: Call STRs in {input.bam} using strkit"
     shell:
         "strkit call "
-        "{input.bam} " 
-        "--ref {input.fasta} " 
+        "{input.bam} "
+        "--ref {input.fasta} "
         "--sample-id {params.sample_id} "
-        "--loci {input.loci} "  
-        "--vcf {output.vcf} " 
+        "--loci {input.loci} "
+        "--vcf {output.vcf} "
         "--processes {threads} &> {log}"
