@@ -56,10 +56,6 @@ picard_create_sequence_dictionary:
 
 picard_collect_hs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
-
-picard_collect_duplication_metrics:
-  container: "docker://hydragenetics/picard:2.25.0"
-  extra: "VALIDATION_STRINGENCY=LENIENT "
  
 mosdepth_bed:
   container: "docker://hydragenetics/mosdepth:0.3.2"
