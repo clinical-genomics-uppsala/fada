@@ -2,17 +2,18 @@
 rule samtools_view_on_target:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
-        bai=lambda wildcards: get_bam_input(wildcards)[1],
-        bed=config.get("reference", {}).get("design_bed", ""),
+        idx=lambda wildcards: get_bam_input(wildcards)[1],
+        regions=config.get("reference", {}).get("design_bed", ""),
     output:
-        on_tsv=temp("qc/samtools_view_on_target/{sample}_{type}.reads.on_target.tsv"),
+        bam=temp("alignment/samtools_view_on_target/{sample}_{type}.on_target.bam"),
+        idx=temp("alignment/samtools_view_on_target/{sample}_{type}.on_target.bam.bai"),
     params:
         extra=config.get("samtools_stats", {}).get("extra", ""),
     log:
-        "qc/samtools_view_on_target/{sample}_{type}.reads.on_target.tsv.log",
+        "alignment/samtools_view_on_target/{sample}_{type}.reads.on_target.bam.log",
     benchmark:
         repeat(
-            "qc/samtools_view_on_target/{sample}_{type}.reads.on_target.tsv.benchmark.tsv",
+            "alignment/samtools_view_on_target/{sample}_{type}.reads.on_target.bam.benchmark.tsv",
             config.get("samtools_view_on_target", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("samtools_view_on_target", {}).get("threads", config["default_resources"]["threads"])
@@ -26,7 +27,5 @@ rule samtools_view_on_target:
         config.get("samtools_view_on_target", {}).get("container", config["default_container"])
     message:
         "{rule}: extract on target reads from {input.bam}"
-    shell:
-        """
-        samtools view  {input.bam} -L {input.bed} | cut -f1 | sort | uniq > {output.on_tsv} 
-        """
+    wrapper:
+        "v5.9.0/bio/samtools/view"
