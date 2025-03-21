@@ -11,18 +11,18 @@ show_analysis_paths: True
 
 decimalPoint_format: ','
 
+log_filesize_limit: 500000000 # increased for larger samtools stats log files
+
 extra_fn_clean_exts: ##from this until end
-    - '.dup'
-    - type: regex
-      pattern: '_fastq[12]'
-#    - '_S'
-extra_fn_clean_trim:
-  - 'Sample_VE-3297_'
+    - '_N'
+
 
 module_order:
+  - nanoplot
+  - seuquali
+  - picard
   - mosdepth
   - samtools
-
 
 table_columns_visible:
   mosdepth:
@@ -32,27 +32,94 @@ table_columns_visible:
     5_x_pc: False
     10_x_pc: True
     20_x_pc: True
-    30_x_pc: True
-    50_x_pc: False
+    30_x_pc: False
+    50_x_pc: True
 
   "Samtools: stats":
+    average_quality: False
     error_rate: False
     non-primary_alignments: False
-    reads_mapped: True
+    reads_mapped: False
     reads_mapped_percent: True
-    reads_properly_paired_percent: True
+    reads_properly_paired_percent: False
     reads_MQ0_percent: False
-    raw_total_sequences: True
+    raw_total_sequences: False
 
-# Patriks plug in, addera egna columner till general stats
+  pbmarkdup:
+    duplicate_reads: True
+    unique_molecules: False
+  
+  nanostat:
+    nanostat_Median_read_length_aligned: True
+    nanostat_Read_length_N50_aligned: False
+
+  Sequali:
+    sequali_duplication_percentage: False
+    sequali-sequali_mean_sequence_length: False
+    sequali-sequali_gc_percentage: False
+  
+  "Picard: HsMetrics":
+    FOLD_ENRICHMENT: True
+    MEDIAN_TARGET_COVERAGE: False
+    picard_target_bases_30X: False
+
+custom_table_header_config:
+  general_stats_table:
+    sequali_total_reads:
+      suffix: ""
+      title: "Total reads M"
+    sequali_mean_sequence_length:
+      suffix: ""
+    samtools_stats-reads_mapped:
+      suffix: ""
+      title: "Reads mapped M"
+    samtools_stats-reads_mapped_percent:
+      suffix: ""    
+    mosdepth-median_coverage:
+      suffix: ""
+      title: "Median target Coverage"
+    mosdepth-10_x_pc:
+      suffix: ""
+    mosdepth-20_x_pc:
+      suffix: ""
+    mosdepth-30_x_pc:
+      suffix: ""
+    mosdepth-50_x_pc:
+      suffix: ""
+    pbmarkdup-duplicate_reads:
+      suffix: ""
+      title: "Duplicate reads [%]"
+    nanostat-nanostat_Median_read_length_aligned:
+      "suffix": ""
+      "title": "Median on-target read length (bp)"
+    picard_hsmetrics-FOLD_ENRICHMENT:
+      suffix: ""
+    picard_hsmetrics-PCT_SELECTED_BASES:
+      suffix: ""
+    picard_hsmetrics-ZERO_CVG_TARGETS_PCT:
+      suffix: ""
+
 multiqc_cgs:
-  "Samtools: stats":
-    average_quality:
-      title: "Average Quality"
-      description: "Ratio between the sum of base qualities and total length from Samtools stats"
-      min: 0
-      max: 60
-      scale: "RdYlGn"
+  "Picard: HsMetrics":
+      FOLD_80_BASE_PENALTY:
+        title: "Fold80"
+        description: "Fold80 penalty from picard hs metrics"
+        min: 1
+        max: 3
+        scale: "RdYlGn-rev"
+        format: "{:.1f}"
+      PCT_SELECTED_BASES:
+        title: "Bases on Target"
+        description: "On+Near Bait Bases / PF Bases Aligned from Picard HsMetrics"
+        format: "{:.2%}"
+        suffix: ""
+      ZERO_CVG_TARGETS_PCT:
+        title: "Target bases with zero coverage [%]"
+        description: "Target bases with zero coverage [%] from Picard"
+        min: 0
+        max: 100
+        scale: "RdYlGn-rev"
+        format: "{:.2%}"
 
 # Galler alla kolumner oberoende pa module!
 table_columns_placement:
@@ -70,12 +137,23 @@ table_columns_placement:
     reads_mapped_percent: 502
     reads_properly_paired_percent: 503
     average_quality: 504
+    reads_duplicated: 505
     error_rate: 555
     reads_MQ0_percent: 555
     non-primary_alignments: 555
- 
+  "Sequali":
+    sequali_total_reads: 400
+    sequali_mean_sequence_length: 401
+    sequali_gc_percentage: 402
+  pbmarkdup:
+    duplicate_reads: 403
 
 mosdepth_config:
+  general_stats_coverage:
+    - 10
+    - 20
+    - 30
+    - 50
   include_contigs:
     - "chr*"
   exclude_contigs:
@@ -86,3 +164,20 @@ mosdepth_config:
     - "HLA*"
     - "chrM"
     - "chrEBV"
+
+picard_config:
+  HsMetrics_table_cols_hidden:
+    - AT_DROPOUT
+    - BAIT_TERRITORY
+    - GC_DROPOUT
+    - ZERO_CVG_TARGETS_PCT    
+    - PCT_EXC_DUPE    
+    - PCT_EXC_ADAPTER 
+    - PCT_EXC_MAPQ    
+    - PCT_EXC_BASEQ   
+    - PCT_EXC_OVERLAP 
+    - PCT_EXC_OFF_TARGET
+    - TARGET_TERRITORY
+    - TOTAL_READS
+    - PCT_OFF_BAIT
+    - PCT_TARGET_BASES_30X

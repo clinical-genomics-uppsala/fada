@@ -57,12 +57,15 @@ picard_create_sequence_dictionary:
 picard_collect_hs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
+picard_collect_duplication_metrics:
+  container: "docker://hydragenetics/picard:2.25.0"
+  extra: "VALIDATION_STRINGENCY=LENIENT "
+ 
 mosdepth_bed:
   container: "docker://hydragenetics/mosdepth:0.3.2"
   thresholds: "10,20,50"
 
 multiqc:
-  container: "docker://hydragenetics/multiqc:1.25.1"
   reports:
     pacbio_twist_cancer:
       config: "config/multiqc_config_pacbio_twist_cancer.yaml"
@@ -75,12 +78,18 @@ multiqc:
         - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
         - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt"
         - "prealignment/pbmarkdup/{sample}_{type}_{processing_unit}_{barcode}.bam.log"
+        - "qc/sequali/{sample}_{type}_{processing_unit}_{barcode}.json"
+        - "qc/nanoplot/{sample}_{type}.txt"
+      extra: "-v "
 
 paraphase:
   container: "docker://quay.io/pacbio/paraphase:3.1.1_build1"
   genome: "38"
   genes:
     - pms2
+
+samtools_view_on_target:
+  container: "docker://hydragenetics/samtools:1.21" 
 
 sawfish_discover:
   extra: "--clobber "

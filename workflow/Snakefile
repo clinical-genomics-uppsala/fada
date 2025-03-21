@@ -5,6 +5,7 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/samtools.smk"
 include: "rules/strkit.smk"
 include: "rules/strdust.smk"
 include: "rules/extract_read_metrics.smk"
@@ -16,18 +17,13 @@ if config.get("pipeline") == "pacbio_twist_cancer":
     include: "rules/picard.smk"
 
 
-if config.get("pipeline") == "ont_target_str":
-
-    include: "rules/samtools.smk"
-
-
 rule all:
     input:
         compile_output_file_list,
 
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
-
+ruleorder: samtools_view_on_target > alignment_samtools_index
 
 if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
 
@@ -304,6 +300,12 @@ use rule multiqc from qc as qc_multiqc with:
             ]
         ),
         config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+
+
+use rule nanoplot from qc as qc_nanoplot with:
+    input:
+        bam="alignment/samtools_view_on_target/{sample}_{type}.on_target.bam",
+        bai="alignment/samtools_view_on_target/{sample}_{type}.on_target.bam.bai",
 
 
 use rule samtools_stats from qc as qc_samtools_stats with:
