@@ -25,6 +25,7 @@ rule all:
 ruleorder: _copy_samtools_crai > compression_samtools_index
 ruleorder: samtools_view_on_target > alignment_samtools_index
 
+
 if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
 
     ruleorder: cnv_sv_sawfish_joint_call > cnv_sv_tabix

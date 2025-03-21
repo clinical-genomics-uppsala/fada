@@ -15,7 +15,6 @@ rule strkit_call:
     params:
         extra=config.get("strkit_call", {}).get("extra", ""),
         sample_id=lambda wildcards: f"{wildcards.sample}_{wildcards.type}",
-        #sex=get_sample_sex,
     log:
         "cnv_sv/strkit_call/{sample}_{type}.vcf.log",
     benchmark:

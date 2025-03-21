@@ -8,7 +8,6 @@ rule samtools_view_on_target:
         bam=temp("alignment/samtools_view_on_target/{sample}_{type}.on_target.bam"),
         idx=temp("alignment/samtools_view_on_target/{sample}_{type}.on_target.bam.bai"),
     params:
-    params:
         extra=config.get("samtools_stats", {}).get("extra", ""),
     log:
         "alignment/samtools_view_on_target/{sample}_{type}.reads.on_target.bam.log",
