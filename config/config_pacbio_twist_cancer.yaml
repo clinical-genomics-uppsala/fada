@@ -94,3 +94,9 @@ sawfish_joint_call:
   container: "docker://hydragenetics/sawfish:0.12.7"
   supporting_reads: true
   
+sniffles2_call:
+  container: "docker://hydragenetics/sniffles2:2.6.1"
+  tandem_repeats: "{{PIPELINE_REF_DATA}}/human_GRCh38_no_alt_analysis_set.trf.bed"
+
+sniffles2_call_mosaic:
+  extra: "--mosaic "

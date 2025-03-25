@@ -68,7 +68,7 @@ trgt_plot_meth:
   show: "meth"
 
 sniffles2_call:
-  container: "docker://hydragenetics/sniffles2:2.4"
+  container: "docker://hydragenetics/sniffles2:2.6.1"
   bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
 
 stranger:
