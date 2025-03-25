@@ -5,32 +5,9 @@ properties:
 
 
 # Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  picard_bed_to_interval_list:
+  add_vcf_ref:
     type: object
-    description: input and output parameters for picard_bed_to_interval_list
-    properties:
-      input:
-        type: object
-        description: list of inputs
-        properties:
-          input1:
-            type: string
-            description: description input1
-            #value: set to override value in table, else remove
-
-      output:
-        type: object
-        description: list of outputs
-        properties:
-          output1:
-            type: string
-            description: description output1
-            #value: set to override value in table, else remove
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  picard_create_sequence_dictionary:
-    type: object
-    description: input and output parameters for picard_create_sequence_dictionary
+    description: input and output parameters for add_vcf_ref
     properties:
       input:
         type: object
@@ -72,7 +49,6 @@ properties:
             type: string
             description: description output1
             #value: set to override value in table, else remove
-
 # Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   export_qc_bedtools_intersect_pgrs:
     type: object
@@ -126,6 +102,53 @@ properties:
   extract_read_metrics:
     type: object
     description: input and output parameters for extract_read_metrics
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          input1:
+            type: string
+            description: description input1
+            #value: set to override value in table, else remove
+
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          output1:
+            type: string
+            description: description output1
+            #value: set to override value in table, else remove
+
+
+# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  picard_bed_to_interval_list:
+    type: object
+    description: input and output parameters for picard_bed_to_interval_list
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          input1:
+            type: string
+            description: description input1
+            #value: set to override value in table, else remove
+
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          output1:
+            type: string
+            description: description output1
+            #value: set to override value in table, else remove
+
+# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  picard_create_sequence_dictionary:
+    type: object
+    description: input and output parameters for picard_create_sequence_dictionary
     properties:
       input:
         type: object

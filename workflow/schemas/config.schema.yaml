@@ -169,6 +169,23 @@ properties:
         type: string
         description: parameters that should be forwarded
 
+
+
+# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  add_vcf_ref:
+    type: object
+    description: parameters for add_vcf_ref
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters that should be forwarded
+
 required:
   - samples
   - units

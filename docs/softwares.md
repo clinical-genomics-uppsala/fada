@@ -168,3 +168,24 @@ Introduction to strkit_call
 #### Resources settings (`resources.yaml`)
 
 #RESOURCESSCHEMA__strkit_call#
+
+## [add_vcf_ref](url_to_tool)
+Introduction to add_vcf_ref
+
+### :snake: Rule
+
+#SNAKEMAKE_RULE_SOURCE__add_vcf_ref__add_vcf_ref#
+
+#### :left_right_arrow: input / output files
+
+#SNAKEMAKE_RULE_TABLE__add_vcf_ref__add_vcf_ref#
+
+### :wrench: Configuration
+
+#### Software settings (`config.yaml`)
+
+#CONFIGSCHEMA__add_vcf_ref#
+
+#### Resources settings (`resources.yaml`)
+
+#RESOURCESSCHEMA__add_vcf_ref#
