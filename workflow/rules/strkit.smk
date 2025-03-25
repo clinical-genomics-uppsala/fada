@@ -9,7 +9,7 @@ rule strkit_call:
         bam="alignment/minimap2_align/{sample}_{type}.bam",
         bai="alignment/minimap2_align/{sample}_{type}.bam.bai",
         fasta=config.get("reference", {}).get("fasta", ""),
-        loci=config.get("strkit_call", {}).get("bed", ""),
+        repeats=config.get("strkit_call", {}).get("bed", ""),
     output:
         vcf="cnv_sv/strkit_call/{sample}_{type}.vcf",
     params:
@@ -37,6 +37,6 @@ rule strkit_call:
         "{input.bam} "
         "--ref {input.fasta} "
         "--sample-id {params.sample_id} "
-        "--loci {input.loci} "
+        "--loci {input.repeats} "
         "--vcf {output.vcf} "
         "--processes {threads} &> {log}"

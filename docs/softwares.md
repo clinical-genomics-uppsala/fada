@@ -106,8 +106,9 @@ Introduction to export_qc_xlsx_report
 
 #RESOURCESSCHEMA__export_qc_xlsx_report#
 
-## [extract_read_metrics](url_to_tool)
-Introduction to extract_read_metrics
+## [extract_read_metrics]
+A python script that extract summary statistics from a bam
+file on read lengths, read qualities and duplicates
 
 ### :snake: Rule
 

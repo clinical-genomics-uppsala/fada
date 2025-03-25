@@ -10,7 +10,7 @@ rule export_qc_bedtools_intersect:
         coverage_csi="qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz.csi",
         right=config["reference"]["exon_bed"],
     output:
-        results=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.per-base.exon_bed.txt"),
+        results=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.per-base.exon_bed.bed"),
     params:
         extra=config.get("export_qc_bedtools_intersect", {}).get("extra", ""),
     log:
@@ -41,7 +41,7 @@ rule export_qc_bedtools_intersect_pgrs:
         coverage_csi="qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz.csi",
         right=config["reference"]["pgrs_bed"],
     output:
-        results=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.pgrs_cov.txt"),
+        results=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.pgrs_cov.bed"),
     params:
         extra=config.get("export_qc_bedtools_intersect_pgrs", {}).get("extra", ""),
     log:
@@ -73,8 +73,8 @@ rule export_qc_xlsx_tc_report:
         mosdepth_summary="qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.summary.txt",
         mosdepth_thresholds="qc/mosdepth_bed_exon/{sample}_{type}.thresholds.bed.gz",
         mosdepth_regions="qc/mosdepth_bed_exon/{sample}_{type}.regions.bed.gz",
-        mosdepth_perbase="qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.per-base.exon_bed.txt",
-        pgrs_coverage="qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.pgrs_cov.txt",
+        mosdepth_perbase="qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.per-base.exon_bed.bed",
+        pgrs_coverage="qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.pgrs_cov.bed",
         design_bed=config["reference"]["exon_bed"],
         pgrs_bed=config["reference"]["pgrs_bed"],
         reads_summary="qc/extract_read_metrics/{sample}_{type}.summary.tsv",

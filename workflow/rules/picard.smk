@@ -10,7 +10,7 @@ rule picard_bed_to_interval_list:
         reference=config["reference"]["fasta"],
         dict="qc/picard_create_sequence_dictionary/reference.dict",
     output:
-        "qc/picard_bed_to_interval_list/targets.interval_list",
+        interval_list=temp("qc/picard_bed_to_interval_list/targets.interval_list"),
     params:
         extra=config.get("picard_bed_to_interval_list", {}).get("extra", ""),
     log:
@@ -37,9 +37,9 @@ rule picard_bed_to_interval_list:
 
 rule picard_create_sequence_dictionary:
     input:
-        config["reference"]["fasta"],
+        fasta=config["reference"]["fasta"],
     output:
-        temp("qc/picard_create_sequence_dictionary/reference.dict"),
+        dict_file=temp("qc/picard_create_sequence_dictionary/reference.dict"),
     params:
         extra=config.get("picard_create_sequence_dictionary", {}).get("extra", ""),
     log:
