@@ -79,8 +79,9 @@ multiqc:
       extra: "-v "
 
 paraphase:
-  container: "docker://quay.io/pacbio/paraphase:3.1.1_build1"
+  container: "docker://quay.io/pacbio/paraphase:3.2.1_build1"
   genome: "38"
+  extra: "--targeted --min-read-variant 40 --min-read-haplotype 10"
   genes:
     - pms2
 
