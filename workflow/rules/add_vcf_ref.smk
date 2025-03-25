@@ -15,10 +15,7 @@ rule add_vcf_ref:
     log:
         "fada/add_vcf_ref/{file}_GRCh38.vcf.gz.log",
     benchmark:
-        repeat(
-            "fada/add_vcf_ref/{file}_GRCh38.vcf.gz.benchmark.tsv",
-            config.get("add_vcf_ref", {}).get("benchmark_repeats", 1)
-        )
+        repeat("fada/add_vcf_ref/{file}_GRCh38.vcf.gz.benchmark.tsv", config.get("add_vcf_ref", {}).get("benchmark_repeats", 1))
     threads: config.get("add_vcf_ref", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("add_vcf_ref", {}).get("mem_mb", config["default_resources"]["mem_mb"]),

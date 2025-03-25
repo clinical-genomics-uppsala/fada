@@ -244,7 +244,7 @@ def get_deepvariant_region(wildcards, input):
         chrom = wildcards.chr
         region_param = f"--regions {chrom}"
     return region_param
-    
+
 
 def get_tr_bed(wildcards):
     tr_bed = config.get("sniffles2_call", {}).get("tandem_repeats", "")
