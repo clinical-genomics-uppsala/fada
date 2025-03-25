@@ -11,32 +11,33 @@ files:
     #SNV & INDEL files
   - name: "deepvariant_phased_vcf"
     output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz"
-    input: "snv_indels/hiphase/{sample}_N.deepvariant.phased.vcf.gz"
+    input: "snv_indels/hiphase/{sample}_N.deepvariant.phased_GRCh38.vcf.gz"
   - name: "deepvariant_phased_tbi"
     output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz.tbi"
-    input: "snv_indels/hiphase/{sample}_N.deepvariant.phased.vcf.gz.tbi"
+    input: "snv_indels/hiphase/{sample}_N.deepvariant.phased_GRCh38.vcf.gz.tbi"
   
     # CNV & SV files
   - name: "sawfish_vcf"
     output: "results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz"
-    input: "cnv_sv/sawfish_joint_call/{sample}_N.vcf.gz"
+    input: "cnv_sv/sawfish_joint_call/{sample}_N_GRCh38.vcf.gz"
   - name: "sawfish_vcf_tbi"
     output: "results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz.tbi"
-    input: "cnv_sv/sawfish_joint_call/{sample}_N.vcf.gz.tbi"
+    input: "cnv_sv/sawfish_joint_call/{sample}_N_GRCh38.vcf.gz.tbi"
 
   - name: "sniffles2_vcf"
     output: "results/{sample}/cnv_sv/{sample}.sniffles2.vcf.gz"
-    input: "cnv_sv/sniffles2_call/{sample}_N.vcf.gz"
+    input: "cnv_sv/sniffles2_call/{sample}_N_GRCh38.vcf.gz"
   - name: "sniffles2_vcf_tbi"
     output: "results/{sample}/cnv_sv/{sample}.sniffles2.vcf.gz.tbi"
-    input: "cnv_sv/sniffles2_call/{sample}_N.vcf.gz.tbi"
+    input: "cnv_sv/sniffles2_call/{sample}_N_GRCh38.vcf.gz.tbi"
 
   - name: "sniffles2_vcf_mosaic"
     output: "results/{sample}/cnv_sv/{sample}.sniffles2.mosaic.vcf.gz"
-    input: "cnv_sv/sniffles2_call_mosaic/{sample}_N.mosaic.vcf.gz"
+    input: "cnv_sv/sniffles2_call_mosaic/{sample}_N_GRCh38.vcf.gz"
   - name: "sniffles2_vcf_mosaic_tbi"
     output: "cnv_sv/sniffles2_call_mosaic/{sample}.mosaic.vcf.gz.tbi"
-    input: "cnv_sv/sniffles2_call/{sample}_N.vcf.gz.tbi"
+    input: "cnv_sv/sniffles2_call_mosaic/{sample}_N_GRCh38.vcf.gz.tbi"
+
   - name: "paraphase_bam"
     output: "results/{sample}/paraphase/{sample}.paraphase.bam"
     input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam"
@@ -48,10 +49,10 @@ files:
     input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam"
   - name: "paraphase_vcf"
     output: "results/{sample}/paraphase/{sample}.paraphase.{gene}.vcf.gz"
-    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N_paraphase_vcfs/{sample}_N_{gene}.vcf.gz"
+    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N_paraphase_vcfs/{sample}_N_{gene}_GRCh38.vcf.gz"
   - name: "paraphase_vcf_tbi"
     output: "results/{sample}/paraphase/{sample}.paraphase.{gene}.vcf.gz.tbi"
-    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N_paraphase_vcfs/{sample}_N_{gene}.vcf.gz.tbi"
+    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N_paraphase_vcfs/{sample}_N_{gene}_GRCh38.vcf.gz.tbi"
 
   
   # QC files

@@ -5,6 +5,7 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/add_vcf_ref.smk"
 include: "rules/strkit.smk"
 include: "rules/strdust.smk"
 include: "rules/extract_read_metrics.smk"
@@ -147,8 +148,8 @@ use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call_mosaic with:
         tandem_repeats=get_tr_bed,
         extra=config.get("sniffles2_call_mosaic", {}).get("extra", ""),
     output:
-        vcf="cnv_sv/sniffles2_call_mosaic/{sample}_{type}.mosaic.vcf",
-        snf="cnv_sv/sniffles2_call_mosaic/{sample}_{type}.modaic.snf",
+        vcf="cnv_sv/sniffles2_call_mosaic/{sample}_{type}.vcf",
+        snf="cnv_sv/sniffles2_call_mosaic/{sample}_{type}.snf",
 
 
 
