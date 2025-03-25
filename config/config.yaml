@@ -2,7 +2,7 @@
 
 PIPELINE_REF_DATA: "/data/ref_data/wp3/fada/GRCH38"
 
-default_container: "docker://hydragenetics/common:1.11.1"
+default_container: "docker://hydragenetics/common:3.1.1"
 
 resources: "config/resources.yaml"
 
@@ -13,8 +13,8 @@ modules:
   cnv_sv: "75bc154"
   filtering: "be5cc98"
   misc: "cd1e891"
-  prealignment: "a9ff268"
-  qc: "c323ccf"
+  prealignment: "e622af0"
+  qc: "911c879"
   snv_indels: "2fa0c4e"
 
 reference:

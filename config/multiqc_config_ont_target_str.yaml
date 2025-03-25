@@ -15,10 +15,6 @@ log_filesize_limit: 500000000 # increased for larger samtools stats log files
 
 extra_fn_clean_exts: ##from this until end
     - '_N'
-# # #    - '_S'
-# extra_fn_clean_trim:
-#   - type: regex
-#     pattern: '_N_*'
 
 module_order:
   - seuquali
@@ -41,6 +37,7 @@ table_columns_visible:
     50_x_pc: False
 
   "Samtools: stats":
+    average_quality: False
     error_rate: False
     non-primary_alignments: False
     reads_mapped: True
@@ -49,7 +46,6 @@ table_columns_visible:
     reads_MQ0_percent: False
     raw_total_sequences: True
 
-# Patriks plug in, addera egna columner till general stats
 # multiqc_cgs:
 #   "Samtools: stats":
 #     average_quality:
