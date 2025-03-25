@@ -32,7 +32,7 @@ files:
     input: "cnv_sv/sniffles2_call/{sample}_N.vcf.gz.tbi"
 
   - name: "sniffles2_vcf_mosaic"
-    output: "results/{sample}/cnv_sv/{sample}.sniffles2.vcf.gz"
+    output: "results/{sample}/cnv_sv/{sample}.sniffles2.mosaic.vcf.gz"
     input: "cnv_sv/sniffles2_call_mosaic/{sample}_N.mosaic.vcf.gz"
   - name: "sniffles2_vcf_mosaic_tbi"
     output: "cnv_sv/sniffles2_call_mosaic/{sample}.mosaic.vcf.gz.tbi"
