@@ -20,55 +20,8 @@ properties:
       time:
         type: string
         description: default max execution time for a rule
-
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  picard_bed_to_interval_list:
-    type: object
-    description: resource definitions for picard_bed_to_interval_list
-    properties:
-      mem_mb:
-        type: integer
-        description: max memory in MB to be available
-      mem_per_cpu:
-        type: integer
-        description: memory in MB used per cpu
-      partition:
-        type: string
-        description: partition to use on cluster
-      threads:
-        type: integer
-        description: number of threads to be available
-      time:
-        type: string
-        description: max execution time
-
-
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  picard_create_sequence_dictionary:
-    type: object
-    description: resource definitions for picard_create_sequence_dictionary
-    properties:
-      mem_mb:
-        type: integer
-        description: max memory in MB to be available
-      mem_per_cpu:
-        type: integer
-        description: memory in MB used per cpu
-      partition:
-        type: string
-        description: partition to use on cluster
-      threads:
-        type: integer
-        description: number of threads to be available
-      time:
-        type: string
-        description: max execution time
-
-
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  
+  
   export_qc_bedtools_intersect:
     type: object
     description: resource definitions for export_qc_bedtools_intersect
@@ -90,31 +43,6 @@ properties:
         description: max execution time
 
 
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  export_qc_bedtools_intersect:
-    type: object
-    description: resource definitions for export_qc_bedtools_intersect
-    properties:
-      mem_mb:
-        type: integer
-        description: max memory in MB to be available
-      mem_per_cpu:
-        type: integer
-        description: memory in MB used per cpu
-      partition:
-        type: string
-        description: partition to use on cluster
-      threads:
-        type: integer
-        description: number of threads to be available
-      time:
-        type: string
-        description: max execution time
-
-
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   export_qc_bedtools_intersect_pgrs:
     type: object
     description: resource definitions for export_qc_bedtools_intersect_pgrs
@@ -137,10 +65,9 @@ properties:
 
 
 
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  export_qc_xlsx_report:
+  export_qc_xlsx_tc_report:
     type: object
-    description: resource definitions for export_qc_xlsx_report
+    description: resource definitions for export_qc_xlsx_tc_report
     properties:
       mem_mb:
         type: integer
@@ -159,8 +86,6 @@ properties:
         description: max execution time
 
 
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   extract_read_metrics:
     type: object
     description: resource definitions for extract_read_metrics
@@ -182,8 +107,48 @@ properties:
         description: max execution time
 
 
+  picard_bed_to_interval_list:
+    type: object
+    description: resource definitions for picard_bed_to_interval_list
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
 
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+
+  picard_create_sequence_dictionary:
+    type: object
+    description: resource definitions for picard_create_sequence_dictionary
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
+
   strdust:
     type: object
     description: resource definitions for strdust
@@ -204,12 +169,29 @@ properties:
         type: string
         description: max execution time
 
-
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   strkit_call:
     type: object
     description: resource definitions for strkit_call
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
+  add_vcf_ref:
+    type: object
+    description: resource definitions for add_vcf_ref
     properties:
       mem_mb:
         type: integer

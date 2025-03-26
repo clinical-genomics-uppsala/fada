@@ -2,55 +2,30 @@ $schema: "http://json-schema.org/draft-04/schema#"
 description: snakemake rule input and output files description file
 type: object
 properties:
-
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  picard_bed_to_interval_list:
+  add_vcf_ref:
     type: object
-    description: input and output parameters for picard_bed_to_interval_list
+    description: input and output parameters for add_vcf_ref
     properties:
       input:
         type: object
         description: list of inputs
         properties:
-          input1:
+          vcf:
             type: string
-            description: description input1
-            #value: set to override value in table, else remove
+            description: Input vcf file
+          ref:
+            type: string
+            description: reference fasta file path
 
       output:
         type: object
         description: list of outputs
         properties:
-          output1:
+          vcf:
             type: string
-            description: description output1
-            #value: set to override value in table, else remove
+            description: vcf with reference genome path in vcf-header
 
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  picard_create_sequence_dictionary:
-    type: object
-    description: input and output parameters for picard_create_sequence_dictionary
-    properties:
-      input:
-        type: object
-        description: list of inputs
-        properties:
-          input1:
-            type: string
-            description: description input1
-            #value: set to override value in table, else remove
 
-      output:
-        type: object
-        description: list of outputs
-        properties:
-          output1:
-            type: string
-            description: description output1
-            #value: set to override value in table, else remove
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   export_qc_bedtools_intersect:
     type: object
     description: input and output parameters for export_qc_bedtools_intersect
@@ -59,21 +34,23 @@ properties:
         type: object
         description: list of inputs
         properties:
-          input1:
+          left:
             type: string
-            description: description input1
-            #value: set to override value in table, else remove
-
+            description: per-base coverage file from mosdepth
+          coverage_csi:
+            type: string
+            description: index file for per-base.bed.gz file
+          right:
+            type: string
+            description: design bed used to only look at coverage based on bedfile
       output:
         type: object
-        description: list of outputs
+        description: list of output files
         properties:
-          output1:
+          results:
             type: string
-            description: description output1
-            #value: set to override value in table, else remove
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+            description: bed file with coverage per base for design file
+            
   export_qc_bedtools_intersect_pgrs:
     type: object
     description: input and output parameters for export_qc_bedtools_intersect_pgrs
@@ -82,47 +59,67 @@ properties:
         type: object
         description: list of inputs
         properties:
-          input1:
+          left:
             type: string
-            description: description input1
-            #value: set to override value in table, else remove
-
+            description: per-base coverage file from mosdepth
+          coverage_csi:
+            type: string
+            description: index file for per-base.bed.gz file
+          right:
+            type: string
+            description: design bed used to only look at coverage based on bedfile, in this case pgrs positions
       output:
         type: object
-        description: list of outputs
+        description: list of output files
         properties:
-          output1:
+          results:
             type: string
-            description: description output1
-            #value: set to override value in table, else remove
+            description: bed file with coverage per base for design file
 
-            description: description output1
-            #value: set to override value in table, else remove
 
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  export_qc_bedtools_xlsx_report:
+  export_qc_xlsx_tc_report:
     type: object
-    description: input and output parameters for export_qc_bedtools_intersect_pgrs
+    description: input and output parameters for export_qc_xlsx_tc_report
     properties:
       input:
         type: object
         description: list of inputs
         properties:
-          input1:
+          mosdepth_summary:
             type: string
-            description: description input1
-            #value: set to override value in table, else remove
-
+            description: mosdepth bed summary file
+          mosdepth_thresholds:
+            type: string
+            description: Mosdepth bed thresholds file
+          mosdepth_regions:
+            type: string
+            description: mosdepth bed coverage per region file
+          mosdepth_perbase:
+            type: string
+            description: mosdepth bed per-base result file subsampled into exons in export_qc_bedtools_intersect output
+          pgrs_coverage:
+            type: string
+            description: mosdepth per-base file from export_qc_bedtools_intersect_pgrs output
+          design_bed:
+            type: string
+            description: design bed defined in config-file
+          pgrs_bed:
+            type: string
+            description: bedfile with PGRS score SNPs
+          reads_summary:
+            type: string
+            description: reads summary stats with duplication rate (generated by calculate_read_metrics.py)
+          wanted_transcripts:
+            type: string
+            description: path to txt-file in bedformat of transcripts of interest
       output:
         type: object
-        description: list of outputs
+        description: list of output files
         properties:
-          output1:
+          results:
             type: string
-            description: description output1
-            #value: set to override value in table, else remove
+            description: .xlsx file with summarized QC-values per sample
 
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   extract_read_metrics:
     type: object
     description: input and output parameters for extract_read_metrics
@@ -131,21 +128,68 @@ properties:
         type: object
         description: list of inputs
         properties:
-          input1:
+          bam:
             type: string
-            description: description input1
-            #value: set to override value in table, else remove
+            description: unmapped bam file with duplicates marked by pbmardup
 
       output:
         type: object
         description: list of outputs
         properties:
-          output1:
+          reads_metrics:
             type: string
-            description: description output1
-            #value: set to override value in table, else remove
+            description: tab-delimited file with summary stats for each read
+          reads_summary:
+            type: string
+            description: tab-delimited file with summary stats over all the reads in reads_metrics
+            
 
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
+  picard_bed_to_interval_list:
+    type: object
+    description: input and output parameters for picard_bed_to_interval_list
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          bed:
+            type: string
+            description: design bed file (aka. target bed file)
+          reference:
+            type: string
+            description: reference genome fasta file
+          dict:
+            type: string
+            description: sequence dictionary file for the reference genome
+
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          interval_list:
+            type: string
+            description: picard interval_list file for design regions
+
+  picard_create_sequence_dictionary:
+    type: object
+    description: input and output parameters for picard_create_sequence_dictionary
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          fasta:
+            type: string
+            description: reference genome fasta file
+
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          dict_file:
+            type: string
+            description: sequence dictionary file for the reference genome
+            
   strdust:
     type: object
     description: input and output parameters for strdust
@@ -154,21 +198,27 @@ properties:
         type: object
         description: list of inputs
         properties:
-          input1:
+          bam:
             type: string
-            description: description input1
-            #value: set to override value in table, else remove
+            description: bam file with alignend long-reads
+          bai:
+            type: string
+            description: index for the bam file
+          fasta:
+            type: string
+            description: reference genome fasta file
+          repeats:
+            type: string
+            description: bed file of str regions for strdust
 
       output:
         type: object
         description: list of outputs
         properties:
-          output1:
+          vcf:
             type: string
-            description: description output1
-            #value: set to override value in table, else remove
+            description: vcf file with str calls from strdust
 
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   strkit_call:
     type: object
     description: input and output parameters for strkit_call
@@ -177,16 +227,24 @@ properties:
         type: object
         description: list of inputs
         properties:
-          input1:
+          bam:
             type: string
-            description: description input1
-            #value: set to override value in table, else remove
+            description: bam file with alignend long-reads
+          bai:
+            type: string
+            description: index for the bam file
+          fasta:
+            type: string
+            description: reference genome fasta file
+          repeats:
+            type: string
+            description: bed file of str regions for strkit
 
       output:
         type: object
         description: list of outputs
         properties:
-          output1:
+          vcf:
             type: string
-            description: description output1
-            #value: set to override value in table, else remove
+            description: vcf file with str calls from strkit
+

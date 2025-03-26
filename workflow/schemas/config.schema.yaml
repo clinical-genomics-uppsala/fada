@@ -17,8 +17,6 @@ properties:
     description: name or path to a default docker/singularity container
 
 
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   picard_bed_to_interval_list:
     type: object
     description: parameters for picard_bed_to_interval_list
@@ -34,8 +32,6 @@ properties:
         description: parameters that should be forwarded
 
 
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   picard_create_sequence_dictionary:
     type: object
     description: parameters for picard_create_sequence_dictionary
@@ -52,7 +48,6 @@ properties:
 
 
 
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   export_qc_bedtools_intersect:
     type: object
     description: parameters for export_qc_bedtools_intersect
@@ -69,24 +64,6 @@ properties:
 
 
 
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  export_qc_bedtools_intersect:
-    type: object
-    description: parameters for export_qc_bedtools_intersect
-    properties:
-      benchmark_repeats:
-        type: integer
-        description: set number of times benchmark should be repeated
-      container:
-        type: string
-        description: name or path to docker/singularity container
-      extra:
-        type: string
-        description: parameters that should be forwarded
-
-
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   export_qc_bedtools_intersect_pgrs:
     type: object
     description: parameters for export_qc_bedtools_intersect_pgrs
@@ -102,11 +79,9 @@ properties:
         description: parameters that should be forwarded
 
 
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
-  export_qc_xlsx_report:
+  export_qc_xlsx_tc_report:
     type: object
-    description: parameters for export_qc_xlsx_report
+    description: parameters for export_qc_xlsx_tc_report
     properties:
       benchmark_repeats:
         type: integer
@@ -119,8 +94,6 @@ properties:
         description: parameters that should be forwarded
 
 
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   extract_read_metrics:
     type: object
     description: parameters for extract_read_metrics
@@ -136,8 +109,6 @@ properties:
         description: parameters that should be forwarded
 
 
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   strdust:
     type: object
     description: parameters for strdust
@@ -152,12 +123,23 @@ properties:
         type: string
         description: parameters that should be forwarded
 
-
-
-# Entry added using Hydra-Genetics CLI - please move it into alphabetically sorted order
   strkit_call:
     type: object
     description: parameters for strkit_call
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters that should be forwarded
+
+  add_vcf_ref:
+    type: object
+    description: parameters for add_vcf_ref
     properties:
       benchmark_repeats:
         type: integer

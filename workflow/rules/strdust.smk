@@ -8,8 +8,8 @@ rule strdust:
     input:
         bam="alignment/minimap2_align/{sample}_{type}.bam",
         bai="alignment/minimap2_align/{sample}_{type}.bam.bai",
-        repeats=config.get("reference", {}).get("str_bed", ""),
         fasta=config.get("reference", {}).get("fasta", ""),
+        repeats=config.get("reference", {}).get("str_bed", ""),
     output:
         vcf="cnv_sv/strdust/{sample}_{type}.vcf",
     params:

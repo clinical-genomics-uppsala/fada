@@ -246,6 +246,15 @@ def get_deepvariant_region(wildcards, input):
     return region_param
 
 
+def get_tr_bed(wildcards):
+    tr_bed = config.get("sniffles2_call", {}).get("tandem_repeats", "")
+
+    if tr_bed != "":
+        tr_bed = f"--tandem-repeats {tr_bed}"
+
+    return tr_bed
+
+
 def compile_output_file_list(wildcards):
     outdir = pathlib.Path(output_spec.get("directory", "./"))
     output_files = []

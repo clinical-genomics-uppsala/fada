@@ -48,11 +48,11 @@ Introduction to export_qc_bedtools_intersect
 
 ### :snake: Rule
 
-#SNAKEMAKE_RULE_SOURCE__export_qc__export_qc_bedtools_intersect#
+#SNAKEMAKE_RULE_SOURCE__export_qc_twist_cancer__export_qc_bedtools_intersect#
 
 #### :left_right_arrow: input / output files
 
-#SNAKEMAKE_RULE_TABLE__export_qc__export_qc_bedtools_intersect#
+#SNAKEMAKE_RULE_TABLE__export_qc_twist_cancer__export_qc_bedtools_intersect#
 
 ### :wrench: Configuration
 
@@ -69,11 +69,11 @@ Introduction to export_qc_bedtools_intersect_pgrs
 
 ### :snake: Rule
 
-#SNAKEMAKE_RULE_SOURCE__export_qc__export_qc_bedtools_intersect_pgrs#
+#SNAKEMAKE_RULE_SOURCE__export_qc_twist_cancer__export_qc_bedtools_intersect_pgrs#
 
 #### :left_right_arrow: input / output files
 
-#SNAKEMAKE_RULE_TABLE__export_qc__export_qc_bedtools_intersect_pgrs#
+#SNAKEMAKE_RULE_TABLE__export_qc_twist_cancer__export_qc_bedtools_intersect_pgrs#
 
 ### :wrench: Configuration
 
@@ -85,29 +85,30 @@ Introduction to export_qc_bedtools_intersect_pgrs
 
 #RESOURCESSCHEMA__export_qc_bedtools_intersect_pgrs#
 
-## [export_qc_xlsx_report](url_to_tool)
-Introduction to export_qc_xlsx_report
+## [export_qc_xlsx_tc_report](url_to_tool)
+Introduction to export_qc_xlsx_tc_report
 
 ### :snake: Rule
 
-#SNAKEMAKE_RULE_SOURCE__export_qc__export_qc_xlsx_report#
+#SNAKEMAKE_RULE_SOURCE__export_qc_twist_cancer__export_qc_xlsx_tc_report#
 
 #### :left_right_arrow: input / output files
 
-#SNAKEMAKE_RULE_TABLE__export_qc__export_qc_xlsx_report#
+#SNAKEMAKE_RULE_TABLE__export_qc_twist_cancer__export_qc_xlsx_tc_report#
 
 ### :wrench: Configuration
 
 #### Software settings (`config.yaml`)
 
-#CONFIGSCHEMA__export_qc_xlsx_report#
+#CONFIGSCHEMA__export_qc_xlsx_tc_report#
 
 #### Resources settings (`resources.yaml`)
 
-#RESOURCESSCHEMA__export_qc_xlsx_report#
+#RESOURCESSCHEMA__export_qc_xlsx_tc_report#
 
-## [extract_read_metrics](url_to_tool)
-Introduction to extract_read_metrics
+## [extract_read_metrics]
+A python script that extract summary statistics from a bam
+file on read lengths, read qualities and duplicates
 
 ### :snake: Rule
 
@@ -168,3 +169,24 @@ Introduction to strkit_call
 #### Resources settings (`resources.yaml`)
 
 #RESOURCESSCHEMA__strkit_call#
+
+## [add_vcf_ref](url_to_tool)
+Introduction to add_vcf_ref
+
+### :snake: Rule
+
+#SNAKEMAKE_RULE_SOURCE__add_vcf_ref__add_vcf_ref#
+
+#### :left_right_arrow: input / output files
+
+#SNAKEMAKE_RULE_TABLE__add_vcf_ref__add_vcf_ref#
+
+### :wrench: Configuration
+
+#### Software settings (`config.yaml`)
+
+#CONFIGSCHEMA__add_vcf_ref#
+
+#### Resources settings (`resources.yaml`)
+
+#RESOURCESSCHEMA__add_vcf_ref#

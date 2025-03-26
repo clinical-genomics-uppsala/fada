@@ -20,10 +20,10 @@
 
 In order to use this module, the following dependencies are required:
 
-[![clinical-genomics-uppsala](https://img.shields.io/badge/hydragenetics-v3.0.0-blue)](https://github.com/hydra-genetics/)
+[![clinical-genomics-uppsala](https://img.shields.io/badge/hydragenetics-v3.1.1-blue)](https://github.com/hydra-genetics/)
 [![pandas](https://img.shields.io/badge/pandas-1.3.1-blue)](https://pandas.pydata.org/)
 [![python](https://img.shields.io/badge/python-3.9-blue)
-[![snakemake](https://img.shields.io/badge/snakemake-7.26.0-blue)](https://snakemake.readthedocs.io/en/stable/)
+[![snakemake](https://img.shields.io/badge/snakemake-7.32.4-blue)](https://snakemake.readthedocs.io/en/stable/)
 [![singularity](https://img.shields.io/badge/singularity-3.11.0-blue)](https://sylabs.io/docs/)
 
 ## :school_satchel: Preparations
