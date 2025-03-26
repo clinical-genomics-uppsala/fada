@@ -2,8 +2,6 @@ $schema: "http://json-schema.org/draft-04/schema#"
 description: snakemake rule input and output files description file
 type: object
 properties:
-
-
   add_vcf_ref:
     type: object
     description: input and output parameters for add_vcf_ref
@@ -33,15 +31,18 @@ properties:
     description: input and output parameters for export_qc_bedtools_intersect
     properties:
       input:
-        left:
-          type: string
-          description: per-base coverage file from mosdepth
-        coverage_csi:
-          type: string
-          description: index file for per-base.bed.gz file
-        right:
-          type: string
-          description: design bed used to only look at coverage based on bedfile
+        type: object
+        description: list of inputs
+        properties:
+          left:
+            type: string
+            description: per-base coverage file from mosdepth
+          coverage_csi:
+            type: string
+            description: index file for per-base.bed.gz file
+          right:
+            type: string
+            description: design bed used to only look at coverage based on bedfile
       output:
         type: object
         description: list of output files
@@ -76,9 +77,9 @@ properties:
             description: bed file with coverage per base for design file
 
 
-  export_qc_bedtools_xlsx_report:
+  export_qc_xlsx_tc_report:
     type: object
-    description: input and output parameters for export_qc_bedtools_intersect_pgrs
+    description: input and output parameters for export_qc_xlsx_tc_report
     properties:
       input:
         type: object
@@ -135,7 +136,7 @@ properties:
         type: object
         description: list of outputs
         properties:
-          read_metrics:
+          reads_metrics:
             type: string
             description: tab-delimited file with summary stats for each read
           reads_summary:
@@ -214,7 +215,7 @@ properties:
         type: object
         description: list of outputs
         properties:
-          output1:
+          vcf:
             type: string
             description: vcf file with str calls from strdust
 

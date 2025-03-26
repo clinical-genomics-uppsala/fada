@@ -65,9 +65,9 @@ properties:
 
 
 
-  export_qc_xlsx_report:
+  export_qc_xlsx_tc_report:
     type: object
-    description: resource definitions for export_qc_xlsx_report
+    description: resource definitions for export_qc_xlsx_tc_report
     properties:
       mem_mb:
         type: integer

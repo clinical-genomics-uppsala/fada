@@ -79,9 +79,9 @@ properties:
         description: parameters that should be forwarded
 
 
-  export_qc_xlsx_report:
+  export_qc_xlsx_tc_report:
     type: object
-    description: parameters for export_qc_xlsx_report
+    description: parameters for export_qc_xlsx_tc_report
     properties:
       benchmark_repeats:
         type: integer
