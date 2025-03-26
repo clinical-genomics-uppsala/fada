@@ -91,9 +91,9 @@ samtools_view_on_target:
 sawfish_discover:
   extra: "--clobber "
   container: "docker://hydragenetics/sawfish:0.12.7"
-  expected_cn: ## not specified due to lack of chrX or chrY in the data
-      male: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XY.bed" 
-      female: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XX.bed"
+  # expected_cn: ## not specified due to lack of chrX or chrY in the data
+  #     male: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XY.bed" 
+  #     female: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XX.bed"
 
 sawfish_joint_call:
   extra: "--clobber "
