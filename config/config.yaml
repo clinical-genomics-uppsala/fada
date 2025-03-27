@@ -1,42 +1,38 @@
 ---
 
-PIPELINE_REF_DATA: "reference"
+PIPELINE_REF_DATA: "/data/ref_data/wp3/fada/GRCH38"
 
-default_container: "docker://hydragenetics/common:1.11.1"
+default_container: "docker://hydragenetics/common:3.1.1"
 
 resources: "config/resources.yaml"
 
 modules:
-  alignment: "1f4bc73"
-  annotation: "7b57039"
+  alignment: "5444def"
+  annotation: "3ce9da5"
   compression: "b3ef8cc"
-  cnv_sv: "34dbbb4"
-  # filtering: "v0.3.0"
-  #qc: "v0.5.0"
+  cnv_sv: "75bc154"
+  filtering: "be5cc98"
   misc: "cd1e891"
-  snv_indels: "0ed8526"
+  prealignment: "e622af0"
+  qc: "911c879"
+  snv_indels: "2fa0c4e"
 
 reference:
-  design_bed: ""
   fasta: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
   fai: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
   pathogenic_repeats_bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
 
-multiqc:
-  container: "docker://hydragenetics/multiqc:1.21"
-  reports:
-    DNA:
-      config: "config/multiqc_config_DNA.yaml"
-      included_unit_types: ["N"]
-      qc_files:
-        - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
-        - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
-        - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
-        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
-        - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.summary_metrics"
-        - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
-        - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
+minimap2_align:
+  preset: ""
 
-stranger:
-  catalog: "{{PIPELINE_REF_DATA}}/variant_catalog_hg38.json"
-  container: "docker://hydragenetics/stranger:0.9.1"
+cramino:
+  container: "docker://hydragenetics/cramino:0.14.5"
+
+multiqc:
+  container: "docker://hydragenetics/multiqc:1.27.1"
+
+nanoplot:
+  container: "docker://hydragenetics/nanoplot:1.44.1"
+
+sequali:
+  container: "docker://hydragenetics/sequali:0.12.0"

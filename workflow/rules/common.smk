@@ -19,6 +19,7 @@ from hydra_genetics.utils.samples import *
 from hydra_genetics.utils.units import *
 
 from hydra_genetics.utils.misc import replace_dict_variables
+from hydra_genetics.utils.misc import extract_chr
 
 from hydra_genetics.utils.misc import export_config_as_file
 from hydra_genetics.utils.software_versions import add_version_files_to_multiqc
@@ -58,12 +59,13 @@ except WorkflowError as we:
 
 pipeline_name = "Fada"
 pipeline_version = get_pipeline_version(workflow, pipeline_name=pipeline_name)
-version_files = touch_pipeline_version_file_name(
+version_file = touch_pipeline_version_file_name(
     pipeline_version, date_string=pipeline_name, directory="results/versions/software"
 )
+
 if use_container(workflow):
-    version_files += touch_software_version_file(config, date_string=pipeline_name, directory="results/versions/software")
-add_version_files_to_multiqc(config, version_files)
+    version_file.append(touch_software_version_file(config, date_string=pipeline_name, directory="results/versions/software"))
+add_version_files_to_multiqc(config, version_file)
 
 
 onstart:
@@ -78,10 +80,10 @@ onstart:
         # - file_name_ending, default value: mqc_versions.yaml
         # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
         export_software_version_as_file(software_info, date_string=pipeline_name, directory="results/versions/software")
-    # print config dict as a file. Additional parameters that can be set
-    # output_file, default config
-    # output_directory, default = None, i.e no folder
-    # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
+        # print config dict as a file. Additional parameters that can be set
+        # output_file, default config
+        # output_directory, default = None, i.e no folder
+        # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
     date_string = datetime.now().strftime("%Y%m%d")
     export_config_as_file(update_config, date_string=date_string, directory="results/versions")
 
@@ -108,6 +110,44 @@ units = (
 
 validate(units, schema="../schemas/units.schema.yaml")
 
+## genarate chromosome list
+
+
+def get_chr_from_re(contig_patterns):
+    contigs = []
+    ref_fasta = config.get("reference", {}).get("fasta", "")
+    all_contigs = extract_chr(f"{ref_fasta}.fai", filter_out=[])
+    for pattern in contig_patterns:
+        for contig in all_contigs:
+            # print(pattern, contig)
+            contig_match = re.match(pattern, contig)
+            if contig_match is not None:
+                # print(contig_match, contig_match.group())
+                contigs.append(contig_match.group())
+    # print(contigs)
+    if len(set(contigs)) < len(contigs):  # check for duplicate conting entries
+        chr_set = set()
+        duplicate_contigs = [c for c in contigs if c in chr_set or chr_set.add(c)]
+        dup_contigs_str = ", ".join(duplicate_contigs)
+        sys.exit(
+            f"Duplicate contigs detected:\n {dup_contigs_str}\n\
+        Please revise the regular expressions listed under reference in the config"
+        )
+
+    return contigs
+
+
+skip_contig_patterns = config.get("reference", {}).get("skip_contigs", [])
+
+if len(skip_contig_patterns) == 0:
+    skip_contigs = []
+else:
+    skip_contigs = get_chr_from_re(skip_contig_patterns)
+
+ref_fai = config.get("reference", {}).get("fai", "")
+chr_list = extract_chr(ref_fai, filter_out=skip_contigs)
+
+
 ### Read and validate output file
 
 with open(config["output"]) as output:
@@ -121,27 +161,98 @@ validate(output_spec, schema="../schemas/output_files.schema.yaml")
 
 ### Set wildcard constraints
 wildcard_constraints:
+    barcode="[A-Z-]+",
     sample="|".join(samples.index),
     type="N|T|R",
 
 
-def get_bam_input(wildcards):
+def get_pbmm2_query(wildcards):
+    markdups = config.get("markdups", "")
+    unit = units.loc[(wildcards.sample, wildcards.type, wildcards.processing_unit, wildcards.barcode)]
+    if markdups == "pbmarkdup":
+        bam_file = f"prealignment/pbmarkdup/{{sample}}_{{type}}_{{processing_unit}}_{{barcode}}.bam"
+    else:
+        unit = units.loc[(wildcards.sample, wildcards.type, wildcards.processing_unit, wildcards.barcode)]
+        bam_file = unit["bam"]
 
+    return bam_file
+
+
+def get_bam_input(wildcards, phaser=None):
     sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
     aligner = config.get("aligner", None)
 
     if aligner is None:
         sys.exit("aligner missing from config, valid options: minimap2 or pbmm2")
-    elif aligner == "minimap2":
+    elif aligner == "minimap2" and phaser is None:
         bam_input = f"alignment/minimap2_align/{sample_str}.bam"
-    elif aligner == "pbmm2":
+    elif aligner == "pbmm2" and phaser is None:
         bam_input = f"alignment/pbmm2_align/{sample_str}.bam"
+    elif aligner == "pbmm2" and phaser == "hiphase":
+        bam_input = f"snv_indels/hiphase/{sample_str}.haplotagged.bam"
+    elif aligner == "minimap2" and phaser == "longphase":
+        bam_input = f"snv_indels/longhase/{sample_str}.haplotagged.bam"
     else:
-        sys.exit("valid options for aligner are: minimap2 or pbmm2")
+        sys.exit(
+            "Valid options for aligner are: minimap2 or pbmm2. Valid phasers are hiphase for pbmm2 and longphase for minimap2"
+        )
 
     bai_input = "{}.bai".format(bam_input)
 
     return (bam_input, bai_input)
+
+
+def get_haplotagged_bam(wildcards):
+    sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
+    phaser = config.get("phaser", None)
+
+    if phaser == "hiphase":
+        bam_input = f"snv_indels/hiphase/{sample_str}.haplotagged.bam"
+    elif aligner == "longphase":
+        bam_input = f"snv_indels/longphase/{sample_str}.haplotagged.bam"
+    else:
+        sys.exit("valid options for phaser are: hiphase or longphase")
+
+    bai_input = "{}.bai".format(bam_input)
+
+    return (bam_input, bai_input)
+
+
+def get_trgt_loci(wildcards):
+    trgt_bed = config.get("trgt_genotype", {}).get("bed", "")
+    rep_ids = []
+    with open(trgt_bed, "r") as infile:
+        for line in infile:
+            cols = line.split("\t")
+            rep_id = cols[3].split(";")[0]
+            rep_ids.append(rep_id.split("=")[1])
+    return rep_ids
+
+
+def get_gvcf_output(wildcards, name):
+    if config.get(name, {}).get("output_gvcf", False):
+        return f" --output_gvcf snv_indels/deepvariant/{wildcards.sample}_{wildcards.type}_{wildcards.chr}.g.vcf.gz "
+    else:
+        return ""
+
+
+def get_deepvariant_region(wildcards, input):
+    try:
+        bed_file = input.bed
+        region_param = f"--regions {bed_file}"
+    except KeyError:
+        chrom = wildcards.chr
+        region_param = f"--regions {chrom}"
+    return region_param
+
+
+def get_tr_bed(wildcards):
+    tr_bed = config.get("sniffles2_call", {}).get("tandem_repeats", "")
+
+    if tr_bed != "":
+        tr_bed = f"--tandem-repeats {tr_bed}"
+
+    return tr_bed
 
 
 def compile_output_file_list(wildcards):
@@ -149,15 +260,35 @@ def compile_output_file_list(wildcards):
     output_files = []
 
     for f in output_spec["files"]:
-        # Please remember to add any additional values down below
-        # that the output strings should be formatted with.
-        outputpaths = set(
-            [
-                f["output"].format(sample=sample, type=unit_type)
-                for sample in get_samples(samples)
-                for unit_type in get_unit_types(units, sample)
-            ]
-        )
+        if config["pipeline"] == "pacbio_wgs":
+            outputpaths = set(
+                [
+                    f["output"].format(sample=sample, type=unit_type, locus=locus, suffix=suffix)
+                    for sample in get_samples(samples)
+                    for unit_type in get_unit_types(units, sample)
+                    for locus in get_trgt_loci(wildcards)
+                    for suffix in [config.get("trgt_plot_motif", {}).get("image", "svg")]
+                ]
+            )
+        elif config["pipeline"] == "pacbio_twist_cancer":
+            outputpaths = set(
+                [
+                    f["output"].format(sample=sample, type=unit_type, gene=gene)
+                    for sample in get_samples(samples)
+                    for unit_type in get_unit_types(units, sample)
+                    for gene in config["paraphase"]["genes"]
+                ]
+            )
+        elif config["pipeline"] == "ont_target_str":
+            outputpaths = set(
+                [
+                    f["output"].format(sample=sample, type=unit_type)
+                    for sample in get_samples(samples)
+                    for unit_type in get_unit_types(units, sample)
+                ]
+            )
+        else:
+            sys.exit("pipeline has not be specified in the config file")
 
         for op in outputpaths:
             output_files.append(outdir / Path(op))

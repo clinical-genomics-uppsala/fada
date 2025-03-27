@@ -12,10 +12,53 @@ pbmm2_align:
   mem_per_cpu: 6144
   threads: 20
 
+minimap2_index:
+  mem_mb: 6144
+  mem_per_cpu: 6144
+  threads: 1
+
+minimap2_align:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
+
+nanoplot:
+  mem_mb: 49152
+  mem_per_cpu: 6144
+  threads: 8
+
 deepvariant:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
+
+paraphase:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
+
+pbmarkdup:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
+
+sniffles2_call:
   mem_mb: 61440
   mem_per_cpu: 6144
   threads: 10
 
 trgt_genotype:
   threads: 4
+
+sawfish_discover:
+  mem_mb: 98304
+  mem_per_cpu: 6144
+  threads: 16
+  
+sawfish_joint_call:
+  mem_mb: 98304
+  mem_per_cpu: 6144
+  threads: 16
+  
+  
+

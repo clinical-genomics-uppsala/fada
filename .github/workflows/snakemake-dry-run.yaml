@@ -13,7 +13,7 @@ on:
 
 jobs:
   snakemake-dry-run:
-    name: Run snakemake dry run for cpu mode
+    name: Run snakemake dry run 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,10 +24,15 @@ jobs:
       - name: Install requirements.txt
         run: |
           pip install -r requirements.txt
-      - name: Install requirements.test.txt
-        run: |
-          pip install -r requirements.test.txt
       - name: snakemake dry run pacbio wgs
         working-directory: .tests/integration
         run: |
-          snakemake -n -s ../../workflow/Snakefile --configfiles ../../config/config.yaml config/config_pacbio_wgs.yaml
+          cp -r ../../config . && snakemake -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_pacbio_wgs.yaml --config PIPELINE_REF_DATA=reference
+      - name: snakemake dry run pacbio twist cancer
+        working-directory: .tests/integration
+        run: |
+          cp -r ../../config . && snakemake -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config PIPELINE_REF_DATA=reference sequenceid="test"
+      - name: snakemake dry run ont targeted str
+        working-directory: .tests/integration
+        run: |
+          cp -r ../../config . && snakemake -n -s ../../workflow/Snakefile --configfiles config/config.yaml config/config_ont_target_str.yaml --config PIPELINE_REF_DATA=reference

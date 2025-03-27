@@ -1,0 +1,108 @@
+---
+pipeline: "pacbio_twist_cancer"
+output: "config/output_pacbio_twist_cancer.yaml"
+samples: "samples_pacbio_twist_cancer.tsv"
+units: "units_pacbio_twist_cancer.tsv"
+
+aligner: "pbmm2"
+phaser: "hiphase"
+markdups: "pbmarkdup"
+trimmer_software: None
+
+reference:
+  design_bed: "{{PIPELINE_REF_DATA}}/designs/Annotated_expected_coverage_hg38_241001.bed"
+  exon_bed: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/Twist_Cancer_230602_hg38_coding_exons.bed"
+  pgrs_bed: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/Twist_Cancer_230707_hg38_pgrs_snps.bed"
+  skip_contigs: #chromosomes or scaffolds not in the design
+    - "^chrX$"
+    - "^chrY$"
+    - "^chrM$"
+    - ".*_random"
+    - "chrUn_.*"
+    - "chrEBV"
+  wanted_transcripts: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/wanted_transcripts.bed"
+
+deepvariant:
+  container: "docker://google/deepvariant:1.8.0"
+  model_type: "PACBIO"
+  output_gvcf: false
+
+export_qc_bedtools_intersect:
+  extra: " -wb "
+
+hiphase:
+  container: "docker://hydragenetics/hiphase:1.4.5"
+  sv_caller: false
+  str_caller: false
+
+pbmarkdup:
+  container: "docker://hydragenetics/pbmarkdup:1.1.0"
+
+pbmm2_index:
+  preset: "HIFI"
+  container: "docker://hydragenetics/pbmm2:1.16"
+
+pbmm2_align:
+  preset: "HIFI"
+  container: "docker://hydragenetics/pbmm2:1.16"
+  extra: "--unmapped "
+
+picard_bed_to_interval_list:
+  container: "docker://hydragenetics/picard:2.25.0"
+  extra: "SORT=true"
+
+picard_create_sequence_dictionary:
+  container: "docker://hydragenetics/picard:2.25.0"
+
+picard_collect_hs_metrics:
+  container: "docker://hydragenetics/picard:2.25.0"
+ 
+mosdepth_bed:
+  container: "docker://hydragenetics/mosdepth:0.3.2"
+  thresholds: "10,20,50"
+
+multiqc:
+  reports:
+    pacbio_twist_cancer:
+      config: "config/multiqc_config_pacbio_twist_cancer.yaml"
+      included_unit_types: ["N"]
+      qc_files:
+        - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt"
+        - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.region.dist.txt"
+        - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.global.dist.txt"
+        - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
+        - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
+        - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt"
+        - "prealignment/pbmarkdup/{sample}_{type}_{processing_unit}_{barcode}.bam.log"
+        - "qc/sequali/{sample}_{type}_{processing_unit}_{barcode}.json"
+        - "qc/nanoplot/{sample}_{type}.txt"
+      extra: "-v "
+
+paraphase:
+  container: "docker://quay.io/pacbio/paraphase:3.2.1_build1"
+  genome: "38"
+  extra: "--targeted --min-read-variant 40 --min-read-haplotype 10"
+  genes:
+    - pms2
+
+samtools_view_on_target:
+  container: "docker://hydragenetics/samtools:1.21" 
+
+sawfish_discover:
+  extra: "--clobber "
+  container: "docker://hydragenetics/sawfish:0.12.7"
+  expected_cn: ## not specified due to lack of chrX or chrY in the data
+      male: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XY.bed" 
+      female: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XX.bed"
+
+sawfish_joint_call:
+  extra: "--clobber "
+  container: "docker://hydragenetics/sawfish:0.12.7"
+  supporting_reads: true
+  
+sniffles2_call:
+  container: "docker://hydragenetics/sniffles2:2.6.1"
+  tandem_repeats: "{{PIPELINE_REF_DATA}}/human_GRCh38_no_alt_analysis_set.trf.bed"
+
+sniffles2_call_mosaic:
+  extra: "--mosaic "

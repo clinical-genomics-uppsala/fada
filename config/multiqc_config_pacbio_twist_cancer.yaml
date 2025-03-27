@@ -1,0 +1,183 @@
+
+title: "Clinical Genomics MultiQC Report"
+subtitle: "Reference used: GRCh38 workflow: Pacbio twist cancer"
+intro_text: "The MultiQC report summarise analysis results from long read DNA sequencing that been analysed by the pipeline Fada (https://github.com/clinical-genomics-uppsala/fada)."
+
+report_header_info:
+  - Contact E-mail: "igp-klinsek-bioinfo@lists.uu.se"
+  - Application Type: "Bioinformatic analysis of long read for rare diseases"
+
+show_analysis_paths: True
+
+decimalPoint_format: ','
+
+log_filesize_limit: 500000000 # increased for larger samtools stats log files
+
+extra_fn_clean_exts: ##from this until end
+    - '_N'
+
+
+module_order:
+  - nanoplot
+  - seuquali
+  - picard
+  - mosdepth
+  - samtools
+
+table_columns_visible:
+  mosdepth:
+    median_coverage: True
+    mean_coverage: False
+    1_x_pc: False
+    5_x_pc: False
+    10_x_pc: True
+    20_x_pc: True
+    30_x_pc: False
+    50_x_pc: True
+
+  "Samtools: stats":
+    average_quality: False
+    error_rate: False
+    non-primary_alignments: False
+    reads_mapped: False
+    reads_mapped_percent: True
+    reads_properly_paired_percent: False
+    reads_MQ0_percent: False
+    raw_total_sequences: False
+
+  pbmarkdup:
+    duplicate_reads: True
+    unique_molecules: False
+  
+  nanostat:
+    nanostat_Median_read_length_aligned: True
+    nanostat_Read_length_N50_aligned: False
+
+  Sequali:
+    sequali_duplication_percentage: False
+    sequali-sequali_mean_sequence_length: False
+    sequali-sequali_gc_percentage: False
+  
+  "Picard: HsMetrics":
+    FOLD_ENRICHMENT: True
+    MEDIAN_TARGET_COVERAGE: False
+    picard_target_bases_30X: False
+
+custom_table_header_config:
+  general_stats_table:
+    sequali_total_reads:
+      suffix: ""
+      title: "Total reads M"
+    sequali_mean_sequence_length:
+      suffix: ""
+    samtools_stats-reads_mapped:
+      suffix: ""
+      title: "Reads mapped M"
+    samtools_stats-reads_mapped_percent:
+      suffix: ""    
+    mosdepth-median_coverage:
+      suffix: ""
+      title: "Median target Coverage"
+    mosdepth-10_x_pc:
+      suffix: ""
+    mosdepth-20_x_pc:
+      suffix: ""
+    mosdepth-30_x_pc:
+      suffix: ""
+    mosdepth-50_x_pc:
+      suffix: ""
+    pbmarkdup-duplicate_reads:
+      suffix: ""
+      title: "Duplicate reads [%]"
+    nanostat-nanostat_Median_read_length_aligned:
+      "suffix": ""
+      "title": "Median on-target read length (bp)"
+    picard_hsmetrics-FOLD_ENRICHMENT:
+      suffix: ""
+    picard_hsmetrics-PCT_SELECTED_BASES:
+      suffix: ""
+    picard_hsmetrics-ZERO_CVG_TARGETS_PCT:
+      suffix: ""
+
+multiqc_cgs:
+  "Picard: HsMetrics":
+      FOLD_80_BASE_PENALTY:
+        title: "Fold80"
+        description: "Fold80 penalty from picard hs metrics"
+        min: 1
+        max: 3
+        scale: "RdYlGn-rev"
+        format: "{:.1f}"
+      PCT_SELECTED_BASES:
+        title: "Bases on Target"
+        description: "On+Near Bait Bases / PF Bases Aligned from Picard HsMetrics"
+        format: "{:.2%}"
+        suffix: ""
+      ZERO_CVG_TARGETS_PCT:
+        title: "Target bases with zero coverage [%]"
+        description: "Target bases with zero coverage [%] from Picard"
+        min: 0
+        max: 100
+        scale: "RdYlGn-rev"
+        format: "{:.2%}"
+
+# Galler alla kolumner oberoende pa module!
+table_columns_placement:
+  mosdepth:
+    median_coverage: 601
+    1_x_pc: 666
+    5_x_pc: 666
+    10_x_pc: 602
+    20_x_pc: 603
+    30_x_pc: 604
+    50_x_pc: 605
+  "Samtools: stats":
+    raw_total_sequences: 500
+    reads_mapped: 501
+    reads_mapped_percent: 502
+    reads_properly_paired_percent: 503
+    average_quality: 504
+    reads_duplicated: 505
+    error_rate: 555
+    reads_MQ0_percent: 555
+    non-primary_alignments: 555
+  "Sequali":
+    sequali_total_reads: 400
+    sequali_mean_sequence_length: 401
+    sequali_gc_percentage: 402
+  pbmarkdup:
+    duplicate_reads: 403
+
+mosdepth_config:
+  general_stats_coverage:
+    - 10
+    - 20
+    - 30
+    - 50
+  include_contigs:
+    - "chr*"
+  exclude_contigs:
+    - "*_alt"
+    - "*_decoy"
+    - "*_random"
+    - "chrUn*"
+    - "HLA*"
+    - "chrM"
+    - "chrEBV"
+
+picard_config:
+  HsMetrics_table_cols_hidden:
+    - AT_DROPOUT
+    - BAIT_TERRITORY
+    - GC_DROPOUT
+    - ZERO_CVG_TARGETS_PCT    
+    - PCT_EXC_DUPE    
+    - PCT_EXC_ADAPTER 
+    - PCT_EXC_MAPQ    
+    - PCT_EXC_BASEQ   
+    - PCT_EXC_OVERLAP 
+    - PCT_EXC_OFF_TARGET
+    - TARGET_TERRITORY
+    - TOTAL_READS
+    - PCT_OFF_BAIT
+    - PCT_TARGET_BASES_30X

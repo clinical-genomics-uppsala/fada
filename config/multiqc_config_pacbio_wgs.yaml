@@ -1,0 +1,88 @@
+
+title: "Clinical Genomics MultiQC Report"
+subtitle: "Reference used: GRCh38 workflow: Pacbio WGS""
+intro_text: "The MultiQC report summarise analysis results from long read DNA sequencing that been analysed by the pipeline Fada (https://github.com/clinical-genomics-uppsala/fada)."
+
+report_header_info:
+  - Contact E-mail: "igp-klinsek-bioinfo@lists.uu.se"
+  - Application Type: "Bioinformatic analysis of long read for rare diseases"
+
+show_analysis_paths: True
+
+decimalPoint_format: ','
+
+extra_fn_clean_exts: ##from this until end
+    - '.dup'
+    - type: regex
+      pattern: '_fastq[12]'
+#    - '_S'
+extra_fn_clean_trim:
+  - 'Sample_VE-3297_'
+
+module_order:
+  - mosdepth
+  - samtools
+
+
+table_columns_visible:
+  mosdepth:
+    median_coverage: True
+    mean_coverage: False
+    1_x_pc: False
+    5_x_pc: False
+    10_x_pc: True
+    20_x_pc: True
+    30_x_pc: True
+    50_x_pc: False
+
+  "Samtools: stats":
+    error_rate: False
+    non-primary_alignments: False
+    reads_mapped: True
+    reads_mapped_percent: True
+    reads_properly_paired_percent: True
+    reads_MQ0_percent: False
+    raw_total_sequences: True
+
+# Patriks plug in, addera egna columner till general stats
+multiqc_cgs:
+  "Samtools: stats":
+    average_quality:
+      title: "Average Quality"
+      description: "Ratio between the sum of base qualities and total length from Samtools stats"
+      min: 0
+      max: 60
+      scale: "RdYlGn"
+
+# Galler alla kolumner oberoende pa module!
+table_columns_placement:
+  mosdepth:
+    median_coverage: 601
+    1_x_pc: 666
+    5_x_pc: 666
+    10_x_pc: 602
+    20_x_pc: 603
+    30_x_pc: 604
+    50_x_pc: 605
+  "Samtools: stats":
+    raw_total_sequences: 500
+    reads_mapped: 501
+    reads_mapped_percent: 502
+    reads_properly_paired_percent: 503
+    average_quality: 504
+    error_rate: 555
+    reads_MQ0_percent: 555
+    non-primary_alignments: 555
+ 
+
+mosdepth_config:
+  include_contigs:
+    - "chr*"
+  exclude_contigs:
+    - "*_alt"
+    - "*_decoy"
+    - "*_random"
+    - "chrUn*"
+    - "HLA*"
+    - "chrM"
+    - "chrEBV"

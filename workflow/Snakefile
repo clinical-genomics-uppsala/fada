@@ -5,6 +5,17 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/add_vcf_ref.smk"
+include: "rules/samtools.smk"
+include: "rules/strkit.smk"
+include: "rules/strdust.smk"
+include: "rules/extract_read_metrics.smk"
+
+
+if config.get("pipeline") == "pacbio_twist_cancer":
+
+    include: "rules/export_qc_twist_cancer.smk"
+    include: "rules/picard.smk"
 
 
 rule all:
@@ -13,9 +24,14 @@ rule all:
 
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
-ruleorder: _copy_stranger_trgt_tbi > annotation_tabix_vcf
-ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
-ruleorder: snv_indels_tabix > annotation_tabix_vcf
+ruleorder: samtools_view_on_target > alignment_samtools_index
+
+
+if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
+
+    ruleorder: cnv_sv_sawfish_joint_call > cnv_sv_tabix
+    ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
+    ruleorder: snv_indels_tabix > annotation_tabix_vcf
 
 
 module annotation:
@@ -46,6 +62,35 @@ module alignment:
 use rule * from alignment as alignment_*
 
 
+use rule pbmm2_align from alignment as alignment_pbmm2_align with:
+    input:
+        query=lambda wildcards: get_pbmm2_query(wildcards),
+        reference=expand(
+            "{ref}.{preset}.mmi",
+            ref=config.get("reference", {}).get("fasta", ""),
+            preset=config.get("pbmm2_align", {}).get("preset", ""),
+        ),
+
+
+use rule samtools_merge_bam from alignment as alignment_samtools_merge_bam with:
+    input:
+        bams=lambda wildcards: [
+            "prealignment/pbmarkdup/{sample}_{type}_%s_%s.bam" % (u.processing_unit, u.barcode)
+            for u in get_units(units, wildcards)
+        ],
+    output:
+        bam=temp("prealignment/pbmarkdup/{sample}_{type}.bam"),
+    log:
+        "prealignment/pbmarkdup/{sample}_{type}.bam.log",
+    benchmark:
+        repeat(
+            "prealignment/pbmarkdup/{sample}_{type}.bam.benchmark.tsv",
+            config.get("samtools_merge_bam", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: merge {input.bams} files, creating {output.bam}"
+
+
 module compression:
     snakefile:
         get_module_snakefile(
@@ -60,8 +105,8 @@ use rule * from compression as compression_*
 
 use rule samtools_view from compression as compression_samtools_view with:
     input:
-        bam=lambda wildcards: get_bam_input(wildcards)[0],
-        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bam=lambda wildcards: get_bam_input(wildcards, phaser=config.get("phaser", None))[0],
+        bai=lambda wildcards: get_bam_input(wildcards, phaser=config.get("phaser", None))[1],
         ref=config.get("reference", {}).get("fasta", ""),
     output:
         cram=temp("compression/samtools_view/{sample}_{type}.cram"),
@@ -84,7 +129,27 @@ module cnv_sv:
 use rule * from cnv_sv as cnv_sv_*
 
 
-use rule trgt_genotype from cnv_sv as cnv_sv_trgt with:
+use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        ref=config.get("reference", {}).get("fasta", ""),
+
+
+use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call_mosaic with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        ref=config.get("reference", {}).get("fasta", ""),
+    params:
+        tandem_repeats=get_tr_bed,
+        extra=config.get("sniffles2_call_mosaic", {}).get("extra", ""),
+    output:
+        vcf="cnv_sv/sniffles2_call_mosaic/{sample}_{type}.vcf",
+        snf="cnv_sv/sniffles2_call_mosaic/{sample}_{type}.snf",
+
+
+use rule trgt_genotype from cnv_sv as cnv_sv_trgt_genotype with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
         bai=lambda wildcards: get_bam_input(wildcards)[1],
@@ -95,15 +160,41 @@ use rule trgt_genotype from cnv_sv as cnv_sv_trgt with:
         bam="cnv_sv/trgt_genotype/{sample}_{type}.spanning.bam",
 
 
-# module misc:
-#     snakefile:
-#         get_module_snakefile(
-#             config, "hydra-genetics/misc", path="workflow/Snakefile", tag=config["modules"]["misc"]
-#         )
-#     config:
-#         config
+use rule trgt_plot from cnv_sv as cnv_sv_trgt_plot with:
+    output:
+        image=expand(
+            "cnv_sv/trgt_plot/motif/{{sample}}_{{type}}_{{locus}}.{ext}",
+            ext=config.get("trgt_plot_motif", {}).get("image", "svg"),
+        ),
 
-# use rule * from misc exclude bedtools_intersect as misc_*
+
+use rule trgt_plot from cnv_sv as cnv_sv_trgt_plot_meth with:
+    output:
+        image=expand(
+            "cnv_sv/trgt_plot/meth/{{sample}}_{{type}}_{{locus}}.{ext}", ext=config.get("trgt_plot_meth", {}).get("image", "svg")
+        ),
+
+
+module filtering:
+    snakefile:
+        get_module_snakefile(config, "hydra-genetics/filtering", path="workflow/Snakefile", tag=config["modules"]["filtering"])
+    config:
+        config
+
+
+use rule bcftools_view from filtering as filtering_bcftools_view
+
+
+module prealignment:
+    snakefile:
+        get_module_snakefile(
+            config, "hydra-genetics/prealignment", path="workflow/Snakefile", tag=config["modules"]["prealignment"]
+        )
+    config:
+        config
+
+
+use rule pbmarkdup from prealignment as prealignment_pbmarkdup
 
 
 module snv_indels:
@@ -116,14 +207,139 @@ module snv_indels:
 use rule * from snv_indels as snv_indels_*
 
 
-use rule deepvariant from snv_indels as snv_indels_deepvariant with:
+use rule deepvariant_pacbio from snv_indels as snv_indels_deepvariant_pacbio with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
         bai=lambda wildcards: get_bam_input(wildcards)[1],
         ref=config.get("reference", {}).get("fasta", ""),
+        bed="snv_indels/bed_split/design_bedfile_{chr}.bed" if config.get("reference", {}).get("design_bed", False) else [],
+    params:
+        model_type=config.get("deepvariant", {}).get("model_type", "PACBIO"),
+        output_gvcf=lambda wildcards: get_gvcf_output(wildcards, "deepvariant"),
+        int_res=lambda wildcards: f"snv_indels/deepvariant/{wildcards.sample}_{wildcards.type}_{wildcards.chr}",
+        regions=lambda wildcards, input: get_deepvariant_region(wildcards, input),
+        extra=config.get("deepvariant", {}).get("extra", ""),
 
 
 use rule bcftools_concat from snv_indels as snv_indels_bcftools_concat with:
     input:
-        calls=expand("{{file}}_{chr}.{{vcf}}.gz", chr=[f"chr{i}" for i in list(range(1, 23)) + ["X", "Y"]]),
-        index=expand("{{file}}_{chr}.{{vcf}}.gz", chr=[f"chr{i}" for i in list(range(1, 23)) + ["X", "Y"]]),
+        calls=expand("{{file}}_{chr}.{{vcf}}.gz", chr=chr_list),
+        index=expand("{{file}}_{chr}.{{vcf}}.gz.tbi", chr=chr_list),
+
+
+module qc:
+    snakefile:
+        get_module_snakefile(config, "hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["qc"])
+    config:
+        config
+
+
+use rule * from qc as qc_*
+
+
+use rule cramino from qc as qc_cramino with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+
+
+use rule mosdepth from qc as qc_mosdepth with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+
+
+use rule mosdepth_bed from qc as qc_mosdepth_bed_design with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bed=config.get("reference", {}).get("design_bed", ""),
+    output:
+        bed=temp("qc/mosdepth_bed_design/{sample}_{type}.regions.bed.gz"),
+        bed_csi=temp("qc/mosdepth_bed_design/{sample}_{type}.regions.bed.gz.csi"),
+        coverage=temp("qc/mosdepth_bed_design/{sample}_{type}.per-base.bed.gz"),
+        coverage_csi=temp("qc/mosdepth_bed_design/{sample}_{type}.per-base.bed.gz.csi"),
+        thresholds=temp("qc/mosdepth_bed_design/{sample}_{type}.thresholds.bed.gz"),
+        glob=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.global.dist.txt"),
+        region=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt"),
+    params:
+        thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
+
+
+use rule mosdepth_bed from qc as qc_mosdepth_bed_exon with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bed=config.get("reference", {}).get("exon_bed", ""),
+    output:
+        bed=temp("qc/mosdepth_bed_exon/{sample}_{type}.regions.bed.gz"),
+        bed_csi=temp("qc/mosdepth_bed_exon/{sample}_{type}.regions.bed.gz.csi"),
+        coverage=temp("qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz"),
+        coverage_csi=temp("qc/mosdepth_bed_exon/{sample}_{type}.per-base.bed.gz.csi"),
+        thresholds=temp("qc/mosdepth_bed_exon/{sample}_{type}.thresholds.bed.gz"),
+        glob=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.global.dist.txt"),
+        region=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth_bed_exon/{sample}_{type}.mosdepth.summary.txt"),
+    params:
+        thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
+
+
+use rule mosdepth_bed from qc as qc_mosdepth_bed_str with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bed=config.get("reference", {}).get("str_bed", ""),
+    output:
+        bed=temp("qc/mosdepth_bed_str/{sample}_{type}.regions.bed.gz"),
+        bed_csi=temp("qc/mosdepth_bed_str/{sample}_{type}.regions.bed.gz.csi"),
+        coverage=temp("qc/mosdepth_bed_str/{sample}_{type}.per-base.bed.gz"),
+        coverage_csi=temp("qc/mosdepth_bed_str/{sample}_{type}.per-base.bed.gz.csi"),
+        thresholds=temp("qc/mosdepth_bed_str/{sample}_{type}.thresholds.bed.gz"),
+        glob=temp("qc/mosdepth_bed_str/{sample}_{type}.mosdepth.global.dist.txt"),
+        region=temp("qc/mosdepth_bed_str/{sample}_{type}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth_bed_str/{sample}_{type}.mosdepth.summary.txt"),
+    params:
+        thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
+
+
+use rule multiqc from qc as qc_multiqc with:
+    input:
+        files=lambda wildcards: set(
+            [
+                file.format(sample=sample, type=u.type, processing_unit=u.processing_unit, barcode=u.barcode)
+                for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
+                for sample in get_samples(samples)
+                for u in units.loc[sample].dropna().itertuples()
+                if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+            ]
+        ),
+        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+
+
+use rule nanoplot from qc as qc_nanoplot with:
+    input:
+        bam="alignment/samtools_view_on_target/{sample}_{type}.on_target.bam",
+        bai="alignment/samtools_view_on_target/{sample}_{type}.on_target.bam.bai",
+
+
+use rule samtools_stats from qc as qc_samtools_stats with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+
+
+use rule samtools_idxstats from qc as qc_samtools_idxstats with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+    output:
+        temp("qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"),
+
+
+use rule picard_collect_hs_metrics from qc as qc_picard_hs_metrics with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        bait_intervals="qc/picard_bed_to_interval_list/targets.interval_list",
+        reference=config.get("reference", {}).get("fasta", ""),
+        target_intervals="qc/picard_bed_to_interval_list/targets.interval_list",
