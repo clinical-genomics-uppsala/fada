@@ -45,9 +45,6 @@ jobs:
       - name: Install requirements.txt
         run: |
           pip install -r requirements.txt
-      - name: Install requirements.test.txt
-        run: |
-          pip install -r requirements.test.txt 
       - name: Integration test - small dataset twist cancer
         working-directory: .tests/integration
         run: |
