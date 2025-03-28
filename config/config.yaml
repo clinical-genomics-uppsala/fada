@@ -15,7 +15,7 @@ modules:
   misc: "cd1e891"
   prealignment: "e622af0"
   qc: "911c879"
-  snv_indels: "2fa0c4e"
+  snv_indels: "1f4ccee"
 
 reference:
   fasta: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
