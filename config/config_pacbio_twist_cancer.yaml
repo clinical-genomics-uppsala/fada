@@ -30,6 +30,9 @@ deepvariant:
 export_qc_bedtools_intersect:
   extra: " -wb "
 
+export_qc_bedtools_intersect_pgrs:
+  extra: " -wb "
+
 hiphase:
   container: "docker://hydragenetics/hiphase:1.4.5"
   sv_caller: false
