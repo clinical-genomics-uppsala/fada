@@ -26,6 +26,6 @@ rule samtools_view_on_target:
     container:
         config.get("samtools_view_on_target", {}).get("container", config["default_container"])
     message:
-        "{rule}: extract on target reads from {input.bam}"
+        "{rule}: extract on target primary non-duplicate reads from {input.bam}"
     wrapper:
         "v5.9.0/bio/samtools/view"
