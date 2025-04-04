@@ -17,6 +17,7 @@ modules:
   qc: "911c879"
   snv_indels: "d015a8e"
 
+
 reference:
   fasta: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
   fai: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
