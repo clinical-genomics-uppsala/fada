@@ -41,6 +41,7 @@ hiphase:
 
 pbmarkdup:
   container: "docker://hydragenetics/pbmarkdup:1.1.0"
+  extra: "--rmdup "
 
 pbmm2_index:
   preset: "HIFI"
@@ -91,6 +92,7 @@ paraphase:
 
 samtools_view_on_target:
   container: "docker://hydragenetics/samtools:1.21" 
+  extra: "-F 3328" #not prim,not supp, not dup
 
 sawfish_discover:
   extra: "--clobber "

@@ -13,7 +13,7 @@ modules:
   cnv_sv: "7f236b9"
   filtering: "be5cc98"
   misc: "cd1e891"
-  prealignment: "e622af0"
+  prealignment: "85b0fc5"
   qc: "911c879"
   snv_indels: "d015a8e"
 

@@ -15,6 +15,10 @@ files:
   - name: "deepvariant_phased_tbi"
     output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz.tbi"
     input: "snv_indels/hiphase/{sample}_N.deepvariant.phased_GRCh38.vcf.gz.tbi"
+  # - name: "deepvariant_report"
+  #   output: "results/{sample}/snv_indels/{sample}.visual_report.html"
+  #   input: "snv_indels/deepvariant/{sample}_N.deepvariant.phased_GRCh38.vcf.gz"
+  
   
     # CNV & SV files
   - name: "sawfish_vcf"
