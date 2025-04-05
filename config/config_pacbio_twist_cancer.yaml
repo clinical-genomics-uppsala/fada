@@ -26,8 +26,12 @@ deepvariant:
   container: "docker://google/deepvariant:1.8.0"
   model_type: "PACBIO"
   output_gvcf: false
+  extra: "--vcf_stats_report=true"
 
 export_qc_bedtools_intersect:
+  extra: " -wb "
+
+export_qc_bedtools_intersect_pgrs:
   extra: " -wb "
 
 hiphase:
@@ -37,6 +41,7 @@ hiphase:
 
 pbmarkdup:
   container: "docker://hydragenetics/pbmarkdup:1.1.0"
+  extra: "--rmdup "
 
 pbmm2_index:
   preset: "HIFI"
@@ -87,13 +92,14 @@ paraphase:
 
 samtools_view_on_target:
   container: "docker://hydragenetics/samtools:1.21" 
+  extra: "-F 3328" #not prim,not supp, not dup
 
 sawfish_discover:
   extra: "--clobber "
   container: "docker://hydragenetics/sawfish:0.12.7"
-  expected_cn: ## not specified due to lack of chrX or chrY in the data
-      male: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XY.bed" 
-      female: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XX.bed"
+  #expected_cn: ## not specified due to lack of chrX or chrY in the data
+  #    male: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XY.bed" 
+  #    female: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XX.bed"
 
 sawfish_joint_call:
   extra: "--clobber "

@@ -15,6 +15,10 @@ files:
   - name: "deepvariant_phased_tbi"
     output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz.tbi"
     input: "snv_indels/hiphase/{sample}_N.deepvariant.phased_GRCh38.vcf.gz.tbi"
+  # - name: "deepvariant_report"
+  #   output: "results/{sample}/snv_indels/{sample}.visual_report.html"
+  #   input: "snv_indels/deepvariant/{sample}_N.deepvariant.phased_GRCh38.vcf.gz"
+  
   
     # CNV & SV files
   - name: "sawfish_vcf"
@@ -46,7 +50,7 @@ files:
     input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam.bai"
   - name: "paraphase_json"
     output: "results/{sample}/paraphase/{sample}.paraphase.json"
-    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam"
+    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.json"
   - name: "paraphase_vcf"
     output: "results/{sample}/paraphase/{sample}.paraphase.{gene}.vcf.gz"
     input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N_paraphase_vcfs/{sample}_N_{gene}_GRCh38.vcf.gz"

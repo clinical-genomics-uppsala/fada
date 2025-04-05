@@ -142,6 +142,7 @@ use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call_mosaic with:
         bai=lambda wildcards: get_bam_input(wildcards)[1],
         ref=config.get("reference", {}).get("fasta", ""),
     params:
+        sample_id=lambda wildcards, output: "{}_{}".format(wildcards.sample, wildcards.type),
         tandem_repeats=get_tr_bed,
         extra=config.get("sniffles2_call_mosaic", {}).get("extra", ""),
     output:

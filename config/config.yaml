@@ -10,12 +10,13 @@ modules:
   alignment: "5444def"
   annotation: "3ce9da5"
   compression: "b3ef8cc"
-  cnv_sv: "75bc154"
+  cnv_sv: "7f236b9"
   filtering: "be5cc98"
   misc: "cd1e891"
-  prealignment: "e622af0"
+  prealignment: "85b0fc5"
   qc: "911c879"
-  snv_indels: "1f4ccee"
+  snv_indels: "d015a8e"
+
 
 reference:
   fasta: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
