@@ -61,7 +61,12 @@ picard_create_sequence_dictionary:
 
 picard_collect_hs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
- 
+
+minimap2_align:
+  container: "docker://hydragenetics/minimap2:2.26"
+  preset: "map-hifi"
+  extra: "-Y --secondary=no "
+
 mosdepth_bed:
   container: "docker://hydragenetics/mosdepth:0.3.2"
   thresholds: "10,20,50"

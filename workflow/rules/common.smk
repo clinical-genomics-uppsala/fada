@@ -166,7 +166,7 @@ wildcard_constraints:
     type="N|T|R",
 
 
-def get_pbmm2_query(wildcards):
+def get_bam_query(wildcards):
     markdups = config.get("markdups", "")
     unit = units.loc[(wildcards.sample, wildcards.type, wildcards.processing_unit, wildcards.barcode)]
     if markdups == "pbmarkdup":
@@ -179,27 +179,30 @@ def get_pbmm2_query(wildcards):
 
 
 def get_bam_input(wildcards, phaser=None):
-    sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
-    aligner = config.get("aligner", None)
+    sample_str = f"{wildcards.sample}_{wildcards.type}"
+    aligner = config.get("aligner")
 
-    if aligner is None:
+    if not aligner:
         sys.exit("aligner missing from config, valid options: minimap2 or pbmm2")
-    elif aligner == "minimap2" and phaser is None:
-        bam_input = f"alignment/minimap2_align/{sample_str}.bam"
-    elif aligner == "pbmm2" and phaser is None:
-        bam_input = f"alignment/pbmm2_align/{sample_str}.bam"
-    elif aligner == "pbmm2" and phaser == "hiphase":
-        bam_input = f"snv_indels/hiphase/{sample_str}.haplotagged.bam"
-    elif aligner == "minimap2" and phaser == "longphase":
-        bam_input = f"snv_indels/longhase/{sample_str}.haplotagged.bam"
-    else:
+
+    if phaser == "hiphase" and units.platform.iloc[0] == "ONT":
+        sys.exit("Hiphase is restricted to Pacbio sequence data")
+
+    bam_paths = {
+        (None, "minimap2"): f"alignment/minimap2_align/{sample_str}.bam",
+        (None, "pbmm2"): f"alignment/pbmm2_align/{sample_str}.bam",
+        ("hiphase", "pbmm2"): f"snv_indels/hiphase/{sample_str}.haplotagged.bam",
+        ("longphase", "minimap2"): f"snv_indels/longhase/{sample_str}.haplotagged.bam",
+        ("hiphase", "minimap2"): f"snv_indels/hiphase/{sample_str}.haplotagged.bam",
+    }
+
+    bam_input = bam_paths.get((phaser, aligner))
+    if not bam_input:
         sys.exit(
-            "Valid options for aligner are: minimap2 or pbmm2. Valid phasers are hiphase for pbmm2 and longphase for minimap2"
+            "Valid options for aligner are: minimap2 or pbmm2. Valid phasers are hiphase for Pacbio or longphase for Pacbio and ONT"
         )
 
-    bai_input = "{}.bai".format(bam_input)
-
-    return (bam_input, bai_input)
+    return bam_input, f"{bam_input}.bai"
 
 
 def get_haplotagged_bam(wildcards):
