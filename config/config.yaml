@@ -15,16 +15,18 @@ modules:
   misc: "cd1e891"
   prealignment: "85b0fc5"
   qc: "911c879"
-  snv_indels: "d015a8e"
-
+  snv_indels: "fc7673a"
 
 reference:
   fasta: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta"
   fai: "{{PIPELINE_REF_DATA}}/GCA_000001405.15_GRCh38_no_alt_analysis_set.fasta.fai"
   pathogenic_repeats_bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
 
+minimap2_index:
+  container: "docker://hydragenetics/minimap2:2.26"
+
 minimap2_align:
-  preset: ""
+  container: "docker://hydragenetics/minimap2:2.26"
 
 cramino:
   container: "docker://hydragenetics/cramino:0.14.5"

@@ -62,15 +62,17 @@ module alignment:
 use rule * from alignment as alignment_*
 
 
+use rule minimap2_align from alignment as alignment_minimap2_align with:
+    input:
+        query=lambda wildcards: get_bam_query(wildcards),
+        target=rules.alignment_minimap2_index.output.mmi,
+
+
 use rule pbmm2_align from alignment as alignment_pbmm2_align with:
     input:
-        query=lambda wildcards: get_pbmm2_query(wildcards),
-        reference=expand(
-            "{ref}.{preset}.mmi",
-            ref=config.get("reference", {}).get("fasta", ""),
-            preset=config.get("pbmm2_align", {}).get("preset", ""),
-        ),
-
+        query=lambda wildcards: get_bam_query(wildcards),
+        reference=rules.alignment_pbmm2_index.output.mmi,
+  
 
 use rule samtools_merge_bam from alignment as alignment_samtools_merge_bam with:
     input:
@@ -195,7 +197,8 @@ module prealignment:
         config
 
 
-use rule pbmarkdup from prealignment as prealignment_pbmarkdup
+use rule pbmarkdup from prealignment as prealignment_pbmarkdup with:
+    
 
 
 module snv_indels:
@@ -220,6 +223,19 @@ use rule deepvariant_pacbio from snv_indels as snv_indels_deepvariant_pacbio wit
         int_res=lambda wildcards: f"snv_indels/deepvariant/{wildcards.sample}_{wildcards.type}_{wildcards.chr}",
         regions=lambda wildcards, input: get_deepvariant_region(wildcards, input),
         extra=config.get("deepvariant", {}).get("extra", ""),
+
+
+use rule hiphase from snv_indels as snv_indels_hiphase with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        ref=config.get("reference", {}).get("fasta", ""),
+        snv_vcf="snv_indels/deepvariant/{sample}_{type}.merged.vcf.gz",
+        snv_tbi="snv_indels/deepvariant/{sample}_{type}.merged.vcf.gz.tbi",
+        sv_vcf="cnv_sv/pbsv/{sample}_{type}.vcf.gz" if config.get("hiphase", {}).get("sv_caller", False) else [],
+        sv_tbi="cnv_sv/pbsv/{sample}_{type}.vcf.gz.tbi" if config.get("hiphase", {}).get("sv_caller", False) else [],
+        str_vcf="cnv_sv/trgt/{sample}_{type}.vcf.gz" if config.get("hiphase", {}).get("str_caller", False) else [],
+        str_tbi="cnv_sv/trgt/{sample}_{type}.vcf.gz.tbi" if config.get("hiphase", {}).get("str_caller", False) else [],
 
 
 use rule bcftools_concat from snv_indels as snv_indels_bcftools_concat with:
