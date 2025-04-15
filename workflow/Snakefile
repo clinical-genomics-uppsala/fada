@@ -72,7 +72,7 @@ use rule pbmm2_align from alignment as alignment_pbmm2_align with:
     input:
         query=lambda wildcards: get_bam_query(wildcards),
         reference=rules.alignment_pbmm2_index.output.mmi,
-  
+
 
 use rule samtools_merge_bam from alignment as alignment_samtools_merge_bam with:
     input:
@@ -197,8 +197,7 @@ module prealignment:
         config
 
 
-use rule pbmarkdup from prealignment as prealignment_pbmarkdup with:
-    
+use rule pbmarkdup from prealignment as prealignment_pbmarkdup
 
 
 module snv_indels:
