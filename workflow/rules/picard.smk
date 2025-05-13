@@ -6,7 +6,7 @@ __license__ = "GPL-3"
 
 rule picard_bed_to_interval_list:
     input:
-        bed=config.get("reference", {}).get("design_bed", ""),
+        bed=config.get("reference", {}).get("design_genes_bed", ""),
         reference=config["reference"]["fasta"],
         dict="qc/picard_create_sequence_dictionary/reference.dict",
     output:

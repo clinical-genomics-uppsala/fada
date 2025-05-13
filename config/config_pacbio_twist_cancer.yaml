@@ -10,7 +10,9 @@ markdups: "pbmarkdup"
 trimmer_software: None
 
 reference:
-  design_bed: "{{PIPELINE_REF_DATA}}/designs/Annotated_expected_coverage_hg38_241001.bed"
+  design_bed: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/expected_capture_targets_covered_CGU_InheritedCancer_v4_LRTE-95759153_combined_sorted_hg38.bed"
+  design_genes_bed: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/expected_capture_targets_covered_CGU_InheritedCancer_v4_LRTE-95759153_annotated_sorted_hg38.bed"
+  design_pgrs_bed: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/expected_capture_targets_covered_CGU_InheritedCancer_v4_SNP_LRTE-95759153_annotated_sorted_hg38.bed"
   exon_bed: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/Twist_Cancer_230602_hg38_coding_exons.bed"
   pgrs_bed: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/Twist_Cancer_230707_hg38_pgrs_snps.bed"
   skip_contigs: #chromosomes or scaffolds not in the design
@@ -26,7 +28,6 @@ deepvariant:
   container: "docker://google/deepvariant:1.8.0"
   model_type: "PACBIO"
   output_gvcf: false
-  extra: "--vcf_stats_report=true"
 
 export_qc_bedtools_intersect:
   extra: " -wb "
@@ -61,7 +62,12 @@ picard_create_sequence_dictionary:
 
 picard_collect_hs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
- 
+
+minimap2_align:
+  container: "docker://hydragenetics/minimap2:2.26"
+  preset: "map-hifi"
+  extra: "-Y --secondary=no "
+
 mosdepth_bed:
   container: "docker://hydragenetics/mosdepth:0.3.2"
   thresholds: "10,20,50"
@@ -89,6 +95,16 @@ paraphase:
   extra: "--targeted --min-read-variant 40 --min-read-haplotype 10"
   genes:
     - pms2
+
+pbsv_discover:
+  container: "docker://hydragenetics/pbsv:2.9.0"
+  trf: "reference/human_GRCh38_no_alt_analysis_set.trf.bed"
+  extra: "--hifi"
+
+pbsv_call:
+  container: "docker://hydragenetics/pbsv:2.9.0"
+  trf: "{{PIPELINE_REF_DATA}}/human_GRCh38_no_alt_analysis_set.trf.bed"
+  extra: "--hifi"
 
 samtools_view_on_target:
   container: "docker://hydragenetics/samtools:1.21" 
