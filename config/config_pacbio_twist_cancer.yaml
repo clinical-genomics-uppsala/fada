@@ -118,12 +118,12 @@ sawfish_discover:
   #    female: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XX.bed"
 
 sawfish_joint_call:
-  extra: "--clobber "
-  container: "docker://hydragenetics/sawfish:0.12.7"
+  extra: "--clobber --disable-cnv "
+  container: "docker://hydragenetics/sawfish:2.0.4"
   supporting_reads: true
   
 sniffles2_call:
-  container: "docker://hydragenetics/sniffles2:2.6.1"
+  container: "docker://hydragenetics/sniffles2:2.6.3"
   tandem_repeats: "{{PIPELINE_REF_DATA}}/human_GRCh38_no_alt_analysis_set.trf.bed"
 
 sniffles2_call_mosaic:
