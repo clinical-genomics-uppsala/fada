@@ -112,13 +112,15 @@ samtools_view_on_target:
 
 sawfish_discover:
   extra: "--clobber "
-  container: "docker://hydragenetics/sawfish:0.12.7"
+  disable_cnv: true
+  maf: true
+  container: "docker://hydragenetics/sawfish:2.0.4"
   #expected_cn: ## not specified due to lack of chrX or chrY in the data
   #    male: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XY.bed" 
   #    female: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XX.bed"
 
-sawfish_joint_call:
-  extra: "--clobber --disable-cnv "
+sawfish_joint_call_single:
+  extra: "--clobber "
   container: "docker://hydragenetics/sawfish:2.0.4"
   supporting_reads: true
   
