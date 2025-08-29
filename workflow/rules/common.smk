@@ -275,7 +275,6 @@ def compile_output_file_list(wildcards):
                 ]
             )
         elif config["pipeline"] == "pacbio_twist_cancer":
-            print('testing')
             outputpaths = set(
                 [
                     f["output"].format(sample=sample, type=unit_type, gene=gene)
