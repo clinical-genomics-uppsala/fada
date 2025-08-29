@@ -25,14 +25,20 @@ rule all:
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
 ruleorder: samtools_view_on_target > alignment_samtools_index
-
+ruleorder: _copy_deepvariant_phased_tbi > annotation_tabix_vcf
+ruleorder: cnv_sv_bgzip > annotation_bgzip_vcf
+ruleorder: cnv_sv_tabix > annotation_tabix_vcf
 
 if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
 
     ruleorder: cnv_sv_sawfish_joint_call_single > cnv_sv_tabix
     ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
     ruleorder: snv_indels_tabix > annotation_tabix_vcf
-
+    ruleorder: _copy_pbsv_vcf_tbi > annotation_tabix_vcf
+    ruleorder: cnv_sv_sawfish_joint_call_single > annotation_tabix_vcf
+    ruleorder: _copy_sawfish_vcf_tbi > annotation_tabix_vcf 
+    ruleorder: _copy_sniffles2_vcf_tbi > annotation_tabix_vcf
+    ruleorder: _copy_paraphase_vcf_tbi > annotation_tabix_vcf
 
 module annotation:
     snakefile:
@@ -250,7 +256,7 @@ module qc:
         config
 
 
-use rule * from qc as qc_*
+use rule * from qc exclude multiqc as qc_* 
 
 
 use rule cramino from qc as qc_cramino with:
@@ -319,7 +325,7 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_str with:
         thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
 
 
-use rule multiqc from qc as qc_multiqc with:
+use rule multiqc_longread from qc as qc_multiqc_longread with:
     input:
         files=lambda wildcards: set(
             [
