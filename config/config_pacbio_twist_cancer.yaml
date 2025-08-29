@@ -78,6 +78,7 @@ multiqc:
       config: "config/multiqc_config_pacbio_twist_cancer.yaml"
       included_unit_types: ["N"]
       qc_files:
+        - "qc/bcftools_stats/{sample}_{type}.stats.txt"
         - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt"
         - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.region.dist.txt"
         - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.global.dist.txt"

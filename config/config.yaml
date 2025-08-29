@@ -7,15 +7,15 @@ default_container: "docker://hydragenetics/common:3.1.1"
 resources: "config/resources.yaml"
 
 modules:
-  alignment: "5444def"
-  annotation: "3ce9da5"
-  compression: "b3ef8cc"
-  cnv_sv: "0d5c025"
-  filtering: "be5cc98"
-  misc: "cd1e891"
+  alignment: "v0.7.0"
+  annotation: "283944d"
+  compression: "v2.1.0"
+  cnv_sv: "v1.0.0"
+  filtering: "v1.1.0"
+  misc: "v0.3.0"
   prealignment: "v1.4.0"
-  qc: "911c879"
-  snv_indels: "fc7673a"
+  qc: "v0.6.0"
+  snv_indels: "v1.2.0"
 
 reference:
   fasta: "{{PIPELINE_REF_DATA}}/GRCh38_GIABv3_no_alt_analysis_set_maskedGRC_decoys_MAP2K3_KMT2C_KCNJ18.fasta"
