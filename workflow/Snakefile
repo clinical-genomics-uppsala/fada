@@ -25,9 +25,9 @@ rule all:
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
 ruleorder: samtools_view_on_target > alignment_samtools_index
-ruleorder: _copy_deepvariant_phased_tbi > annotation_tabix_vcf
 ruleorder: cnv_sv_bgzip > annotation_bgzip_vcf
 ruleorder: cnv_sv_tabix > annotation_tabix_vcf
+ruleorder: _copy_deepvariant_phased_tbi > annotation_tabix_vcf
 
 if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
 

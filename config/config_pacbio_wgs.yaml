@@ -55,6 +55,13 @@ multiqc:
         - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
         - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
 
+paraphase:
+  container: "docker://quay.io/pacbio/paraphase:3.2.1_build1"
+  genome: "38"
+  extra: ""
+  genes:
+    - pms2
+
 trgt_genotype:
   container: "docker://hydragenetics/trgt:1.0.0"
   bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
