@@ -31,7 +31,12 @@ pbmm2_align:
   preset: "HIFI"
   container: "docker://hydragenetics/pbmm2:1.16"
   extra: "--unmapped "
-  
+
+minimap2_align:
+  container: "docker://hydragenetics/minimap2:2.26"
+  preset: "map-hifi"
+  extra: "-Y --secondary=no "
+
 mosdepth:
   container: "docker://hydragenetics/mosdepth:0.3.2"
   by: "500"
@@ -49,6 +54,13 @@ multiqc:
         - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
         - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
         - "qc/samtools_idxstats/{sample}_{type}.samtools-idxstats.txt"
+
+paraphase:
+  container: "docker://quay.io/pacbio/paraphase:3.2.1_build1"
+  genome: "38"
+  extra: ""
+  genes:
+    - pms2
 
 trgt_genotype:
   container: "docker://hydragenetics/trgt:1.0.0"

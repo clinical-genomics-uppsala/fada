@@ -11,18 +11,29 @@ files:
     #SNV & INDEL files
   - name: "deepvariant_phased_vcf"
     output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz"
-    input: "snv_indels/hiphase/{sample}_N.deepvariant.phased_GRCh38.vcf.gz"
+    input: "snv_indels/hiphase/{sample}_N.deepvariant.phased.vcf.gz"
   - name: "deepvariant_phased_tbi"
     output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz.tbi"
-    input: "snv_indels/hiphase/{sample}_N.deepvariant.phased_GRCh38.vcf.gz.tbi"
+    input: "snv_indels/hiphase/{sample}_N.deepvariant.phased.vcf.gz.tbi"
+  # - name: "deepvariant_report"
+  #   output: "results/{sample}/snv_indels/{sample}.visual_report.html"
+  #   input: "snv_indels/deepvariant/{sample}_N.deepvariant.phased_GRCh38.vcf.gz"
+  
   
     # CNV & SV files
+  - name: "pbsv_vcf"
+    output: "results/{sample}/cnv_sv/{sample}.pbsv.vcf.gz"
+    input: "cnv_sv/pbsv_call/{sample}_N_GRCh38.vcf.gz"
+  - name: "pbsv_vcf_tbi"
+    output: "results/{sample}/cnv_sv/{sample}.pbsv.vcf.gz.tbi"
+    input: "cnv_sv/pbsv_call/{sample}_N_GRCh38.vcf.gz.tbi"
+  
   - name: "sawfish_vcf"
     output: "results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz"
-    input: "cnv_sv/sawfish_joint_call/{sample}_N_GRCh38.vcf.gz"
+    input: "cnv_sv/sawfish_joint_call_single/{sample}_N.vcf.gz"
   - name: "sawfish_vcf_tbi"
     output: "results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz.tbi"
-    input: "cnv_sv/sawfish_joint_call/{sample}_N_GRCh38.vcf.gz.tbi"
+    input: "cnv_sv/sawfish_joint_call_single/{sample}_N.vcf.gz.tbi"
 
   - name: "sniffles2_vcf"
     output: "results/{sample}/cnv_sv/{sample}.sniffles2.vcf.gz"
@@ -46,7 +57,7 @@ files:
     input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam.bai"
   - name: "paraphase_json"
     output: "results/{sample}/paraphase/{sample}.paraphase.json"
-    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.bam"
+    input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N.paraphase.json"
   - name: "paraphase_vcf"
     output: "results/{sample}/paraphase/{sample}.paraphase.{gene}.vcf.gz"
     input: "cnv_sv/paraphase/paraphase_{sample}_N/{sample}_N_paraphase_vcfs/{sample}_N_{gene}_GRCh38.vcf.gz"

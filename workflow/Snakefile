@@ -25,13 +25,21 @@ rule all:
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
 ruleorder: samtools_view_on_target > alignment_samtools_index
+ruleorder: cnv_sv_bgzip > annotation_bgzip_vcf
+ruleorder: cnv_sv_tabix > annotation_tabix_vcf
 
 
 if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
 
-    ruleorder: cnv_sv_sawfish_joint_call > cnv_sv_tabix
+    ruleorder: cnv_sv_sawfish_joint_call_single > cnv_sv_tabix
     ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
     ruleorder: snv_indels_tabix > annotation_tabix_vcf
+    ruleorder: _copy_pbsv_vcf_tbi > annotation_tabix_vcf
+    ruleorder: cnv_sv_sawfish_joint_call_single > annotation_tabix_vcf
+    ruleorder: _copy_sawfish_vcf_tbi > annotation_tabix_vcf
+    ruleorder: _copy_sniffles2_vcf_tbi > annotation_tabix_vcf
+    ruleorder: _copy_paraphase_vcf_tbi > annotation_tabix_vcf
+    ruleorder: _copy_deepvariant_phased_tbi > annotation_tabix_vcf
 
 
 module annotation:
@@ -62,14 +70,16 @@ module alignment:
 use rule * from alignment as alignment_*
 
 
+use rule minimap2_align from alignment as alignment_minimap2_align with:
+    input:
+        query=lambda wildcards: get_bam_query(wildcards),
+        target=rules.alignment_minimap2_index.output.mmi,
+
+
 use rule pbmm2_align from alignment as alignment_pbmm2_align with:
     input:
-        query=lambda wildcards: get_pbmm2_query(wildcards),
-        reference=expand(
-            "{ref}.{preset}.mmi",
-            ref=config.get("reference", {}).get("fasta", ""),
-            preset=config.get("pbmm2_align", {}).get("preset", ""),
-        ),
+        query=lambda wildcards: get_bam_query(wildcards),
+        reference=rules.alignment_pbmm2_index.output.mmi,
 
 
 use rule samtools_merge_bam from alignment as alignment_samtools_merge_bam with:
@@ -142,6 +152,7 @@ use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call_mosaic with:
         bai=lambda wildcards: get_bam_input(wildcards)[1],
         ref=config.get("reference", {}).get("fasta", ""),
     params:
+        sample_id=lambda wildcards, output: "{}_{}".format(wildcards.sample, wildcards.type),
         tandem_repeats=get_tr_bed,
         extra=config.get("sniffles2_call_mosaic", {}).get("extra", ""),
     output:
@@ -221,6 +232,19 @@ use rule deepvariant_pacbio from snv_indels as snv_indels_deepvariant_pacbio wit
         extra=config.get("deepvariant", {}).get("extra", ""),
 
 
+use rule hiphase from snv_indels as snv_indels_hiphase with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
+        ref=config.get("reference", {}).get("fasta", ""),
+        snv_vcf="snv_indels/deepvariant/{sample}_{type}.merged.vcf.gz",
+        snv_tbi="snv_indels/deepvariant/{sample}_{type}.merged.vcf.gz.tbi",
+        sv_vcf="cnv_sv/pbsv/{sample}_{type}.vcf.gz" if config.get("hiphase", {}).get("sv_caller", False) else [],
+        sv_tbi="cnv_sv/pbsv/{sample}_{type}.vcf.gz.tbi" if config.get("hiphase", {}).get("sv_caller", False) else [],
+        str_vcf="cnv_sv/trgt/{sample}_{type}.vcf.gz" if config.get("hiphase", {}).get("str_caller", False) else [],
+        str_tbi="cnv_sv/trgt/{sample}_{type}.vcf.gz.tbi" if config.get("hiphase", {}).get("str_caller", False) else [],
+
+
 use rule bcftools_concat from snv_indels as snv_indels_bcftools_concat with:
     input:
         calls=expand("{{file}}_{chr}.{{vcf}}.gz", chr=chr_list),
@@ -234,7 +258,7 @@ module qc:
         config
 
 
-use rule * from qc as qc_*
+use rule * from qc exclude multiqc as qc_*
 
 
 use rule cramino from qc as qc_cramino with:
@@ -303,7 +327,7 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_str with:
         thresholds=config.get("mosdepth_bed", {}).get("thresholds", ""),
 
 
-use rule multiqc from qc as qc_multiqc with:
+use rule multiqc_longread from qc as qc_multiqc_longread with:
     input:
         files=lambda wildcards: set(
             [
