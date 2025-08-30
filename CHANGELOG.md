@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.2.0](https://www.github.com/clinical-genomics-uppsala/fada/compare/v0.1.0...v0.2.0) (2025-08-30)
+
+
+### Features
+
+* report hs metrics for the gene regions in the design and not the pgrs targets ([4ddefb2](https://www.github.com/clinical-genomics-uppsala/fada/commit/4ddefb2a63f7dc9c183bfc4942ca45d90a0abe90))
+* update all hydra-genetics module versions ([a81a70e](https://www.github.com/clinical-genomics-uppsala/fada/commit/a81a70e8c7edc3d5b0332ef38c3c54e31ca2a11d))
+* update hydra-genetics modules ([45775e4](https://www.github.com/clinical-genomics-uppsala/fada/commit/45775e47021dccc584045b7902c9185afe010557))
+* update module versions ([11eba0c](https://www.github.com/clinical-genomics-uppsala/fada/commit/11eba0cd54afa365648d848dea2302f20977eacf))
+* update reference fasta to the giab v3 ref ([135c52c](https://www.github.com/clinical-genomics-uppsala/fada/commit/135c52ced7e4c615394930b17f815975e7ea45dd))
+* update sawfish to sawfish2, and update sniffles version ([0701ec7](https://www.github.com/clinical-genomics-uppsala/fada/commit/0701ec746b636328b90439e6bbcc69db5f89a784))
+* update to sawfish 2 ([b6f68d4](https://www.github.com/clinical-genomics-uppsala/fada/commit/b6f68d4d39a6596d03ab70f3f62eb86ffc7cfaab))
+* update wgs workflow to keep the tests happy ([a1399bf](https://www.github.com/clinical-genomics-uppsala/fada/commit/a1399bf5253694c8d44c49f5431b545291cd9768))
+
+
+### Bug Fixes
+
+* add sample-id to sniffles vcf ([a4ab36b](https://www.github.com/clinical-genomics-uppsala/fada/commit/a4ab36b52f77449eefe12c210b4e8101568d986c))
+* paraphase jsom copy ([6750d66](https://www.github.com/clinical-genomics-uppsala/fada/commit/6750d66e309908245eb8f64a3b3f9ff8850c3768))
+
+
+### Documentation
+
+* change pipeline name for mkdocs ([178f221](https://www.github.com/clinical-genomics-uppsala/fada/commit/178f221a7fe53b7d943f3d12d63a6fb99a5c5c71))
+* update message on samtools view rule ([e59b1b9](https://www.github.com/clinical-genomics-uppsala/fada/commit/e59b1b96e8c5896c98b1116e31eded239d38760b))
+
 ## 0.1.0 (2025-03-28)
 
 
