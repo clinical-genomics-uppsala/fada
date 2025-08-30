@@ -266,9 +266,10 @@ def compile_output_file_list(wildcards):
         if config["pipeline"] == "pacbio_wgs":
             outputpaths = set(
                 [
-                    f["output"].format(sample=sample, type=unit_type, locus=locus, suffix=suffix)
+                    f["output"].format(sample=sample, type=unit_type, locus=locus, gene=gene, suffix=suffix)
                     for sample in get_samples(samples)
                     for unit_type in get_unit_types(units, sample)
+                    for gene in config["paraphase"]["genes"]
                     for locus in get_trgt_loci(wildcards)
                     for suffix in [config.get("trgt_plot_motif", {}).get("image", "svg")]
                 ]

@@ -78,6 +78,7 @@ multiqc:
       config: "config/multiqc_config_pacbio_twist_cancer.yaml"
       included_unit_types: ["N"]
       qc_files:
+        - "qc/bcftools_stats/{sample}_{type}.stats.txt"
         - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.summary.txt"
         - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.region.dist.txt"
         - "qc/mosdepth_bed_design/{sample}_{type}.mosdepth.global.dist.txt"
@@ -112,18 +113,20 @@ samtools_view_on_target:
 
 sawfish_discover:
   extra: "--clobber "
-  container: "docker://hydragenetics/sawfish:0.12.7"
+  disable_cnv: true
+  maf: true
+  container: "docker://hydragenetics/sawfish:2.0.4"
   #expected_cn: ## not specified due to lack of chrX or chrY in the data
   #    male: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XY.bed" 
   #    female: "{{PIPELINE_REF_DATA}}/expected_cn.hg38.XX.bed"
 
-sawfish_joint_call:
+sawfish_joint_call_single:
   extra: "--clobber "
-  container: "docker://hydragenetics/sawfish:0.12.7"
+  container: "docker://hydragenetics/sawfish:2.0.4"
   supporting_reads: true
   
 sniffles2_call:
-  container: "docker://hydragenetics/sniffles2:2.6.1"
+  container: "docker://hydragenetics/sniffles2:2.6.3"
   tandem_repeats: "{{PIPELINE_REF_DATA}}/human_GRCh38_no_alt_analysis_set.trf.bed"
 
 sniffles2_call_mosaic:
