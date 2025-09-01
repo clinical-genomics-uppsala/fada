@@ -17,8 +17,6 @@ reference:
     - "^MAP2K3_.*"
     - "^KCNJ18_.*"
     - "^KMT2C_.*"
-
-reference:
   design_bed: ""
 
 deepvariant:
