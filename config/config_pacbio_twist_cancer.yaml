@@ -28,7 +28,7 @@ reference:
   wanted_transcripts: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/wanted_transcripts.bed"
 
 deepvariant:
-  container: "docker://google/deepvariant:1.8.0"
+  container: "docker://google/deepvariant:1.9.0"
   model_type: "PACBIO"
   output_gvcf: false
 
