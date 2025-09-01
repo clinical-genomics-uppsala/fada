@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0](https://www.github.com/clinical-genomics-uppsala/fada/compare/v0.2.0...v0.3.0) (2025-09-01)
+
+
+### Features
+
+* keep reads marked as duplicates in the bam file ([efeca96](https://www.github.com/clinical-genomics-uppsala/fada/commit/efeca969312bf7cd34a452837c4ba6c01cca45af))
+* remove pbsv from twist cancer pipeline ([aae3393](https://www.github.com/clinical-genomics-uppsala/fada/commit/aae3393b6f2a9f4a72557a70b82415652843aa72))
+* update cnv_sv module ([5163dba](https://www.github.com/clinical-genomics-uppsala/fada/commit/5163dbaf324de23a181d377292445da186a6fbdf))
+* update deepvariant to v1.9.0 ([2335c9e](https://www.github.com/clinical-genomics-uppsala/fada/commit/2335c9e5f55dfaf29389cec259ae6ac2725c2d60))
+* use design_bed for hs_metrics ([6f6e6c1](https://www.github.com/clinical-genomics-uppsala/fada/commit/6f6e6c18c04001c6c1cb6ffc72b5ab91f7a4bb9e))
+
+
+### Bug Fixes
+
+* update handling of configs to skip in snv indel calling ([b8352dd](https://www.github.com/clinical-genomics-uppsala/fada/commit/b8352dd8b3609d7ae4703715a58520bba20998b7))
+
 ## [0.2.0](https://www.github.com/clinical-genomics-uppsala/fada/compare/v0.1.0...v0.2.0) (2025-08-30)
 
 
