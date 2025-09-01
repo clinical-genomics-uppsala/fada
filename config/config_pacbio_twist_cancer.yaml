@@ -22,6 +22,9 @@ reference:
     - ".*_random"
     - "chrUn_.*"
     - "chrEBV"
+    - "^MAP2K3_.*"
+    - "^KCNJ18_.*"
+    - "^KMT2C_.*"
   wanted_transcripts: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/wanted_transcripts.bed"
 
 deepvariant:
@@ -99,7 +102,7 @@ paraphase:
 
 pbsv_discover:
   container: "docker://hydragenetics/pbsv:2.9.0"
-  trf: "reference/human_GRCh38_no_alt_analysis_set.trf.bed"
+  trf: "{{PIPELINE_REF_DATA}}/human_GRCh38_no_alt_analysis_set.trf.bed"
   extra: "--hifi"
 
 pbsv_call:

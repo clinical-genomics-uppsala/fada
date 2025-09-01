@@ -112,26 +112,32 @@ validate(units, schema="../schemas/units.schema.yaml")
 
 ## genarate chromosome list
 
-
 def get_chr_from_re(contig_patterns):
     contigs = []
     ref_fasta = config.get("reference", {}).get("fasta", "")
+    if not ref_fasta:
+        sys.exit("reference.fasta is not set in config")
     all_contigs = extract_chr(f"{ref_fasta}.fai", filter_out=[])
+
     for pattern in contig_patterns:
         for contig in all_contigs:
-            # print(pattern, contig)
-            contig_match = re.match(pattern, contig)
-            if contig_match is not None:
-                # print(contig_match, contig_match.group())
-                contigs.append(contig_match.group())
-    # print(contigs)
-    if len(set(contigs)) < len(contigs):  # check for duplicate conting entries
-        chr_set = set()
-        duplicate_contigs = [c for c in contigs if c in chr_set or chr_set.add(c)]
-        dup_contigs_str = ", ".join(duplicate_contigs)
+            # use search so patterns can match substrings or full names (anchors still work)
+            if re.search(pattern, contig):
+                contigs.append(contig)
+
+    # find duplicates while preserving order of first occurrence
+    seen = set()
+    duplicates = []
+    for c in contigs:
+        if c in seen and c not in duplicates:
+            duplicates.append(c)
+        seen.add(c)
+
+    if duplicates:
+        dup_contigs_str = ", ".join(duplicates)
         sys.exit(
-            f"Duplicate contigs detected:\n {dup_contigs_str}\n\
-        Please revise the regular expressions listed under reference in the config"
+            f"Duplicate contigs detected:\n {dup_contigs_str}\n"
+            "Please revise the regular expressions listed under reference in the config"
         )
 
     return contigs
