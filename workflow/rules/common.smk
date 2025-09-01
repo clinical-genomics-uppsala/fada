@@ -112,6 +112,7 @@ validate(units, schema="../schemas/units.schema.yaml")
 
 ## genarate chromosome list
 
+
 def get_chr_from_re(contig_patterns):
     contigs = []
     ref_fasta = config.get("reference", {}).get("fasta", "")
