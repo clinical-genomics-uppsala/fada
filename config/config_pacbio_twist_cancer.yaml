@@ -22,10 +22,13 @@ reference:
     - ".*_random"
     - "chrUn_.*"
     - "chrEBV"
+    - "^MAP2K3_.*"
+    - "^KCNJ18_.*"
+    - "^KMT2C_.*"
   wanted_transcripts: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/wanted_transcripts.bed"
 
 deepvariant:
-  container: "docker://google/deepvariant:1.8.0"
+  container: "docker://google/deepvariant:1.9.0"
   model_type: "PACBIO"
   output_gvcf: false
 
@@ -42,7 +45,6 @@ hiphase:
 
 pbmarkdup:
   container: "docker://hydragenetics/pbmarkdup:1.1.0"
-  extra: "--rmdup "
 
 pbmm2_index:
   preset: "HIFI"
@@ -96,16 +98,6 @@ paraphase:
   extra: "--targeted --min-read-variant 40 --min-read-haplotype 10"
   genes:
     - pms2
-
-pbsv_discover:
-  container: "docker://hydragenetics/pbsv:2.9.0"
-  trf: "reference/human_GRCh38_no_alt_analysis_set.trf.bed"
-  extra: "--hifi"
-
-pbsv_call:
-  container: "docker://hydragenetics/pbsv:2.9.0"
-  trf: "{{PIPELINE_REF_DATA}}/human_GRCh38_no_alt_analysis_set.trf.bed"
-  extra: "--hifi"
 
 samtools_view_on_target:
   container: "docker://hydragenetics/samtools:1.21" 

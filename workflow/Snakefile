@@ -34,7 +34,6 @@ if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
     ruleorder: cnv_sv_sawfish_joint_call_single > cnv_sv_tabix
     ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
     ruleorder: snv_indels_tabix > annotation_tabix_vcf
-    ruleorder: _copy_pbsv_vcf_tbi > annotation_tabix_vcf
     ruleorder: cnv_sv_sawfish_joint_call_single > annotation_tabix_vcf
     ruleorder: _copy_sawfish_vcf_tbi > annotation_tabix_vcf
     ruleorder: _copy_sniffles2_vcf_tbi > annotation_tabix_vcf

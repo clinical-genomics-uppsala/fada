@@ -21,13 +21,6 @@ files:
   
   
     # CNV & SV files
-  - name: "pbsv_vcf"
-    output: "results/{sample}/cnv_sv/{sample}.pbsv.vcf.gz"
-    input: "cnv_sv/pbsv_call/{sample}_N_GRCh38.vcf.gz"
-  - name: "pbsv_vcf_tbi"
-    output: "results/{sample}/cnv_sv/{sample}.pbsv.vcf.gz.tbi"
-    input: "cnv_sv/pbsv_call/{sample}_N_GRCh38.vcf.gz.tbi"
-  
   - name: "sawfish_vcf"
     output: "results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz"
     input: "cnv_sv/sawfish_joint_call_single/{sample}_N.vcf.gz"

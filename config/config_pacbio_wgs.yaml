@@ -14,8 +14,9 @@ reference:
     - ".*_random"
     - "chrUn_.*"
     - "chrEBV"
-
-reference:
+    - "^MAP2K3_.*"
+    - "^KCNJ18_.*"
+    - "^KMT2C_.*"
   design_bed: ""
 
 deepvariant:
