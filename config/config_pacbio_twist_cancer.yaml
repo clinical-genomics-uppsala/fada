@@ -45,7 +45,6 @@ hiphase:
 
 pbmarkdup:
   container: "docker://hydragenetics/pbmarkdup:1.1.0"
-  extra: "--rmdup "
 
 pbmm2_index:
   preset: "HIFI"
