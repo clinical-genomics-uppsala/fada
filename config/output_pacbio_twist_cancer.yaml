@@ -21,6 +21,19 @@ files:
   
   
     # CNV & SV files
+  - name: "cnvkit_vcf"
+    output: "results/{sample}/cnv_sv/{sample}.cnv.vcf.gz"
+    input: "cnv_sv/cnvkit_vcf/{sample}_N.vcf.gz"
+  - name: "cnvkit_vcf_tbi"
+    output: "results/{sample}/cnv_sv/{sample}.cnv.vcf.gz.tbi"
+    input: "cnv_sv/cnvkit_vcf/{sample}_N.vcf.gz.tbi"
+  - name: "cnvkit_scatter_plot"
+    output: "results/{sample}/cnv_sv/{sample}.cnvkit.scatter.png"
+    input: "cnv_sv/cnvkit_scatter/{sample}_N.png"
+  - name: "cnvkit_report_html"
+    output: "results/{sample}/cnv_sv/{sample}.cnv_report.html"
+    input: "reports/cnv_html_report/{sample}_N.pathology.cnv_report.html"
+
   - name: "sawfish_vcf"
     output: "results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz"
     input: "cnv_sv/sawfish_joint_call_single/{sample}_N.vcf.gz"

@@ -15,6 +15,7 @@ modules:
   misc: "v0.3.0"
   prealignment: "v1.4.0"
   qc: "v0.6.0"
+  reports: "develop"
   snv_indels: "v1.2.0"
 
 reference:
