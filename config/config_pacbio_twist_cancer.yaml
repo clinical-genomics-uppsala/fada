@@ -46,7 +46,7 @@ cnvkit_batch:
   container: "docker://etal/cnvkit:0.9.11"
   extra: " --segment-method hmm-germline "
   method: "hybrid"
-  normal_reference: "{{PIPELINE_REF_DATA}}/cnvkit.PoN.5kb_target.1Mb_antitarget.cnn"
+  normal_reference: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/cnvkit.PoN.5kb_target.1Mb_antitarget.cnn"
 
 cnvkit_call:
   container: "docker://etal/cnvkit:0.9.11"
