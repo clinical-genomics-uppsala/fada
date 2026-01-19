@@ -15,21 +15,14 @@ files:
   - name: "deepvariant_phased_tbi"
     output: "results/{sample}/snv_indels/{sample}.deepvariant.phased.vcf.gz.tbi"
     input: "snv_indels/hiphase/{sample}_N.deepvariant.phased.vcf.gz.tbi"
-  # - name: "deepvariant_report"
-  #   output: "results/{sample}/snv_indels/{sample}.visual_report.html"
-  #   input: "snv_indels/deepvariant/{sample}_N.deepvariant.phased_GRCh38.vcf.gz"
-  
   
     # CNV & SV files
   - name: "cnvkit_vcf"
     output: "results/{sample}/cnv_sv/{sample}.cnv.vcf.gz"
-    input: "cnv_sv/cnvkit_vcf/{sample}_N.vcf.gz"
+    input: "cnv_sv/cnvkit_vcf/{sample}_N.annotate_cnv.refseq_genes.bcftools_view.wholegene.CNVS.vcf.gz"
   - name: "cnvkit_vcf_tbi"
     output: "results/{sample}/cnv_sv/{sample}.cnv.vcf.gz.tbi"
-    input: "cnv_sv/cnvkit_vcf/{sample}_N.vcf.gz.tbi"
-  - name: "cnvkit_scatter_plot"
-    output: "results/{sample}/cnv_sv/{sample}.cnvkit.scatter.png"
-    input: "cnv_sv/cnvkit_scatter/{sample}_N.png"
+    input: "cnv_sv/cnvkit_vcf/{sample}_N.annotate_cnv.refseq_genes.bcftools_view.wholegene.CNVS.vcf.gz.tbi"
   - name: "cnvkit_report_html"
     output: "results/{sample}/cnv_sv/{sample}.cnv_report.html"
     input: "reports/cnv_html_report/{sample}_N.pathology.cnv_report.html"
@@ -78,4 +71,4 @@ files:
     input: "qc/multiqc/multiqc_pacbio_twist_cancer.html"
   - name: QC xlsx-report
     input: qc/xlsx_report/{sample}_N.xlsx
-    output: "results/{sample}/{sample}_coveage_report.xlsx"
+    output: "results/{sample}/{sample}_coverage_report.xlsx"

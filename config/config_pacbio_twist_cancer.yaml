@@ -35,7 +35,7 @@ bcftools_view_snps:
   extra: " "
 
 bcftools_view_cnvs:
-  CNVS: " -e 'INFO/SVTYPE=\"COPY_NORMAL\"' "
+  CNVS: " -e 'INFO/SVTYPE=\"COPY_NORMAL\" "
   extra: " "
 
 cnv_html_report:
@@ -46,19 +46,21 @@ cnvkit_batch:
   container: "docker://etal/cnvkit:0.9.11"
   extra: " --segment-method hmm-germline "
   method: "hybrid"
-  normal_reference: "{{PIPELINE_REF_DATA}}/cnvkit.PoN.cnn"
+  normal_reference: "{{PIPELINE_REF_DATA}}/cnvkit.PoN.5kb_target.1Mb_antitarget.cnn"
 
 cnvkit_call:
   container: "docker://etal/cnvkit:0.9.11"
-  extra: "--filter ci -t=-1.1,-0.4,0.3,0.7"
+  filter: "ci"
+  extra: "-t=-1.1,-0.4,0.3,0.7"
 
 cnvkit_vcf:
   hom_del_limit: 0.9330329915368074
   het_del_limit: 1.515716566510398
   dup_limit: 2.4622888266898326
 
-cnvkit_scatter:
+cnvkit_segment:
   container: "docker://etal/cnvkit:0.9.11"
+  method: "hmm-germline"
 
 cnvkit_segmetrics:
   container: "docker://etal/cnvkit:0.9.11"
@@ -74,7 +76,6 @@ export_qc_bedtools_intersect:
 
 export_qc_bedtools_intersect_pgrs:
   extra: " -wb "
-
 
 general_report: "config/report.yaml"
 
@@ -108,7 +109,7 @@ picard_collect_hs_metrics:
 merge_cnv_json:
   germline_vcf: "snv_indels/deepvariant/{sample}_{type}.fix_af.bcftools_view.SNPS.vcf.gz"
   filtered_cnv_vcfs: 
-    - cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.CNVS.vcf.gz
+    - cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.wholegene.CNVS.vcf.gz
   unfiltered_cnv_vcfs: 
     - cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.vcf.gz
   annotations: 

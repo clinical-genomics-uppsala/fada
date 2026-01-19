@@ -15,6 +15,34 @@ properties:
   default_container:
     type: string
     description: name or path to a default docker/singularity container
+  
+  bedtools_intersect:
+    type: object
+    description: parameters for bedtools_intersect
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters that should be forwarded
+
+  cnvkit_segment:
+    type: object
+    description: parameters for cnvkit_segment
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters that should be forwarded
 
 
   picard_bed_to_interval_list:

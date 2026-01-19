@@ -1,5 +1,47 @@
 # Softwares used in the fada module
 
+## [bedtools_intersect](url_to_tool)
+Introduction to bedtools_intersect
+
+### :snake: Rule
+
+#SNAKEMAKE_RULE_SOURCE__bedtools__bedtools_intersect#
+
+#### :left_right_arrow: input / output files
+
+#SNAKEMAKE_RULE_TABLE__bedtools__bedtools_intersect#
+
+### :wrench: Configuration
+
+#### Software settings (`config.yaml`)
+
+#CONFIGSCHEMA__bedtools_intersect#
+
+#### Resources settings (`resources.yaml`)
+
+#RESOURCESSCHEMA__bedtools_intersect#
+
+## [cnvkit_segment](url_to_tool)
+Introduction to cnvkit_segment
+
+### :snake: Rule
+
+#SNAKEMAKE_RULE_SOURCE__cnvkit__cnvkit_segment#
+
+#### :left_right_arrow: input / output files
+
+#SNAKEMAKE_RULE_TABLE__cnvkit__cnvkit_segment#
+
+### :wrench: Configuration
+
+#### Software settings (`config.yaml`)
+
+#CONFIGSCHEMA__cnvkit_segment#
+
+#### Resources settings (`resources.yaml`)
+
+#RESOURCESSCHEMA__cnvkit_segment#
+
 ## [picard_bed_to_interval_list](url_to_tool)
 Introduction to picard_bed_to_interval_list
 
@@ -190,3 +232,4 @@ Introduction to add_vcf_ref
 #### Resources settings (`resources.yaml`)
 
 #RESOURCESSCHEMA__add_vcf_ref#
+

@@ -5,6 +5,7 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/bedtools.smk"
 include: "rules/add_vcf_ref.smk"
 include: "rules/cnvkit.smk"
 include: "rules/samtools.smk"
@@ -40,6 +41,9 @@ if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
     ruleorder: _copy_sniffles2_vcf_tbi > annotation_tabix_vcf
     ruleorder: _copy_paraphase_vcf_tbi > annotation_tabix_vcf
     ruleorder: _copy_deepvariant_phased_tbi > annotation_tabix_vcf
+
+
+if config.get("pipeline") in ["pacbio_twist_cancer"]:
     ruleorder: _copy_cnvkit_vcf_tbi > annotation_tabix_vcf
 
 
@@ -142,7 +146,7 @@ use rule * from cnv_sv as cnv_sv_*
 
 use rule cnvkit_call from cnv_sv as cnv_sv_cnvkit_call with:
     input:
-        segment="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cns",
+        segment="cnv_sv/cnvkit_segment/{sample}_{type}.cns",
         vcf="snv_indels/deepvariant/{sample}_{type}.fix_af.bcftools_view.SNPS.vcf.gz",
     output:
         segment=temp("cnv_sv/cnvkit_call/{sample}_{type}.loh.cns"),
@@ -169,13 +173,6 @@ use rule cnvkit_vcf from cnv_sv as cnv_sv_cnvkit_vcf with:
             "cnv_sv/cnvkit_vcf/{sample}_{type}.vcf.benchmark.tsv",
             config.get("cnvkit_vcf", {}).get("benchmark_repeats", 1),
         )
-
-
-use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter with:
-    input:
-        segments="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
-        segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
-        vcf="snv_indels/deepvariant/{sample}_{type}.merged.bcftools_view.SNPS.vcf.gz",
 
 
 use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call with:
@@ -294,8 +291,8 @@ use rule hiphase from snv_indels as snv_indels_hiphase with:
         ref=config.get("reference", {}).get("fasta", ""),
         snv_vcf="snv_indels/deepvariant/{sample}_{type}.merged.vcf.gz",
         snv_tbi="snv_indels/deepvariant/{sample}_{type}.merged.vcf.gz.tbi",
-        sv_vcf="cnv_sv/sawfish_joint_call_single/{sample}_{type}.vcf.gz" if config.get("hiphase", {}).get("sv_caller", False) else [],
-        sv_tbi="cnv_sv/sawfish_joint_call_single/{sample}_{type}.vcf.gz.tbi" if config.get("hiphase", {}).get("sv_caller", False) else [],
+        sv_vcf="cnv_sv/pbsv/{sample}_{type}.vcf.gz" if config.get("hiphase", {}).get("sv_caller", False) else [],
+        sv_tbi="cnv_sv/pbsv/{sample}_{type}.vcf.gz.tbi" if config.get("hiphase", {}).get("sv_caller", False) else [],
         str_vcf="cnv_sv/trgt/{sample}_{type}.vcf.gz" if config.get("hiphase", {}).get("str_caller", False) else [],
         str_tbi="cnv_sv/trgt/{sample}_{type}.vcf.gz.tbi" if config.get("hiphase", {}).get("str_caller", False) else [],
 
