@@ -9,14 +9,14 @@ rule bedtools_intersect_cnvkit:
         left="cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.CNVS.vcf.gz",
         right=config["reference"]["design_genes_bed"],
     output:
-        vcf="cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.wholegene.CNVS.vcf",
+        vcf="cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.gene.CNVS.vcf",
     params:
         extra="-F 0.6 -u -header " + config.get("bedtools_intersect_cnvkit", {}).get("extra", ""),
     log:
-        "cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.wholegene.CNVS.vcf.log",
+        "cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.gene.CNVS.vcf.log",
     benchmark:
         repeat(
-            "cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.wholegene.CNVS.vcf.benchmark.tsv",
+            "cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.gene.CNVS.vcf.benchmark.tsv",
             config.get("bedtools_intersect_cnvkit", {}).get("benchmark_repeats", 1)
         )
     threads: config.get("bedtools_intersect_cnvkit", {}).get("threads", config["default_resources"]["threads"])
@@ -29,6 +29,6 @@ rule bedtools_intersect_cnvkit:
     container:
         config.get("bedtools_intersect_cnvkit", {}).get("container", config["default_container"])
     message:
-        "{rule}: export CNVS that include the whole target gene from {input.left} based on {input.right}"
+        "{rule}: export CNVS that include the majority of the target gene from {input.left} based on {input.right}"
     wrapper:
         "v1.32.0/bio/bedtools/intersect"

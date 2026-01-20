@@ -30,12 +30,20 @@ reference:
 annotate_cnv:
   refseq_genes: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/expected_capture_targets_covered_CGU_InheritedCancer_v4_LRTE-95759153_annotated_sorted_hg38.bed"
 
+bcftools_view_deepvariant:
+  PASS: " --apply-filter PASS "
+  extra: " "
+
 bcftools_view_snps:
   SNPS: " --apply-filter PASS -v snps "
   extra: " "
 
 bcftools_view_cnvs:
-  CNVS: " -e 'INFO/SVTYPE=\"COPY_NORMAL\" "
+  CNVS: " -e 'INFO/SVTYPE=\"COPY_NORMAL\"'"
+  extra: " "
+
+bcftools_view_svs:
+  SVS: " --apply-filter PASS "
   extra: " "
 
 cnv_html_report:
@@ -109,7 +117,7 @@ picard_collect_hs_metrics:
 merge_cnv_json:
   germline_vcf: "snv_indels/deepvariant/{sample}_{type}.fix_af.bcftools_view.SNPS.vcf.gz"
   filtered_cnv_vcfs: 
-    - cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.wholegene.CNVS.vcf.gz
+    - cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.gene.CNVS.vcf.gz
   unfiltered_cnv_vcfs: 
     - cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.vcf.gz
   annotations: 
@@ -179,3 +187,12 @@ svdb_merge:
     - name: pathology
       cnv_caller:
         - cnvkit
+
+svdb_merge_callers:
+  container: "docker://hydragenetics/svdb:2.8.2"
+  overlap: 0.6
+  priority: "sawfish,cnvkit"
+  extra: "--pass_only --no_intra "
+  sv_caller:
+    - sawfish
+    - cnvkit

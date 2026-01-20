@@ -227,6 +227,28 @@ def get_haplotagged_bam(wildcards):
 
     return (bam_input, bai_input)
 
+SV_VCFS = {
+    "sawfish": "cnv_sv/sawfish_joint_call_single/{sample}_{type}.bcftools_view.SVS.vcf.gz",
+    "cnvkit": "cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.gene.CNVS.vcf.gz",
+    "sniffles2": "cnv_sv/sniffles2_call/{sample}_{type}.bcftools_view.SVS.vcf.gz",
+}
+
+def vcfs_for_svdb_merge(wildcards, add_suffix=False):
+
+    vcf_input = config.get("svdb_merge_callers", {}).get("sv_caller", [])
+    vcfs_with_suffix = []
+
+    for caller in vcf_input:
+        if caller not in SV_VCFS:
+            sys.exit(f"SV caller {caller} not recognized for svdb merge")
+        input_vcf = SV_VCFS[caller].format(sample=wildcards.sample, type=wildcards.type)
+        if not add_suffix:
+            vcfs_with_suffix.append(input_vcf)
+        else:
+            vcfs_with_suffix.append(f"{input_vcf}:{caller}")
+
+    return vcfs_with_suffix
+
 
 def get_trgt_loci(wildcards):
     trgt_bed = config.get("trgt_genotype", {}).get("bed", "")

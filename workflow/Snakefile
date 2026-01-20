@@ -27,24 +27,24 @@ rule all:
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
 ruleorder: samtools_view_on_target > alignment_samtools_index
-ruleorder: cnv_sv_bgzip > annotation_bgzip_vcf
-ruleorder: cnv_sv_tabix > annotation_tabix_vcf
+# ruleorder: cnv_sv_bgzip > annotation_bgzip_vcf
+# ruleorder: cnv_sv_tabix > annotation_tabix_vcf
 
 
 if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
-
     ruleorder: cnv_sv_sawfish_joint_call_single > cnv_sv_tabix
-    ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
-    ruleorder: snv_indels_tabix > annotation_tabix_vcf
-    ruleorder: cnv_sv_sawfish_joint_call_single > annotation_tabix_vcf
-    ruleorder: _copy_sawfish_vcf_tbi > annotation_tabix_vcf
-    ruleorder: _copy_sniffles2_vcf_tbi > annotation_tabix_vcf
-    ruleorder: _copy_paraphase_vcf_tbi > annotation_tabix_vcf
-    ruleorder: _copy_deepvariant_phased_tbi > annotation_tabix_vcf
+    # ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
+    # ruleorder: snv_indels_tabix > annotation_tabix_vcf
+    # ruleorder: cnv_sv_sawfish_joint_call_single > annotation_tabix_vcf
+    # ruleorder: _copy_sawfish_vcf_tbi > annotation_tabix_vcf
+    # ruleorder: _copy_sniffles2_vcf_tbi > annotation_tabix_vcf
+    # ruleorder: _copy_paraphase_vcf_tbi > annotation_tabix_vcf
+    # ruleorder: _copy_deepvariant_phased_tbi > annotation_tabix_vcf
 
 
-if config.get("pipeline") in ["pacbio_twist_cancer"]:
-    ruleorder: _copy_cnvkit_vcf_tbi > annotation_tabix_vcf
+# if config.get("pipeline") in ["pacbio_twist_cancer"]:
+#     ruleorder: _copy_cnvkit_vcf_tbi > annotation_tabix_vcf
+#     ruleorder: _copy_cnv_sv_vcf_tbi > annotation_tabix_vcf
 
 
 module annotation:
@@ -54,7 +54,7 @@ module annotation:
         config
 
 
-use rule * from annotation as annotation_*
+use rule * from annotation exclude bgzip_vcf, tabix_vcf as annotation_*
 
 
 use rule stranger from annotation as annotation_stranger with:
@@ -196,6 +196,26 @@ use rule sniffles2_call from cnv_sv as cnv_sv_sniffles2_call_mosaic with:
         snf="cnv_sv/sniffles2_call_mosaic/{sample}_{type}.snf",
 
 
+use rule svdb_merge from cnv_sv as cnv_sv_svdb_merge_callers with:
+    input:
+        vcfs=vcfs_for_svdb_merge,
+    output:
+        vcf=temp("cnv_sv/svdb_merge_callers/{sample}_{type}.merged.vcf"),
+    params:
+        extra=config.get("svdb_merge_callers", {}).get("extra", ""),
+        overlap=config.get("svdb_merge_callers", {}).get("overlap", 0.6),
+        bnd_distance=config.get("svdb_merge_callers", {}).get("bnd_distance", 10000),
+        priority=config.get("svdb_merge_callers", {}).get("priority", ""),
+        vcfs=lambda wildcards, input: vcfs_for_svdb_merge(wildcards, add_suffix=True),
+    log:
+        "cnv_sv/svdb_merge_callers/{sample}_{type}.merged.vcf.log",
+    benchmark:
+        repeat(
+            "cnv_sv/svdb_merge_callers/{sample}_{type}.merged.benchmark.tsv",
+            config.get("svdb_merge_callers", {}).get("benchmark_repeats", 1),
+        )
+
+
 use rule trgt_genotype from cnv_sv as cnv_sv_trgt_genotype with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
@@ -236,6 +256,15 @@ use rule bcftools_view from filtering as filtering_bcftools_view_snps with:
         + config.get("bcftools_view_snps", {}).get(wildcards.tag, ""),
     wildcard_constraints:
         tag="SNPS",
+
+
+use rule bcftools_view from filtering as filtering_bcftools_view_deepvariant with:
+    params:
+        extra=lambda wildcards: config.get("bcftools_view_deepvariant", {}).get("extra", "")
+        + " "
+        + config.get("bcftools_view_deepvariant", {}).get(wildcards.tag, ""),
+    wildcard_constraints:
+        tag="PASS",
     
 
 use rule bcftools_view from filtering as filtering_bcftools_view_cnvs with:
@@ -245,8 +274,16 @@ use rule bcftools_view from filtering as filtering_bcftools_view_cnvs with:
         + config.get("bcftools_view_cnvs", {}).get(wildcards.tag, ""),
     wildcard_constraints:
         tag="CNVS",
-   
 
+
+use rule bcftools_view from filtering as filtering_bcftools_view_svs with:
+    params:
+        extra=lambda wildcards: config.get("bcftools_view_svs", {}).get("extra", "")
+        + " "
+        + config.get("bcftools_view_svs", {}).get(wildcards.tag, ""),
+    wildcard_constraints:
+        tag="SVS",
+   
 
 module prealignment:
     snakefile:
