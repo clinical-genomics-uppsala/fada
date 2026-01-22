@@ -1,21 +1,43 @@
-site_name: fada
+site_name: Fada
+repo_url: https://github.com/clinical-genomics-uppsala/fada
 nav:
   - Overview:
     - Introduction: index.md
-    - Pipeline overview: overview.md
-    - Result files: results_files.md
-  - Setting up and Running the pipeline:
-    - Setup and configuration: setup.md
-    - Running pipeline: running.md
+    - Usage Guide: usage.md
+    - Workflows:
+      - PacBio Twist Cancer: pb_twist_cancer.md
+      - PacBio WGS: pb_wgs.md
+      - ONT STR: ont_str.md
+  - Development:
+    - Documentation: documentation.md
   - Pipeline specific rules:
     - Rule list: softwares.md
-  - Output- Project Info:
-    - Changelog: changelog.md
-    - License: license.md
   
 
 theme:
-    name: readthedocs
+    name: material
+    palette:
+
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default 
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
 extra_css: [extra.css]
 markdown_extensions:
   - abbr
@@ -28,15 +50,15 @@ markdown_extensions:
         - includes/abbreviations.md
       base_path: "docs/"
       url_download: "True"
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.emoji
   - toc:
       permalink: True
 
 plugins:
   - include-markdown
   - search
+  - macros:
+      module_name: docs/main
   - yaml-schema:
       yaml_files:
         - file: "workflow/schemas/config.schema.yaml"

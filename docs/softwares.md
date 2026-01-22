@@ -1,15 +1,15 @@
 # Softwares used in the fada module
 
-## [bedtools_intersect](url_to_tool)
-Introduction to bedtools_intersect
+## [bedtools_intersect_cnvkit](url_to_tool)
+Introduction to bedtools_intersect_cnvkit
 
 ### :snake: Rule
 
-#SNAKEMAKE_RULE_SOURCE__bedtools__bedtools_intersect#
+#SNAKEMAKE_RULE_SOURCE__bedtools__bedtools_intersect_cnvkit#
 
 #### :left_right_arrow: input / output files
 
-#SNAKEMAKE_RULE_TABLE__bedtools__bedtools_intersect#
+#SNAKEMAKE_RULE_TABLE__bedtools__bedtools_intersect_cnvkit#
 
 ### :wrench: Configuration
 
