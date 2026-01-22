@@ -2,7 +2,7 @@
 
 
 
-rule cnvkit_segment1:
+rule cnvkit_segment:
     input:
         log2_bins="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
         snps="snv_indels/deepvariant/{sample}_{type}.fix_af.bcftools_view.SNPS.vcf.gz",
