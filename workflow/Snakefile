@@ -207,6 +207,8 @@ use rule svdb_merge from cnv_sv as cnv_sv_svdb_merge_callers with:
         bnd_distance=config.get("svdb_merge_callers", {}).get("bnd_distance", 10000),
         priority=config.get("svdb_merge_callers", {}).get("priority", ""),
         vcfs=lambda wildcards, input: vcfs_for_svdb_merge(wildcards, add_suffix=True),
+    container:
+        config.get("svdb_merge_callers", {}).get("container", config["default_container"])
     log:
         "cnv_sv/svdb_merge_callers/{sample}_{type}.merged.vcf.log",
     benchmark:
