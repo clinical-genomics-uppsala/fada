@@ -24,11 +24,12 @@ All results are organized under `results/{sample}/` with the following directory
 ```
 results/
 ├── {sample}/
-│   ├── cram/                   # Alignment file
-│   ├── snv_indels/             # Small variant calls
-│   ├── cnv_sv/                 # Copy number and structural variants
-│   └── paraphase/              # Paralog-specific variant analysis
-├── multiqc_pacbio_twist_cancer.html  # Quality control report
+│   ├── {sample}_coverage_report.xlsx  # excel coverage report
+│   ├── cram/                          # Alignment file
+│   ├── snv_indels/                    # Small variant calls
+│   ├── cnv_sv/                        # Copy number and structural variants
+│   └── paraphase/                     # Paralog-specific variant analysis
+├── multiqc_pacbio_twist_cancer.html   # Quality control report
 ```
 
 ## Alignment Files (CRAM)
@@ -49,7 +50,7 @@ results/
 
 - **File**: `results/{sample}/snv_indels/{sample}.hard-filtered.vcf.gz.tbi`
 - **Description**: Tabix index for the hard-filtered VCF
-- **Use**: Enables efficient querying of specific genomic regions
+
 
 ### Soft-Filtered Variants (with Phasing)
 - **File**: `results/{sample}/snv_indels/{sample}.deepvariant.soft-filtered.vcf.gz`
@@ -57,7 +58,7 @@ results/
 
 - **File**: `results/{sample}/snv_indels/{sample}.deepvariant.soft-filtered.vcf.gz.tbi`
 - **Description**: Tabix index for the soft-filtered VCF
-- **Use**: Enables efficient querying of specific genomic regions
+
 
 ## Copy Number Variants & Structural Variants
 
@@ -82,8 +83,6 @@ results/
 ### Sawfish Results
 - **File**: `results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz`
 - **Description**: Structural variants called by Sawfish
-- **Use**: High-precision structural variant detection
-- **Content**: Structural variants (deletions, duplications, inversions, translocations)
 
 - **File**: `results/{sample}/cnv_sv/{sample}.sawfish.vcf.gz.tbi`
 - **Description**: Tabix index for the Sawfish VCF
@@ -110,7 +109,6 @@ results/
 
 - **File**: `results/{sample}/paraphase/{sample}.paraphase.bam.bai`
 - **Description**: Index file for the Paraphase BAM
-- **Use**: Enables rapid access for visualization and analysis
 
 ### Analysis Results
 - **File**: `results/{sample}/paraphase/{sample}.paraphase.json`
