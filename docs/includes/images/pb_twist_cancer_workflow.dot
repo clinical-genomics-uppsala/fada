@@ -108,7 +108,6 @@ digraph fada_simplified {
     // Phasing
     pbmm2 -> hiphase [color="grey"];
     deepvariant -> hiphase [color="grey"];
-    sawfish -> hiphase [color="grey"];
     hiphase -> samtools_view [color="grey"];
     samtools_view -> cram [color="grey"];
     
