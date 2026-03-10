@@ -11,6 +11,7 @@ include: "rules/cnvkit.smk"
 include: "rules/samtools.smk"
 include: "rules/strkit.smk"
 include: "rules/strdust.smk"
+include: "rules/straglr.smk"
 include: "rules/extract_read_metrics.smk"
 
 
