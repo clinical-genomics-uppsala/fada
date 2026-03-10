@@ -50,7 +50,7 @@ straglr:
   bed: "{{PIPELINE_REF_DATA}}/ont_target_str/STRchive-disease-loci-v2.16.0.hg38.straglr.in_design.filtered.bed"
 
 strdust:
-  container: "docker://hydragenetics/strdust:0.8.2"
+  container: "docker://hydragenetics/strdust:0.16.0"
   extra: "--somatic  --unphased "
 
 strkit_call:
