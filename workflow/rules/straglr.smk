@@ -7,7 +7,7 @@ __license__ = "GPL-3"
 rule straglr:
     input:
         bam="alignment/minimap2_align/{sample}_{type}.bam",
-        loci=config.get("reference", {}).get("straglr_loci", ""),
+        loci=config.get("straglr", {}).get("bed", ""),
         ref=config.get("reference", {}).get("fasta", ""),
     output:
         vcf="cnv_sv/straglr/{sample}_{type}.vcf",
