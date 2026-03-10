@@ -12,6 +12,7 @@ rule strkit_call:
         repeats=config.get("strkit_call", {}).get("bed", ""),
     output:
         vcf="cnv_sv/strkit_call/{sample}_{type}.vcf",
+        json="cnv_sv/strkit_call/{sample}_{type}.json",
     params:
         extra=config.get("strkit_call", {}).get("extra", ""),
         sample_id=lambda wildcards: f"{wildcards.sample}_{wildcards.type}",
@@ -39,4 +40,6 @@ rule strkit_call:
         "--sample-id {params.sample_id} "
         "--loci {input.repeats} "
         "--vcf {output.vcf} "
+        "--json {output.json} "
+        "{params.extra} "
         "--processes {threads} &> {log}"

@@ -59,11 +59,17 @@ files:
 
   #STRs
   - name: "strdust_vcf"
-    output: "results/{sample}/STRs/{sample}.strdust.vcf"
-    input: "cnv_sv/strdust/{sample}_N.vcf"
+    output: "results/{sample}/STRs/{sample}.strdust.vcf.gz"
+    input: "cnv_sv/strdust/{sample}_N.vcf.gz"
   - name: "strkit_vcf"
-    output: "results/{sample}/STRs/{sample}.strkit.vcf"
-    input: "cnv_sv/strkit_call/{sample}_N.vcf"
+    output: "results/{sample}/STRs/{sample}.strkit.vcf.gz"
+    input: "cnv_sv/strkit_call/{sample}_N.vcf.gz"
+  - name: "strkit_json"
+    output: "results/{sample}/STRs/{sample}.strkit.json"
+    input: "cnv_sv/strkit_call/{sample}_N.json"
+  - name: "straglr_vcf"
+    output: "results/{sample}/STRs/{sample}.straglr.vcf.gz"
+    input: "cnv_sv/straglr/{sample}_N.vcf.gz"
 
   
 
