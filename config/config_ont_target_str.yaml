@@ -56,7 +56,7 @@ strdust:
 strkit_call:
   container: "docker://ghcr.io/davidlougheed/strkit:0.24.2"
   bed: "{{PIPELINE_REF_DATA}}/ont_target_str/strkit_catalog.in_design.bed"
-  extra: "--targeted  --seed 183 --hq --realign"
+  extra: "--targeted  --seed 183 --hq --realign --count-kmers both"
 
 
 

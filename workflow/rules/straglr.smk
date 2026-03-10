@@ -40,4 +40,5 @@ rule straglr:
         "{input.ref} "
         "{params.prefix} "
         "--loci {input.loci} "
+        "--nprocs {threads} "
         "{params.extra}) &> {log}"
