@@ -10,17 +10,17 @@ rule straglr:
         loci=config.get("reference", {}).get("straglr_loci", ""),
         ref=config.get("reference", {}).get("fasta", ""),
     output:
-        vcf="straglr/{sample}_{type}_straglr_genotype.vcf",
-        tsv="straglr/{sample}_{type}_straglr_genotype.tsv",
-        bed="straglr/{sample}_{type}_straglr_genotype.bed",
+        vcf="cnv_sv/straglr/{sample}_{type}.vcf",
+        tsv="cnv_sv/straglr/{sample}_{type}.tsv",
+        bed="cnv_sv/straglr/{sample}_{type}.bed",
     params:
         extra=config.get("straglr", {}).get("extra", ""),
         prefix=lambda wildcards, output: "{}/{}_{}".format(os.path.split(output[0])[0], wildcards.sample, wildcards.type),
     log:
-        "straglr/{sample}_{type}.output.log",
+        "cnv_sv/straglr/{sample}_{type}.vcf.log",
     benchmark:
         repeat(
-            "straglr/{sample}_{type}.output.benchmark.tsv",
+            "cnv_sv/straglr/{sample}_{type}.vcf.benchmark.tsv",
             config.get("straglr", {}).get("benchmark_repeats", 1)
         )
     threads: config.get("straglr", {}).get("threads", config["default_resources"]["threads"])
