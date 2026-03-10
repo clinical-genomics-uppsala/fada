@@ -24,10 +24,10 @@ reference:
   pathogenic_repeats_bed: "{{PIPELINE_REF_DATA}}/pathogenic_repeats.hg38.bed"
 
 minimap2_index:
-  container: "docker://hydragenetics/minimap2:2.26"
+  container: "docker://hydragenetics/minimap2:2.30"
 
 minimap2_align:
-  container: "docker://hydragenetics/minimap2:2.26"
+  container: "docker://hydragenetics/minimap2:2.30"
 
 cramino:
   container: "docker://hydragenetics/cramino:0.14.5"
