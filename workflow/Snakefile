@@ -52,7 +52,7 @@ use rule stranger from annotation as annotation_stranger with:
         vcf="cnv_sv/trgt_genotype/{sample}_{type}.vcf.gz",
         cat=config.get("stranger", {}).get("catalog", ""),
     output:
-        vcf=temp("cnv_sv/trgt_genotype/{sample}_{type}.trgt.vcf"),
+        vcf=temp("cnv_sv/trgt_genotype/{sample}_{type}.trgt.stranger.vcf"),
 
 
 module alignment:
