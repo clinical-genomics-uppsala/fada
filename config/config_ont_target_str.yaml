@@ -18,7 +18,7 @@ minimap2_index:
 minimap2_align:
   container: "docker://hydragenetics/minimap2:2.30"
   preset: "lr:hq"
-  extra: "-Y "
+  extra: "-Y --MD --cs=short"
 
 mosdepth_bed:
   container: "docker://hydragenetics/mosdepth:0.3.2"

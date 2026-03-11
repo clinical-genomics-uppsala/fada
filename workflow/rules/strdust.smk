@@ -6,8 +6,8 @@ __license__ = "GPL-3"
 
 rule strdust:
     input:
-        bam="alignment/minimap2_align/{sample}_{type}.bam",
-        bai="alignment/minimap2_align/{sample}_{type}.bam.bai",
+        bam=lambda wildcards: get_input_aligned_bam(wildcards, config)[0],
+        bai=lambda wildcards: get_input_aligned_bam(wildcards, config)[1],
         fasta=config.get("reference", {}).get("fasta", ""),
         repeats=config.get("reference", {}).get("str_bed", ""),
     output:
