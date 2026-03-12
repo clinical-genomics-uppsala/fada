@@ -13,7 +13,8 @@ reference:
 
 atarva_genotype:
   container: "docker://hydragenetics/atarva:0.6.0"
-  bed: "{{PIPELINE_REF_DATA}}/ont_target_str/STRchive-disease-loci-v2.16.0.hg38.straglr.in_design.filtered.bed"
+  bed: "{{PIPELINE_REF_DATA}}/ont_target_str/STRchive-disease-loci-v2.16.0.hg38.atarva.in_design.bed.gz"
+  bed_tbi: "{{PIPELINE_REF_DATA}}/ont_target_str/STRchive-disease-loci-v2.16.0.hg38.atarva.in_design.bed.gz.tbi"
 
 minimap2_index:
   container: "docker://hydragenetics/minimap2:2.30"

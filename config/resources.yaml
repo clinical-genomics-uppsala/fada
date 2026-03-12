@@ -75,6 +75,9 @@ strkit_call:
   mem_per_cpu: 6144
   threads: 10
 
-
+atarva_genotype:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
 
 

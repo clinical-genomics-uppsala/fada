@@ -10,6 +10,7 @@ rule atarva_genotype:
         bai=lambda wildcards: get_input_aligned_bam(wildcards, config)[1],
         fasta=config.get("reference", {}).get("fasta", ""),
         regions=config.get("atarva_genotype", {}).get("bed", ""),
+	regions_tbi=config.get("atarva_genotype", {}).get("bed_tbi", ""),
     output:
         vcf="cnv_sv/atarva_genotype/{sample}_{type}.vcf",
     params:
