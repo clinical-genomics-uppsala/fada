@@ -52,9 +52,9 @@ cnv_html_report:
 
 cnvkit_batch:
   container: "docker://etal/cnvkit:0.9.11"
-  extra: " --segment-method hmm-germline "
+  extra: " --segment-method cbs "
   method: "hybrid"
-  normal_reference: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/cnvkit.PoN.5kb_target.1Mb_antitarget.cnn"
+  normal_reference: "{{PIPELINE_REF_DATA}}/pb_twist_cancer/cnvkit.PoN.2.5kb_target.1Mb_antitarget.cnn"
 
 cnvkit_call:
   container: "docker://etal/cnvkit:0.9.11"
@@ -68,7 +68,7 @@ cnvkit_vcf:
 
 cnvkit_segment:
   container: "docker://etal/cnvkit:0.9.11"
-  method: "hmm-germline"
+  method: "cbs"
 
 cnvkit_segmetrics:
   container: "docker://etal/cnvkit:0.9.11"
