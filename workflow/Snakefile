@@ -253,12 +253,11 @@ module filtering:
 
 use rule bcftools_view from filtering as filtering_bcftools_view_snps with:
     params:
-        extra=lambda wildcards: config.get("bcftools_view_snvs", {}).get("extra", "")
-        + " "
-        + config.get("bcftools_view_snps", {}).get(wildcards.tag, ""),
+        extra=lambda wildcards: config.get("bcftools_view_snps", {}).get("extra", "")
+         " "
+         config.get("bcftools_view_snps", {}).get(wildcards.tag, ""),
     wildcard_constraints:
         tag="SNPS",
-
 
 use rule bcftools_view from filtering as filtering_bcftools_view_deepvariant with:
     params:

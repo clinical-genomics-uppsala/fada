@@ -7,7 +7,7 @@ __license__ = "GPL-3"
 rule bedtools_intersect_cnvkit:
     input:
         left="cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.CNVS.vcf.gz",
-        right=config["reference"]["design_genes_bed"],
+        right=config.get("reference", {}).get("design_genes_bed", ""),
     output:
         vcf="cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.gene.CNVS.vcf",
     params:

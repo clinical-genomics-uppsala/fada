@@ -7,7 +7,7 @@ You can find the github repository at
 <br />
 <br />
 
-Fada is a [snakemake](https://snakemake.readthedocs.io/en/stable/) pipeline that is built using modules from [Hydra Genetics](https://github.com/hydra-genetics/) to process long-read `.bam` files from Pacbio Revio and Oxford Nanapore Technologies (ONT) R10 data.
+Fada is a [snakemake](https://snakemake.readthedocs.io/en/stable/) pipeline that is built using modules from [Hydra Genetics](https://github.com/hydra-genetics/) to process long-read `.bam` files from Pacbio Revio and Oxford Nanopore Technologies (ONT) R10 data.
 
 If Snakemake is new to you a good place to start is doing the [snakemake tutorial](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html).
 
@@ -23,14 +23,14 @@ Each module is maintained as a separate repository within the [Hydra-Genetics or
 ## Supported Workflows
 
 ### PacBio Twist Cancer Panel
-Targeted enrichement analysis for an hereditary cancer panel
+Targeted enrichment analysis for a hereditary cancer panel
 
     - Targeted SNV INDEL calling
     - CNV detection 
     - SV calling in target regions
 
 ### PacBio Whole Genome Sequencing *(under development)*
-**This pipeline is currently used only for testing and development, we recommend the [GMS Nallo](https://github.com/genomic-medicine-sweden/nallo) pipeline for a comprehensive long read WGS rare-disease pipeline **
+**This pipeline is currently used only for testing and development, we recommend the [GMS Nallo](https://github.com/genomic-medicine-sweden/nallo) pipeline for a comprehensive long-read WGS rare-disease pipeline**
 
 WGS analysis including:
 

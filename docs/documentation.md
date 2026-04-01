@@ -16,7 +16,7 @@ To generate the Read the Docs (RTD) HTML documentation locally:
 
 The fada pipeline documentation is hosted online and automatically updated with each release:
 
-**Documentation URL**: [https://fada.readthedocs.io/en/latest/]
+**Documentation URL**: [https://fada.readthedocs.io/en/latest/](https://fada.readthedocs.io/en/latest/)
 
 The online documentation includes all the same content available locally and is the recommended way to access the most up-to-date information about the pipeline.
 

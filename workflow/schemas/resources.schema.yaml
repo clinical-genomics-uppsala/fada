@@ -22,9 +22,9 @@ properties:
         description: default max execution time for a rule
     
   
-  bedtools_intersect:
+  bedtools_intersect_cnvkit:
     type: object
-    description: resource definitions for bedtools_intersect
+    description: resource definitions for bedtools_intersect_cnvkit
     properties:
       mem_mb:
         type: integer

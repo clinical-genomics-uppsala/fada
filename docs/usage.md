@@ -19,7 +19,7 @@ This guide provides comprehensive instructions for running the fada pipeline usi
     pip install -r requirements.txt
     ```
 
-2. For container-based execution, make sire that Singularity/Apptainer is installed.
+2. For container-based execution, make sure that Singularity/Apptainer is installed.
    
 
 ## Workflow Types
