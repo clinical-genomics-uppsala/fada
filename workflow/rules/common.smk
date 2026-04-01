@@ -234,8 +234,6 @@ SV_VCFS = {
 }
 
 def vcfs_for_svdb_merge(wildcards, add_suffix=False):
-
-def vcfs_for_svdb_merge(wildcards, add_suffix=False):
     vcf_input = config.get("svdb_merge_callers", {}).get("sv_caller")
     if not isinstance(vcf_input, list) or len(vcf_input) == 0:
         sys.exit("svdb_merge_callers.sv_caller must be a non-empty list")
