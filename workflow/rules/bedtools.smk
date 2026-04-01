@@ -11,7 +11,7 @@ rule bedtools_intersect_cnvkit:
     output:
         vcf="cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.gene.CNVS.vcf",
     params:
-        extra="-F 0.6 -u -header " + config.get("bedtools_intersect_cnvkit", {}).get("extra", ""),
+        extra=f"-F 0.6 -u -header {config.get('bedtools_intersect_cnvkit', {}).get('extra', '')}",
     log:
         "cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.gene.CNVS.vcf.log",
     benchmark:
