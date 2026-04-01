@@ -27,24 +27,10 @@ rule all:
 
 ruleorder: _copy_samtools_crai > compression_samtools_index
 ruleorder: samtools_view_on_target > alignment_samtools_index
-# ruleorder: cnv_sv_bgzip > annotation_bgzip_vcf
-# ruleorder: cnv_sv_tabix > annotation_tabix_vcf
 
 
 if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
     ruleorder: cnv_sv_sawfish_joint_call_single > cnv_sv_tabix
-    # ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
-    # ruleorder: snv_indels_tabix > annotation_tabix_vcf
-    # ruleorder: cnv_sv_sawfish_joint_call_single > annotation_tabix_vcf
-    # ruleorder: _copy_sawfish_vcf_tbi > annotation_tabix_vcf
-    # ruleorder: _copy_sniffles2_vcf_tbi > annotation_tabix_vcf
-    # ruleorder: _copy_paraphase_vcf_tbi > annotation_tabix_vcf
-    # ruleorder: _copy_deepvariant_phased_tbi > annotation_tabix_vcf
-
-
-# if config.get("pipeline") in ["pacbio_twist_cancer"]:
-#     ruleorder: _copy_cnvkit_vcf_tbi > annotation_tabix_vcf
-#     ruleorder: _copy_cnv_sv_vcf_tbi > annotation_tabix_vcf
 
 
 module annotation:
@@ -254,8 +240,8 @@ module filtering:
 use rule bcftools_view from filtering as filtering_bcftools_view_snps with:
     params:
         extra=lambda wildcards: config.get("bcftools_view_snps", {}).get("extra", "")
-         " "
-         config.get("bcftools_view_snps", {}).get(wildcards.tag, ""),
+         + " "
+         + config.get("bcftools_view_snps", {}).get(wildcards.tag, ""),
     wildcard_constraints:
         tag="SNPS",
 
