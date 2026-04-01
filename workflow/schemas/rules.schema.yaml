@@ -51,7 +51,7 @@ properties:
 
   bedtools_intersect_cnvkit:
     type: object
-    description: input and output parameters for bedtools_intersect
+    description: input and output parameters for bedtools_intersect_cnvkit
     properties:
       input:
         type: object

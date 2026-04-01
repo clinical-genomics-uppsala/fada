@@ -16,9 +16,9 @@ properties:
     type: string
     description: name or path to a default docker/singularity container
   
-  bedtools_intersect:
+  bedtools_intersect_cnvkit:
     type: object
-    description: parameters for bedtools_intersect
+    description: parameters for bedtools_intersect_cnvkit
     properties:
       benchmark_repeats:
         type: integer

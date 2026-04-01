@@ -85,7 +85,7 @@ export_qc_bedtools_intersect:
 export_qc_bedtools_intersect_pgrs:
   extra: " -wb "
 
-general_report: "config/report.yaml"
+general_report: "config/cnv_pacbio_twist_cancer.yaml"
 
 hiphase:
   container: "docker://hydragenetics/hiphase:1.4.5"

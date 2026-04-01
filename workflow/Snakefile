@@ -13,6 +13,7 @@ include: "rules/strkit.smk"
 include: "rules/strdust.smk"
 include: "rules/extract_read_metrics.smk"
 
+pipelines_with_cnv_reports = ["pacbio_twist_cancer"]
 
 if config.get("pipeline") == "pacbio_twist_cancer":
 
@@ -48,7 +49,7 @@ use rule stranger from annotation as annotation_stranger with:
         vcf="cnv_sv/trgt_genotype/{sample}_{type}.vcf.gz",
         cat=config.get("stranger", {}).get("catalog", ""),
     output:
-        vcf=temp("annotation/stranger/{sample}_{type}.trgt.vcf"),
+        vcf=temp("cnv_sv/trgt_genotype/{sample}_{type}.trgt.vcf"),
 
 
 module alignment:
@@ -445,38 +446,39 @@ use rule picard_collect_hs_metrics from qc as qc_picard_hs_metrics with:
         target_intervals="qc/picard_bed_to_interval_list/targets.interval_list",
 
 
-module reports:
-    snakefile:
-        get_module_snakefile(config, "hydra-genetics/reports", path="workflow/Snakefile", tag=config["modules"]["reports"])
-    config:
-        config
+if config.get("pipeline") in pipelines_with_cnv_reports:
+
+    module reports:
+        snakefile:
+            get_module_snakefile(config, "hydra-genetics/reports", path="workflow/Snakefile", tag=config["modules"]["reports"])
+        config:
+            config
+
+    use rule * from reports exclude all as reports_*
 
 
-use rule * from reports exclude all as reports_*
-
-
-use rule cnv_html_report from reports as reports_cnv_html_report with:
-    input:
-        json="reports/cnv_html_report/{sample}_{type}.{tc_method}.merged.json",
-        html_template=workflow.get_rule("reports_cnv_html_report").input.html_template,
-        js_files=[
-            workflow.get_rule("reports_cnv_html_report").input.js_files[0],
-            workflow.get_rule("reports_cnv_html_report").input.js_files[1],
-            workflow.get_rule("reports_cnv_html_report").input.js_files[2],
-            workflow.get_rule("reports_cnv_html_report").input.js_files[3],
-            workflow.get_rule("reports_cnv_html_report").input.js_files[4],
-            workflow.get_rule("reports_cnv_html_report").input.js_files[5],
-        ],
-        css_files=[
-            workflow.get_rule("reports_cnv_html_report").input.css_files[0],
-            workflow.get_rule("reports_cnv_html_report").input.css_files[1],
-        ],
-        extra_table_files=[t["path"] for t in config.get("cnv_html_report", {}).get("extra_tables", [])],
-    params:
-        extra_tables=config.get("cnv_html_report", {}).get("extra_tables", []),
-        include_table=config.get("cnv_html_report", {}).get("show_table", True),
-        include_cytobands=config.get("cnv_html_report", {}).get("cytobands", True),
-        tc=0,
-        tc_method=lambda wildcards: wildcards.tc_method,
-    output:
-        html=temp("reports/cnv_html_report/{sample}_{type}.{tc_method}.cnv_report.html"),
+    use rule cnv_html_report from reports as reports_cnv_html_report with:
+        input:
+            json="reports/cnv_html_report/{sample}_{type}.{tc_method}.merged.json",
+            html_template=workflow.get_rule("reports_cnv_html_report").input.html_template,
+            js_files=[
+                workflow.get_rule("reports_cnv_html_report").input.js_files[0],
+                workflow.get_rule("reports_cnv_html_report").input.js_files[1],
+                workflow.get_rule("reports_cnv_html_report").input.js_files[2],
+                workflow.get_rule("reports_cnv_html_report").input.js_files[3],
+                workflow.get_rule("reports_cnv_html_report").input.js_files[4],
+                workflow.get_rule("reports_cnv_html_report").input.js_files[5],
+            ],
+            css_files=[
+                workflow.get_rule("reports_cnv_html_report").input.css_files[0],
+                workflow.get_rule("reports_cnv_html_report").input.css_files[1],
+            ],
+            extra_table_files=[t["path"] for t in config.get("cnv_html_report", {}).get("extra_tables", [])],
+        params:
+            extra_tables=config.get("cnv_html_report", {}).get("extra_tables", []),
+            include_table=config.get("cnv_html_report", {}).get("show_table", True),
+            include_cytobands=config.get("cnv_html_report", {}).get("cytobands", True),
+            tc=0,
+            tc_method=lambda wildcards: wildcards.tc_method,
+        output:
+            html=temp("reports/cnv_html_report/{sample}_{type}.{tc_method}.cnv_report.html"),
