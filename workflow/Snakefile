@@ -13,6 +13,7 @@ include: "rules/strkit.smk"
 include: "rules/strdust.smk"
 include: "rules/extract_read_metrics.smk"
 
+
 pipelines_with_cnv_reports = ["pacbio_twist_cancer"]
 
 if config.get("pipeline") == "pacbio_twist_cancer":
@@ -31,6 +32,7 @@ ruleorder: samtools_view_on_target > alignment_samtools_index
 
 
 if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
+
     ruleorder: cnv_sv_sawfish_joint_call_single > cnv_sv_tabix
 
 
@@ -241,10 +243,11 @@ module filtering:
 use rule bcftools_view from filtering as filtering_bcftools_view_snps with:
     params:
         extra=lambda wildcards: config.get("bcftools_view_snps", {}).get("extra", "")
-         + " "
-         + config.get("bcftools_view_snps", {}).get(wildcards.tag, ""),
+        + " "
+        + config.get("bcftools_view_snps", {}).get(wildcards.tag, ""),
     wildcard_constraints:
         tag="SNPS",
+
 
 use rule bcftools_view from filtering as filtering_bcftools_view_deepvariant with:
     params:
@@ -253,7 +256,7 @@ use rule bcftools_view from filtering as filtering_bcftools_view_deepvariant wit
         + config.get("bcftools_view_deepvariant", {}).get(wildcards.tag, ""),
     wildcard_constraints:
         tag="PASS",
-    
+
 
 use rule bcftools_view from filtering as filtering_bcftools_view_cnvs with:
     params:
@@ -271,7 +274,7 @@ use rule bcftools_view from filtering as filtering_bcftools_view_svs with:
         + config.get("bcftools_view_svs", {}).get(wildcards.tag, ""),
     wildcard_constraints:
         tag="SVS",
-   
+
 
 module prealignment:
     snakefile:
@@ -455,7 +458,6 @@ if config.get("pipeline") in pipelines_with_cnv_reports:
             config
 
     use rule * from reports exclude all as reports_*
-
 
     use rule cnv_html_report from reports as reports_cnv_html_report with:
         input:

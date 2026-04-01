@@ -80,10 +80,10 @@ onstart:
         # - file_name_ending, default value: mqc_versions.yaml
         # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
         export_software_version_as_file(software_info, date_string=pipeline_name, directory="results/versions/software")
-        # print config dict as a file. Additional parameters that can be set
-        # output_file, default config
-        # output_directory, default = None, i.e no folder
-        # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
+    # print config dict as a file. Additional parameters that can be set
+    # output_file, default config
+    # output_directory, default = None, i.e no folder
+    # date_string, a string that will be added to the folder name to make it unique (preferably a timestamp)
     date_string = datetime.now().strftime("%Y%m%d")
     export_config_as_file(update_config, date_string=date_string, directory="results/versions")
 
@@ -227,11 +227,13 @@ def get_haplotagged_bam(wildcards):
 
     return (bam_input, bai_input)
 
+
 SV_VCFS = {
     "sawfish": "cnv_sv/sawfish_joint_call_single/{sample}_{type}.bcftools_view.SVS.vcf.gz",
     "cnvkit": "cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.gene.CNVS.vcf.gz",
     "sniffles2": "cnv_sv/sniffles2_call/{sample}_{type}.bcftools_view.SVS.vcf.gz",
 }
+
 
 def vcfs_for_svdb_merge(wildcards, add_suffix=False):
     vcf_input = config.get("svdb_merge_callers", {}).get("sv_caller")

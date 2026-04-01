@@ -17,7 +17,7 @@ rule bedtools_intersect_cnvkit:
     benchmark:
         repeat(
             "cnv_sv/cnvkit_vcf/{sample}_{type}.annotate_cnv.refseq_genes.bcftools_view.gene.CNVS.vcf.benchmark.tsv",
-            config.get("bedtools_intersect_cnvkit", {}).get("benchmark_repeats", 1)
+            config.get("bedtools_intersect_cnvkit", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("bedtools_intersect_cnvkit", {}).get("threads", config["default_resources"]["threads"])
     resources:
