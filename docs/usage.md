@@ -32,9 +32,10 @@ Each workflow requires specific samples and units input files:
 
 This can be created using [hydra-genetics create-input-files](https://hydra-genetics.readthedocs.io/en/latest/run_pipeline/create_sample_files/#usage)
 
-    - **PacBio Twist Cancer**: `samples_pacbio_twist_cancer.tsv`, `units_pacbio_twist_cancer.tsv`
-    - **PacBio WGS**: `samples_pacbio_wgs.tsv`, `units_pacbio_wgs.tsv`
-    - **ONT STR**: `samples_ont_str.tsv`, `units_ont_str.tsv`
+
+- **PacBio Twist Cancer**: `samples_pacbio_twist_cancer.tsv`, `units_pacbio_twist_cancer.tsv`
+- **PacBio WGS**: `samples_pacbio_wgs.tsv`, `units_pacbio_wgs.tsv`
+- **ONT STR**: `samples_ont_str.tsv`, `units_ont_str.tsv`
 
 ### 1. PacBio Twist Cancer Panel 
 

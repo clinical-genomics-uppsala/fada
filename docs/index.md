@@ -25,25 +25,28 @@ Each module is maintained as a separate repository within the [Hydra-Genetics or
 ### PacBio Twist Cancer Panel
 Targeted enrichment analysis for a hereditary cancer panel
 
-    - Targeted SNV INDEL calling
-    - CNV detection 
-    - SV calling in target regions
+
+- Targeted SNV INDEL calling
+- CNV detection 
+- SV calling in target regions
 
 ### PacBio Whole Genome Sequencing *(under development)*
 **This pipeline is currently used only for testing and development, we recommend the [GMS Nallo](https://github.com/genomic-medicine-sweden/nallo) pipeline for a comprehensive long-read WGS rare-disease pipeline**
 
 WGS analysis including:
 
-    - Genome-wide SNV and INDEL calling
-    - Genome-wide SV and CNV detection
-    - STR expansion detection
+
+- Genome-wide SNV and INDEL calling
+- Genome-wide SV and CNV detection
+- STR expansion detection
 
 ### ONT Targeted STR Analysis *(under development)*
 Specialized workflow for short tandem repeat analysis with targeted ONT data:
 
-    - STR expansion detection
-    - STR expansion annotation
-    - High-resolution repeat visualization
+
+- STR expansion detection
+- STR expansion annotation
+- High-resolution repeat visualization
 
 
 

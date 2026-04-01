@@ -15,11 +15,11 @@ Introduction to bedtools_intersect_cnvkit
 
 #### Software settings (`config.yaml`)
 
-#CONFIGSCHEMA__bedtools_intersect#
+#CONFIGSCHEMA__bedtools_intersect_cnvkit#
 
 #### Resources settings (`resources.yaml`)
 
-#RESOURCESSCHEMA__bedtools_intersect#
+#RESOURCESSCHEMA__bedtools_intersect_cnvkit#
 
 ## [cnvkit_segment](url_to_tool)
 Introduction to cnvkit_segment

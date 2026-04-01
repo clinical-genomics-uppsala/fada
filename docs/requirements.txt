@@ -4,7 +4,6 @@ mkdocs-material==9.7.1
 pymdown-extensions==10.2
 mkdocs-schema-reader==0.11.1
 mkdocs-simple-hooks==0.1.5
-mdx-spanner==0.1.0
 mkdocs-yaml-schema-plugin==0.2.3
 mkdocs-snakemake-rule-plugin==0.4.0
 mkdocs-include-markdown-plugin==4.0.4

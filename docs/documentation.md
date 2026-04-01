@@ -8,9 +8,9 @@ To generate the Read the Docs (RTD) HTML documentation locally:
 
 ### Prerequisites
 1. Install the documentation dependencies:
-   ```bash
-   pip install -r docs/requirements.txt
-   ```
+```bash
+pip install -r docs/requirements.txt
+```
 
 ## Online Documentation
 
@@ -22,22 +22,22 @@ The online documentation includes all the same content available locally and is 
 
 ### Build and Serve
 1. **Build the documentation**:
-   ```bash
-   mkdocs build
-   ```
-   This creates the HTML files in the `site/` directory.
+```bash
+mkdocs build
+```
+This creates the HTML files in the `site/` directory.
 
 2. **Serve locally with live reload**:
-   ```bash
-   mkdocs serve
-   ```
-   This starts a local development server at `http://127.0.0.1:8000/` with automatic reloading when files change.
+```bash
+mkdocs serve
+```
+This starts a local development server at `http://127.0.0.1:8000/` with automatic reloading when files change.
 
 3. **Build for production**:
-   ```bash
-   mkdocs build --clean
-   ```
-   This removes stale files and creates a clean build.
+```bash
+mkdocs build --clean
+```
+This removes stale files and creates a clean build.
 
 ### Documentation Structure
 The documentation is configured via [`mkdocs.yaml`](../mkdocs.yaml) and includes:

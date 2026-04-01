@@ -118,7 +118,8 @@ results/
 - **File**: `results/{sample}/paraphase/{sample}.paraphase.{gene}.vcf.gz`
 - **Description**: Paralog-specific variant calls for individual genes
 - **Genes**:
-    - pms2
+
+- pms2
 
 - **File**: `results/{sample}/paraphase/{sample}.paraphase.{gene}.vcf.gz.tbi`
 - **Description**: Tabix index for gene-specific Paraphase VCFs
