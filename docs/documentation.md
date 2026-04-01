@@ -40,7 +40,7 @@ mkdocs build --clean
 This removes stale files and creates a clean build.
 
 ### Documentation Structure
-The documentation is configured via [`mkdocs.yaml`](../mkdocs.yaml) and includes:
+The documentation is configured via [`mkdocs.yaml`](https://github.com/clinical-genomics-uppsala/fada/blob/develop/mkdocs.yaml) and includes:
 - Pipeline overview and setup instructions
 - Rule documentation with automatic generation from Snakemake rules
 - Schema validation for configuration files
@@ -76,7 +76,7 @@ mkdocs serve
 ### Automated Documentation Building
 Documentation is automatically built and deployed via GitHub Actions when changes are pushed to the main branches. The pipeline includes:
 
-- **Continuous Integration**: The [`test-build-mkdocs.yaml`](../.github/workflows/test-build-mkdocs.yaml) workflow automatically tests documentation builds on pull requests and pushes
+- **Continuous Integration**: The [`test-build-mkdocs.yaml`](https://github.com/clinical-genomics-uppsala/fada/blob/develop/.github/workflows/test-build-mkdocs.yaml) workflow automatically tests documentation builds on pull requests and pushes
 - **Automatic Deployment**: Documentation is built and published to GitHub Pages or other hosting platforms
 - **Dependency Management**: The workflow automatically installs documentation dependencies from `docs/requirements.txt`
 - **Build Validation**: Ensures all documentation builds successfully before merging changes
