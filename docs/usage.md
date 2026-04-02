@@ -13,11 +13,11 @@ This guide provides comprehensive instructions for running the fada pipeline usi
 ### Installation
 1. Install Python dependencies:
 
-    ```
-    python3.11 -m venv fada_env
-    source fada_env/bin/activate
-    pip install -r requirements.txt
-    ```
+```bash
+python3.11 -m venv fada_env
+source fada_env/bin/activate
+pip install -r requirements.txt
+```
 
 2. For container-based execution, make sure that Singularity/Apptainer is installed.
    
@@ -33,9 +33,21 @@ Each workflow requires specific samples and units input files:
 This can be created using [hydra-genetics create-input-files](https://hydra-genetics.readthedocs.io/en/latest/run_pipeline/create_sample_files/#usage)
 
 
-- **PacBio Twist Cancer**: `samples_pacbio_twist_cancer.tsv`, `units_pacbio_twist_cancer.tsv`
-- **PacBio WGS**: `samples_pacbio_wgs.tsv`, `units_pacbio_wgs.tsv`
-- **ONT STR**: `samples_ont_str.tsv`, `units_ont_str.tsv`
+- **PacBio Twist Cancer**: 
+```text
+samples_pacbio_twist_cancer.tsv
+units_pacbio_twist_cancer.tsv
+```
+- **PacBio WGS**: 
+```text
+samples_pacbio_wgs.tsv
+units_pacbio_wgs.tsv
+```
+- **ONT STR**: 
+```text
+samples_ont_str.tsv
+units_ont_str.tsv
+```
 
 ### 1. PacBio Twist Cancer Panel 
 
@@ -47,7 +59,10 @@ hydra-genetics create-input-files -d /path/to/pacbio/uBAM/-t N -p PACBIO --post-
 
 Outputs:
 
-`samples_pacbio_twist_cancer.tsv`, `units_pacbio_twist_cancer.tsv`
+```text
+samples_pacbio_twist_cancer.tsv
+units_pacbio_twist_cancer.tsv
+```
 
 #### Dry Run (Validation)
 ```bash
@@ -56,7 +71,7 @@ snakemake -n -s workflow/Snakefile \
   --config PIPELINE_REF_DATA=/path/to/reference/data/files sequenceid="test"
 ```
 
-#### Production Run
+#### Running on a cluster
 
 **Recommended:** Use a cluster profile for better resource management, the example uses the example profiles yaml file in the github repo
 
@@ -77,7 +92,10 @@ hydra-genetics create-input-files -d /path/to/pacbio/uBAM/-t N -p PACBIO --post-
 
 Outputs:
 
-`samples_pacbio_wgs.tsv`, `units_pacbio_wgs.tsv`
+```text
+samples_pacbio_wgs.tsv
+units_pacbio_wgs.tsv
+```
 
 #### Production Run (Recommended: Use Profile)
 ```bash
@@ -94,7 +112,11 @@ hydra-genetics create-input-files -p ONT -d /path/to/ONT/uBAM/ -t N -b 'NNNN'  -
 ```
 
 Outputs:
-`samples_ont_str.tsv`, `units_ont_str.tsv`
+
+```text
+samples_ont_str.tsv
+units_ont_str.tsv
+```
 
 ```bash
 snakemake --profile profiles/marvin_cpu -s workflow/Snakefile \
@@ -130,26 +152,6 @@ snakemake --profile profiles/marvin_cpu -s workflow/Snakefile \
   - `--cleanenv`: Use clean environment
   - `--bind /path/to/your/data`: Bind data directories to container
 - `--singularity-prefix singularity_files`: Directory for cached container images
-
-
-## Best Practices
-
-### Resource Management
-1. **Use cluster profiles** (recommended) for automatic resource management and job scheduling
-2. **Start with dry runs** to validate configuration before full execution
-3. **Monitor resource usage** and adjust configuration accordingly
-
-### Container Usage
-1. **Use Singularity** for reproducible execution and dependency management
-2. **Bind necessary directories** to ensure data accessibility within containers
-3. **Pre-download containers** using `--singularity-prefix` for faster execution
-
-### Troubleshooting
-1. **Check logs** using `--show-failed-logs` for detailed error information
-2. **Validate input files** before starting analysis
-3. **Verify configuration files** match your data and analysis requirements
-4. **Test with small datasets** before processing large cohorts
-
 
 ### Profile Configuration
 

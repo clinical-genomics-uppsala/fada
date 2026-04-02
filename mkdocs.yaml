@@ -49,7 +49,9 @@ markdown_extensions:
         - includes/abbreviations.md
       base_path: "docs/"
       url_download: "True"
-  - pymdownx.emoji
+  - pymdownx.emoji:
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
   - toc:
       permalink: True
 
