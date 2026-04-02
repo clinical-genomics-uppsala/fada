@@ -22,7 +22,7 @@ reference:
 deepvariant:
   container: "docker://google/deepvariant:1.8.0"
   model_type: "PACBIO"
-  output_gvcf: false
+  output_gvcf: true
 
 pbmm2_index:
   preset: "HIFI"
