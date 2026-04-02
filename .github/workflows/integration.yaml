@@ -19,6 +19,8 @@ jobs:
    integration-small-singularity:
     name: integration small data set singularity
     runs-on: ubuntu-latest
+    env:
+      SINGULARITY_CACHE: ${{ github.workspace }}/singularity_files
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.11
@@ -48,9 +50,7 @@ jobs:
       - name: Cache Snakemake Singularity images
         uses: actions/cache@v4
         with:
-          # Cache the directory where Snakemake puts the images
-          path: .tests/integration/singularity_files
-          # Hash the config directory so changes to URLs trigger a new cache
+          path: ${{ env.SINGULARITY_CACHE }}
           key: ${{ runner.os }}-snakemake-singularity-${{ hashFiles('config/config*.yaml') }}
           restore-keys: |
             ${{ runner.os }}-snakemake-singularity-
@@ -58,4 +58,9 @@ jobs:
       - name: Integration test - small dataset twist cancer
         working-directory: .tests/integration
         run: |
-          mkdir -p singularity_files && cp -r ../../config . && snakemake -s ../../workflow/Snakefile -j 2 -p --show-failed-logs --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config resources=resources_test.yaml PIPELINE_REF_DATA=reference sequenceid="test" lima_reports=lima_reports/ --use-singularity --singularity-args " --no-home --cleanenv --bind /home/runner " --singularity-prefix singularity_files      
+          # Ensure the directory exists
+          mkdir -p "$SINGULARITY_CACHE"
+          cp -r ../../config . && snakemake -s ../../workflow/Snakefile -j 2 -p --show-failed-logs \
+          --configfiles config/config.yaml config/config_pacbio_twist_cancer.yaml --config resources=resources_test.yaml \
+          PIPELINE_REF_DATA=reference sequenceid="test" lima_reports=lima_reports/ --use-singularity \
+          --singularity-args " --no-home --cleanenv --bind /home/runner " --singularity-prefix "$SINGULARITY_CACHE"     
