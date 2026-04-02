@@ -13,7 +13,7 @@ If Snakemake is new to you a good place to start is doing the [snakemake tutoria
 
 
 
-### Hydra-Genetics Modules
+## Hydra-Genetics Modules
 The current module versions (as configured in [`config/config.yaml`](https://github.com/clinical-genomics-uppsala/fada/blob/develop/config/config.yaml)) are:
 
 {{ hydra_modules() }}
