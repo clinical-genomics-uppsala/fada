@@ -57,10 +57,10 @@ files:
     # Repeat expansion files
   - name: "stranger_trgt_vcf"
     output: "results/{sample}/repeat_expansions/{sample}.trgt.vcf.gz"
-    input: "annotation/stranger/{sample}_N.trgt.vcf.gz"
+    input: "cnv_sv/trgt_genotype/{sample}_N.trgt.vcf.gz"
   # - name: "stranger_trgt_tbi"
   #   output: "results/{sample}/repeat_expansions/{sample}.trgt.vcf.gz.tbi"
-  #   input: "annotation/stranger/{sample}_N.trgt.vcf.gz.tbi"
+  #   input: "cnv_sv/trgt_genotype/{sample}_N.trgt.vcf.gz.tbi"
 
   - name: "trgt_plot_motif"
     output: "results/{sample}/repeat_expansions/trgt_plot/motif/{sample}_{locus}.{suffix}"

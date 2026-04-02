@@ -1,7 +1,13 @@
 # <img src="images/hydragenetics.png" width=40 /> Fada
 
-
 #### Pipeline for germline variant detection in longread sequence data
+
+<p align="center">
+<a href="https://fada.readthedocs.io/en/latest/">https://fada.readthedocs.io/en/latest/</a>
+</p>
+
+This ReadMe is only a brief introduction, please refer to ReadTheDocs for the latest documentation and a more detailed description of the pipeline. 
+
 
 ![Lint](https://github.com/clinical-genomics-uppsala/fada/actions/workflows/lint.yaml/badge.svg?branch=develop)
 ![Snakefmt](https://github.com/clinical-genomics-uppsala/fada/actions/workflows/snakefmt.yaml/badge.svg?branch=develop)
@@ -18,33 +24,12 @@
 
 ## :heavy_exclamation_mark: Dependencies
 
-In order to use this module, the following dependencies are required:
+In order to use this pipeline, the following dependencies are required:
 
-[![clinical-genomics-uppsala](https://img.shields.io/badge/hydragenetics-v3.1.1-blue)](https://github.com/hydra-genetics/)
+[![hydra-genetics](https://img.shields.io/badge/hydragenetics-v3.1.1-blue)](https://github.com/hydra-genetics/)
 [![pandas](https://img.shields.io/badge/pandas-1.3.1-blue)](https://pandas.pydata.org/)
-[![python](https://img.shields.io/badge/python-3.9-blue)
+[![python](https://img.shields.io/badge/python-3.11-blue)]
 [![snakemake](https://img.shields.io/badge/snakemake-7.32.4-blue)](https://snakemake.readthedocs.io/en/stable/)
 [![singularity](https://img.shields.io/badge/singularity-3.11.0-blue)](https://sylabs.io/docs/)
 
-## :school_satchel: Preparations
 
-### Sample data
-
-Input data should be added to [`samples.tsv`](https://github.com/hydra-genetics/fada/blob/develop/config/samples.tsv)
-and [`units.tsv`](https://github.com/hydra-genetics/fada/blob/develop/config/units.tsv).
-The following information need to be added to these files:
-
-
-
-## :white_check_mark: Testing
-
-The workflow repository contains a small test dataset `.tests/integration` which can be run like so:
-
-```bash
-$ cd .tests/integration
-$ snakemake -s ../../Snakefile --configfiles ../../config/config.yaml config/config.yaml -j1 --use-singularity
-```
-`../../config/config.yaml` is the original config-file, while `config/config.yaml` is the test config. By defining two config-files the latter overwrites any overlapping variables in the first config-file.
-
-## :judge: Rule Graph
-![rule_graph_reference](images/rulegraph.svg)

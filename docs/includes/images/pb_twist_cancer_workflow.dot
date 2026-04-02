@@ -1,0 +1,140 @@
+digraph fada_simplified {
+    rankdir=LR;
+    label="Fada - PacBio Twist Cancer Workflow";
+    labelloc="t";
+    fontname="Calibri";
+    fontsize=24;
+    node [shape=Mrecord, style=filled, fontname="Calibri", fontsize=10, width=0.8, height=0.8, color=grey];
+    
+    // Input
+    input [label="PacBio HIFI\nreads\nBAM", fillcolor="#E8F4FD", shape=Mrecord, width=1.0, height=0.6, color=grey];
+    
+    // Pre-processing (Blue Line)
+    subgraph cluster_prealignment{
+        label="prealignment module";
+        style=filled;
+        fontname="Calibri";
+        fontsize=14;
+        fillcolor="#F5F5F5";
+        color=grey;
+        pbmarkdup [label="pbmarkdup", fillcolor="#87CEEB"];
+    }
+
+    // Alignment 
+    subgraph cluster_alignment{
+        label="alignment module";
+        style=filled;
+        fontname="Calibri";
+        fontsize=14;
+        fillcolor="#F5F5F5";
+        color=grey;
+        pbmm2 [label="pbmm2", fillcolor="#98D982"];
+    }
+
+    // Compression
+    subgraph cluster_compression {
+        label="compression module";
+        style=filled;
+        fontname="Calibri";
+        fontsize=14;
+        fillcolor="#F5F5F5";
+        color=grey;
+
+        samtools_view [label="samtools view", fillcolor="#6A5ACD"];
+        cram [label="CRAM", fillcolor="#6A5ACD"];
+    }
+
+    // small variant calling 
+    subgraph cluster_variant_calling {
+        label="snv_indels module";
+        style=filled;
+        fontname="Calibri";
+        fontsize=14;
+        fillcolor="#F5F5F5";
+        color=grey;
+        
+        deepvariant [label="DeepVariant", fillcolor="#FFD485"];
+        hiphase [label="hiphase", fillcolor="#FFD485"];
+        
+    }
+
+    subgraph cluster_cnv_sv {
+            label="cnv_sv module";
+            style=filled;
+            fillcolor="#F5F5F5";
+            color=grey;
+            fontname="Calibri";
+            fontsize=14;
+            sawfish [label="Sawfish", fillcolor="#F08080"];
+            cnvkit [label="CNVkit", fillcolor="#F08080"];
+            sniffles2 [label="Sniffles2", fillcolor="#F08080"];
+            paraphase [label="Paraphase", fillcolor="#F08080"];
+            cnv_sv_merged [label="CNV SV merged", fillcolor="#F08080"];
+    }
+    
+    // QC tools 
+    subgraph cluster_qc {
+        label="qc module";
+        fontname="Calibri";
+        fontsize=14;
+        style=filled;
+        fillcolor="#F8F8FF";
+        color=grey;
+        
+        sequali [label="Sequali", fillcolor="#DDA0DD"];
+        nanostat [label="NanoStat", fillcolor="#DDA0DD"];
+        picard [label="Picard\nCollectHsMetrics", fillcolor="#DDA0DD"];
+        samtools_stats [label="samtools\nstats", fillcolor="#DDA0DD"];
+        mosdepth [label="mosdepth", fillcolor="#DDA0DD"];
+        multiqc [label="MultiQC", fillcolor="#DDA0DD"];
+    }
+    
+
+
+    // Data flow 
+    input -> pbmarkdup [color="grey"];
+    pbmarkdup -> pbmm2 [color="grey"];
+    
+    // QC Line (Purple)
+    input -> sequali [color="grey"];
+    
+    // Variant calling flow (Orange/Red Lines)
+    pbmm2 -> deepvariant [color="grey"];
+    pbmm2 -> sawfish [color="grey"];
+    pbmm2 -> cnvkit [color="grey"];
+    pbmm2 -> sniffles2 [color="grey"];
+    pbmm2 -> paraphase [color="grey"];
+
+    // Phasing
+    pbmm2 -> hiphase [color="grey"];
+    deepvariant -> hiphase [color="grey"];
+    hiphase -> samtools_view [color="grey"];
+    samtools_view -> cram [color="grey"];
+    
+    // Merge CNV/SV calls (Red Line)
+    sawfish -> cnv_sv_merged [color="grey"];
+    cnvkit -> cnv_sv_merged [color="grey"];
+    
+    // QC flow (Purple Line)
+    pbmm2 -> nanostat [color="grey"];
+    pbmm2 -> picard [color="grey"];
+    pbmm2 -> samtools_stats [color="grey"];
+    pbmm2 -> mosdepth [color="grey"];
+    
+    // QC to MultiQC (Purple Line)
+    pbmarkdup -> multiqc [color="grey"];
+    sequali -> multiqc [color="grey"];
+    nanostat -> multiqc [color="grey"];
+    picard -> multiqc [color="grey"];
+    samtools_stats -> multiqc [color="grey"];
+    mosdepth -> multiqc [color="grey"];
+    
+    // Hydra-Genetics logo
+    logo [image="hydragenetics.png", label="", shape=none, width=2, height=2, fixedsize=true, style=none];
+    spacer [style=invis, width=0, height=0];
+    
+    // Force logo to bottom right
+    logo -> spacer [style=invis];
+    spacer -> cnvkit [style=invis];
+   
+}
