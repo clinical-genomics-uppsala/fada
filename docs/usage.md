@@ -154,7 +154,7 @@ snakemake --profile profiles/marvin_cpu -s workflow/Snakefile \
 ### Profile Configuration
 
 #### Example Profile in This Repository
-This repository includes an example SLURM profile at [`profiles/marvin_cpu/`](../../profiles/marvin_cpu/) that demonstrates:
+This repository includes an example SLURM profile at [`profiles/marvin_cpu/`](https://github.com/clinical-genomics-uppsala/fada/tree/develop/profiles/marvin_cpu) that demonstrates:
 
 - **SLURM-DRMAA integration**: Uses the DRMAA (Distributed Resource Management Application API) interface for job submission to SLURM
 - **Singularity container execution**: Automatically enables Singularity with appropriate bind mounts and resource constraints

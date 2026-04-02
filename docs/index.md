@@ -1,5 +1,5 @@
-# Welcome to Fada 
-This pipeline,  under development at [Clinical Genomics Uppsala](https://www.uu.se/en/research/clinical-genomics-uppsala), is used  to call variants from long-read data from rare disease patients. 
+# Welcome to Fada
+This pipeline, under development at [Clinical Genomics Uppsala](https://www.uu.se/en/research/clinical-genomics-uppsala), is used to call variants from long-read data from rare disease patients.
 <br />
 <br />
 You can find the github repository at 
