@@ -20,24 +20,12 @@ The fada pipeline documentation is hosted online and automatically updated with 
 
 The online documentation includes all the same content available locally and is the recommended way to access the most up-to-date information about the pipeline.
 
-### Build and Serve
+### Build
 1. **Build the documentation**:
 ```bash
 mkdocs build
 ```
 This creates the HTML files in the `site/` directory.
-
-2. **Serve locally with live reload**:
-```bash
-mkdocs serve
-```
-This starts a local development server at `http://127.0.0.1:8000/` with automatic reloading when files change.
-
-3. **Build for production**:
-```bash
-mkdocs build --clean
-```
-This removes stale files and creates a clean build.
 
 ### Documentation Structure
 The documentation is configured via [`mkdocs.yaml`](https://github.com/clinical-genomics-uppsala/fada/blob/develop/mkdocs.yaml) and includes:
@@ -77,16 +65,8 @@ mkdocs serve
 Documentation is automatically built and deployed via GitHub Actions when changes are pushed to the main branches. The pipeline includes:
 
 - **Continuous Integration**: The [`test-build-mkdocs.yaml`](https://github.com/clinical-genomics-uppsala/fada/blob/develop/.github/workflows/test-build-mkdocs.yaml) workflow automatically tests documentation builds on pull requests and pushes
-- **Automatic Deployment**: Documentation is built and published to GitHub Pages or other hosting platforms
+- **Automatic Deployment**: Documentation is built and published to ReadTheDocs
 - **Dependency Management**: The workflow automatically installs documentation dependencies from `docs/requirements.txt`
 - **Build Validation**: Ensures all documentation builds successfully before merging changes
-
-### Manual Deployment
-For manual deployment or testing:
-```bash
-# Build documentation
-mkdocs build
-
-```
 
 This automation ensures that the documentation is always up-to-date with the latest pipeline changes and that broken documentation builds are caught early in the development process.
