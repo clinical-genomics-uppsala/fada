@@ -24,7 +24,53 @@ properties:
           vcf:
             type: string
             description: vcf with reference genome path in vcf-header
+  
+  cnvkit_segment:
+    type: object
+    description: input and output parameters for cnvkit_segment
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          log2_bins:
+            type: string
+            description: Bin-level log2 ratios file from cnvkit
+          snps:
+            type: string
+            description: SNPs vcf file to use for segmentation
 
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          segment:
+            type: string
+            description: Segmented log2 ratios file from cnvkit
+
+
+  bedtools_intersect_cnvkit:
+    type: object
+    description: input and output parameters for bedtools_intersect_cnvkit
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          left:
+            type: string
+            description: CNVkit vcf with all CNVS
+          right:
+            type: string
+            description: bed file with target genes
+
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          vcf:
+            type: string
+            description: CNVkit vcf with only CNVS that include the whole target gene
 
   export_qc_bedtools_intersect:
     type: object
@@ -247,4 +293,3 @@ properties:
           vcf:
             type: string
             description: vcf file with str calls from strkit
-

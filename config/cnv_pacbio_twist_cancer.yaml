@@ -1,0 +1,6 @@
+files:
+  - name: "CNV Report"
+    description: "This report summarizes the CNV analysis results."
+    type: "CNV"
+    input: "cnv_sv/cnvkit_call/{sample}_{type}.loh.cns"
+    nav_header: "CNV Analysis"

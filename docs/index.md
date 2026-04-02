@@ -1,29 +1,56 @@
-# Welcome to fada 
-the pipeline is running at [Clinical Genomics Uppsala](https://www.uu.se/en/research/clinical-genomics-uppsala) to call variants from long-read data from rare disease patients. 
+# Welcome to Fada
+This pipeline, under development at [Clinical Genomics Uppsala](https://www.uu.se/en/research/clinical-genomics-uppsala), is used to call variants from long-read data from rare disease patients.
 <br />
 <br />
 You can find the github repository at 
 <a href="https://github.com/clinical-genomics-uppsala/fada/">https://github.com/clinical-genomics-uppsala/fada/</a>
 <br />
 <br />
-This [snakemake](https://snakemake.readthedocs.io/en/stable/) pipeline is built using module system from [Hydra Genetics](https://github.com/hydra-genetics/) to process long-read `.bam` files from Pacbio Revio and ONT R10 data.
 
-**Worflows**
+Fada is a [snakemake](https://snakemake.readthedocs.io/en/stable/) pipeline that is built using modules from [Hydra Genetics](https://github.com/hydra-genetics/) to process long-read `.bam` files from Pacbio Revio and Oxford Nanopore Technologies (ONT) R10 data.
 
-
-**Fada uses the following hydra genetics modules:**
-
-##TODO##
+If Snakemake is new to you a good place to start is doing the [snakemake tutorial](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html).
 
 
-# Hydra-genetics
 
-We are an organization/community with the goal of making [snakemake](https://snakemake.readthedocs.io/en/stable/index.html) pipeline development easier, faster, a bit more structured and of higher quality.
+## Hydra-Genetics Modules
+The current module versions (as configured in [`config/config.yaml`](https://github.com/clinical-genomics-uppsala/fada/blob/develop/config/config.yaml)) are:
 
-We do this by providing [snakemake modules](https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#modules) that can be combined to create a complete analysis or included in already existing pipelines. All modules are subjected to extensive testing to make sure that new releases doesn't unexpectedly break existing pipeline or deviate from guidelines and best practices on how to write code.
+{{ hydra_modules() }}
 
-# Snakemake
-Poirot and Hydra-genetics are snakemake bases pipeline/tools. The [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html) workflow management system is a tool to create reproducible and scalable data analyses. Workflows are described via a human readable, Python based language. They can be seamlessly scaled to server, cluster, grid and cloud environments, without the need to modify the workflow definition. Finally, Snakemake workflows can entail a description of required software, which will be automatically deployed to any execution environment. 
+Each module is maintained as a separate repository within the [Hydra-Genetics organization](https://github.com/hydra-genetics) and can be updated independently. Version pinning ensures reproducible analyses.
 
-If Snakemake is new to you a good place to start is doing the [snakemake tutorial](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html) since this will help you setting Poirot up.
+## Supported Workflows
+
+### PacBio Twist Cancer Panel
+Targeted enrichment analysis for a hereditary cancer panel
+
+
+- Targeted SNV INDEL calling
+- CNV detection 
+- SV calling in target regions
+
+### PacBio Whole Genome Sequencing *(under development)*
+**This pipeline is currently used only for testing and development, we recommend the [GMS Nallo](https://github.com/genomic-medicine-sweden/nallo) pipeline for a comprehensive long-read WGS rare-disease pipeline**
+
+WGS analysis including:
+
+
+- Genome-wide SNV and INDEL calling
+- Genome-wide SV and CNV detection
+- STR expansion detection
+
+### ONT Targeted STR Analysis *(under development)*
+Specialized workflow for short tandem repeat analysis with targeted ONT data:
+
+
+- STR expansion detection
+- STR expansion annotation
+- High-resolution repeat visualization
+
+
+
+
+
+
 
