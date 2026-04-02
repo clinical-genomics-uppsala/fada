@@ -50,7 +50,7 @@ jobs:
       - name: Cache Snakemake Singularity images
         uses: actions/cache@v4
         with:
-          path: ${{ env.SINGULARITY_DIR }}
+          path: ${{ env.SINGULARITY_CACHE }}
           key: ${{ runner.os }}-snakemake-singularity-${{ hashFiles('config/config*.yaml') }}
           restore-keys: |
             ${{ runner.os }}-snakemake-singularity-
