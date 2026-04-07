@@ -22,6 +22,16 @@ files:
   - name: "deepvariant_phased_tbi"
     output: "results/{sample}/snv_indels/{sample}.deepvariant.soft-filtered.vcf.gz.tbi"
     input: "snv_indels/hiphase/{sample}_N.deepvariant.phased.vcf.gz.tbi"
+  - name: "deepvariant_gvcf"
+    output: "results/{sample}/snv_indels/{sample}.deepvariant.g.vcf.gz"
+    input: "snv_indels/deepvariant/{sample}_N.merged.g.vcf.gz"
+  - name: "deepvariant_gvcf_tbi"
+    output: "results/{sample}/snv_indels/{sample}.deepvariant.g.vcf.gz.tbi"
+    input: "snv_indels/deepvariant/{sample}_N.merged.g.vcf.gz.tbi"
+  # - name: "deepvariant_report"
+  #   output: "results/{sample}/snv_indels/{sample}.visual_report.html"
+  #   input: "snv_indels/deepvariant/{sample}_N.deepvariant.phased_GRCh38.vcf.gz"
+  
   
     # CNV & SV files
   - name: "cnv_sv_vcf"

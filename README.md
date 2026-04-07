@@ -1,4 +1,4 @@
-# <img src="images/hydragenetics.png" width=40 /> Fada
+# <img src="docs/includes/images/hydragenetics.png" width=40 /> Fada
 
 #### Pipeline for germline variant detection in longread sequence data
 
@@ -28,7 +28,7 @@ In order to use this pipeline, the following dependencies are required:
 
 [![hydra-genetics](https://img.shields.io/badge/hydragenetics-v3.1.1-blue)](https://github.com/hydra-genetics/)
 [![pandas](https://img.shields.io/badge/pandas-1.3.1-blue)](https://pandas.pydata.org/)
-[![python](https://img.shields.io/badge/python-3.11-blue)]
+[![python](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/)
 [![snakemake](https://img.shields.io/badge/snakemake-7.32.4-blue)](https://snakemake.readthedocs.io/en/stable/)
 [![singularity](https://img.shields.io/badge/singularity-3.11.0-blue)](https://sylabs.io/docs/)
 
