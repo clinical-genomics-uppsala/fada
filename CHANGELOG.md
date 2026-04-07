@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.4.0](https://www.github.com/clinical-genomics-uppsala/fada/compare/v0.3.0...v0.4.0) (2026-04-07)
+
+
+### Features
+
+* add cnvkit and cnvkit html report ([24054eb](https://www.github.com/clinical-genomics-uppsala/fada/commit/24054ebf23bd7ccadfd7bb30b27bb0a4a741329a))
+* add svdb merge for sv and cnv callers in pb tc workflow ([42b8836](https://www.github.com/clinical-genomics-uppsala/fada/commit/42b88361a349eb9f9ba501050546a11a9e54c67d))
+* output g.vcf for deepvariant in pacbio workflows ([6201dd0](https://www.github.com/clinical-genomics-uppsala/fada/commit/6201dd0021166668f94207c37da676bec702541f))
+
+
+### Bug Fixes
+
+* make cnv report generation conditional on the workflow ([f6746d6](https://www.github.com/clinical-genomics-uppsala/fada/commit/f6746d640ad2b5eb03051c6f01a9624ddb37c7d4))
+
+
+### Documentation
+
+* add docs on testing ([3ed7b54](https://www.github.com/clinical-genomics-uppsala/fada/commit/3ed7b5442b4af5454998498d23c631240b6045bd))
+* add README on workflow image generation ([8b22b5d](https://www.github.com/clinical-genomics-uppsala/fada/commit/8b22b5dca58356232cc20f030e6dda6877fca717))
+* clean up the documentation.md file ([dd69305](https://www.github.com/clinical-genomics-uppsala/fada/commit/dd6930571adc598ad513e07cfe80b70ac18a620c))
+* fix link for Python badge in README.md ([0a0140a](https://www.github.com/clinical-genomics-uppsala/fada/commit/0a0140acce1799e573e2e85cb2c3622b344847cc))
+* fix links to yaml files ([5cc630a](https://www.github.com/clinical-genomics-uppsala/fada/commit/5cc630a8765a1ef660c2c5f21ede4db3204bd9fd))
+* small fixes and requirements update ([4a24bc6](https://www.github.com/clinical-genomics-uppsala/fada/commit/4a24bc66bf2f2c82da9a24354574c11cd2041584))
+* upadte readthedocs documentation for pb twist cancer workflow ([2eded8f](https://www.github.com/clinical-genomics-uppsala/fada/commit/2eded8f1393258fac24efc3471ed529c7e323775))
+* update hydra logo image path in README.md ([d40a897](https://www.github.com/clinical-genomics-uppsala/fada/commit/d40a89738ddecd2dc4cad55b2db2fe42a450fd64))
+* update requirements.txt for docs ([6656a90](https://www.github.com/clinical-genomics-uppsala/fada/commit/6656a90d809a9eca9742c5ad8b94b0636e9e57c1))
+* update workflow diagram ([9b44549](https://www.github.com/clinical-genomics-uppsala/fada/commit/9b44549e238393a0d9c7ecbafb58e7ed0597019e))
+
 ## [0.3.0](https://www.github.com/clinical-genomics-uppsala/fada/compare/v0.2.0...v0.3.0) (2025-09-01)
 
 
