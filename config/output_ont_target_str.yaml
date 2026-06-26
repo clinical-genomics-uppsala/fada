@@ -60,10 +60,10 @@ files:
   #STRs
   - name: "strdust_vcf"
     output: "results/{sample}/STRs/{sample}.strdust.vcf.gz"
-    input: "cnv_sv/strdust/{sample}_N.vcf.gz"
+    input: "cnv_sv/strdust/{sample}_N.sorted.vcf.gz"
   - name: "strdust_tbi"
     output: "results/{sample}/STRs/{sample}.strdust.vcf.gz.tbi"
-    input: "cnv_sv/strdust/{sample}_N.vcf.gz.tbi"
+    input: "cnv_sv/strdust/{sample}_N.sorted.vcf.gz.tbi"
   - name: "strkit_vcf"
     output: "results/{sample}/STRs/{sample}.strkit.vcf.gz"
     input: "cnv_sv/strkit_call/{sample}_N.vcf.gz"

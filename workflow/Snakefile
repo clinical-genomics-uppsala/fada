@@ -36,6 +36,9 @@ ruleorder: samtools_view_on_target > alignment_samtools_index
 if config.get("pipeline") in ["pacbio_twist_cancer", "pacbio_wgs"]:
     ruleorder: cnv_sv_sawfish_joint_call_single > cnv_sv_tabix
 
+if config.get("pipeline") in ["ont_target_str"]:
+    ruleorder: strdust_sort > cnv_sv_bgzip
+
 
 module annotation:
     snakefile:
