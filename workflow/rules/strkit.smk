@@ -6,12 +6,13 @@ __license__ = "GPL-3"
 
 rule strkit_call:
     input:
-        bam="alignment/minimap2_align/{sample}_{type}.bam",
-        bai="alignment/minimap2_align/{sample}_{type}.bam.bai",
+        bam=lambda wildcards: get_input_aligned_bam(wildcards, config)[0],
+        bai=lambda wildcards: get_input_aligned_bam(wildcards, config)[1],
         fasta=config.get("reference", {}).get("fasta", ""),
         repeats=config.get("strkit_call", {}).get("bed", ""),
     output:
         vcf="cnv_sv/strkit_call/{sample}_{type}.vcf",
+        json="cnv_sv/strkit_call/{sample}_{type}.json",
     params:
         extra=config.get("strkit_call", {}).get("extra", ""),
         sample_id=lambda wildcards: f"{wildcards.sample}_{wildcards.type}",
@@ -39,4 +40,6 @@ rule strkit_call:
         "--sample-id {params.sample_id} "
         "--loci {input.repeats} "
         "--vcf {output.vcf} "
+        "--json {output.json} "
+        "{params.extra} "
         "--processes {threads} &> {log}"

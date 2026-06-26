@@ -1,0 +1,39 @@
+---
+pipeline: "ont_target_str"
+output: "config/output_ont_target_str.yaml"
+samples: "samples_ont_str.tsv"
+units: "units_ont_str.tsv"
+
+aligner: "minimap2"
+trimmer_software: None
+
+reference:
+  design_bed: "{{PIPELINE_REF_DATA}}/designs/gRNA_design_repeat_expansions_220308.bed"
+  str_bed: "{{PIPELINE_REF_DATA}}/ont_target_str/STRchive-disease-loci-v2.16.0.hg38.general.cas9_targets.bed" # disease strs in the design
+
+
+atarva_genotype:
+  container: "docker://hydragenetics/atarva:0.6.0"
+  bed: "{{PIPELINE_REF_DATA}}/ont_target_str/STRchive-disease-loci-v2.16.0.hg38.atarva.cas9_targets.bed.gz"
+  bed_tbi: "{{PIPELINE_REF_DATA}}/ont_target_str/STRchive-disease-loci-v2.16.0.hg38.atarva.cas9_targets.bed.gz.tbi"
+
+minimap2_index:
+  preset: "map-ont"
+
+minimap2_align:
+  preset: "map-ont"
+
+mosdepth_bed:
+  container: "docker://hydragenetics/mosdepth:0.3.2"
+  thresholds: "10,20,50"
+
+straglr:
+  bed: "{{PIPELINE_REF_DATA}}/ont_target_str/STRchive-disease-loci-v2.16.0.hg38.straglr.cas9_targets.filtered.bed"
+
+strdust:
+  extra: "--somatic  --unphased "
+
+strkit_call:
+  bed: "{{PIPELINE_REF_DATA}}/ont_target_str/strkit_catalog.cas9_targets.bed"
+  extra: "--targeted  --seed 183 --log-level debug --min-avg-phred 5 --min-read-align-score 0.5 --max-reads 500 --count-kmers both --indent-json"
+

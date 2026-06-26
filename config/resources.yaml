@@ -59,6 +59,25 @@ sawfish_joint_call:
   mem_mb: 98304
   mem_per_cpu: 6144
   threads: 16
+
+straglr:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
+
+strdust:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
   
-  
+strkit_call:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
+
+atarva_genotype:
+  mem_mb: 61440
+  mem_per_cpu: 6144
+  threads: 10
+
 
